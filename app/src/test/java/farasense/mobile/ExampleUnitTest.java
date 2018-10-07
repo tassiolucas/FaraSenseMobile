@@ -1,4 +1,4 @@
-package com.una.pi.farasensemobile;
+package farasense.mobile;
 
 import org.junit.Test;
 

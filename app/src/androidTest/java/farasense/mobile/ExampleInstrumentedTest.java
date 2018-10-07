@@ -1,4 +1,4 @@
-package com.una.pi.farasensemobile;
+package farasense.mobile;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.una.pi.farasensemobile", appContext.getPackageName());
+        assertEquals("com.farasensemobile", appContext.getPackageName());
     }
 }

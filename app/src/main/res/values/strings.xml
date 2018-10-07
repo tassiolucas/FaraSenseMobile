@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FaraSenseMobile</string>
+    <string name="error_network_timeout_title">Connection timeout</string>
+    <string name="error_network_timeout_message">Connection timeout.</string>
+    <string name="error_network_title">Connection failed</string>
+    <string name="error_network_message">Error tring to connect the server</string>
+    <string name="error_unknown_error_title">An unknown error occurred. Try again in a while.</string>
+    <string name="error_unknown_error_message">>An unknown error occurred. Try again in a while.</string>
 </resources>
