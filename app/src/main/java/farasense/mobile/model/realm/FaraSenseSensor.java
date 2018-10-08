@@ -9,7 +9,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class FaraSenseSensor extends RealmObject {
 
-    @PrimaryKey
     @SerializedName("id")
     Integer id;
     @SerializedName("amper")

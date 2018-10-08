@@ -6,16 +6,16 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.util.Log;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
 import farasense.mobile.api.RestClient;
 import farasense.mobile.api.base.ErrorListener;
 import farasense.mobile.api.base.RestError;
 import farasense.mobile.api.base.SuccessListener;
+import farasense.mobile.model.DAO.FaraSenseSensorDAO;
+import farasense.mobile.model.DAO.base.BaseDAO;
 import farasense.mobile.model.realm.FaraSenseSensor;
 import farasense.mobile.service.base.BaseService;
 import farasense.mobile.util.ConnectionUtil;
@@ -46,7 +46,8 @@ public class DownloadFaraSenseSensorService extends BaseService {
                             @Override
                             public void onSuccess(List<FaraSenseSensor> response) {
                                 Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK);
-
+                                FaraSenseSensorDAO.saveFromServer(response);
+                                BaseDAO.saveDataBase(getApplicationContext());
                             }
                         }, new ErrorListener() {
                             @Override
