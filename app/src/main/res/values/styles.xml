@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FaraSenseToolbar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="titleMargin">0dp</item>
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
+    <style name="FaraSenseToolbarTitle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/title_toolbar</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="FaraSenseToolbarSubtitle" parent="FaraSenseToolbarTitle">
+        <item name="android:textSize">@dimen/subttitle_toolbar</item>
+    </style>
+
 </resources>

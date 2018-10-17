@@ -8,6 +8,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
+
+import farasense.mobile.service.download.DownloadFaraSenseSensorService;
+import farasense.mobile.service.listener.OnDownloadContentListener;
+import farasense.mobile.service.listener.OnStartServiceDownload;
+import farasense.mobile.util.DateUtil;
+
 public class BaseService extends Service {
 
     protected static int SLEEP_WAIT = 300000;
@@ -46,5 +53,20 @@ public class BaseService extends Service {
         msg.arg1 = startId;
         handler.sendMessage(msg);
         return START_STICKY;
+    }
+
+    public static void initialDownloadDataSensors(final OnStartServiceDownload onStartServiceDownload) {
+        DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
+            @Override
+            public void onSucess() {
+                onStartServiceDownload.onFinish();
+            }
+
+            @Override
+            public void onFail() {
+                onStartServiceDownload.onFail();
+            }
+        }, DateUtil.firstDayOfTheYear()
+        , new Date());
     }
 }

@@ -6,10 +6,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.util.Log;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Date;
 import farasense.mobile.api.RestClient;
 import farasense.mobile.api.base.ErrorListener;
 import farasense.mobile.api.base.RestError;
@@ -18,7 +17,10 @@ import farasense.mobile.model.DAO.FaraSenseSensorDAO;
 import farasense.mobile.model.DAO.base.BaseDAO;
 import farasense.mobile.model.realm.FaraSenseSensor;
 import farasense.mobile.service.base.BaseService;
+import farasense.mobile.service.listener.OnDownloadContentListener;
+import farasense.mobile.util.DateUtil;
 import farasense.mobile.util.ConnectionUtil;
+import farasense.mobile.util.PermissionUtil;
 
 public class DownloadFaraSenseSensorService extends BaseService {
 
@@ -31,15 +33,6 @@ public class DownloadFaraSenseSensorService extends BaseService {
         @Override
         public void handleMessage(final Message msg) {
             while (!shouldStop) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-                cal.set(Calendar.HOUR, 12);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-                cal.clear(Calendar.MONTH);
-                cal.set(Calendar.DAY_OF_MONTH, 0);
-
                 try {
                     if (ConnectionUtil.isDataConnectionAvailable(getApplicationContext())) {
                         RestClient.getInstance().getFaraSenseSensor(new SuccessListener<List<FaraSenseSensor>>() {
@@ -47,14 +40,16 @@ public class DownloadFaraSenseSensorService extends BaseService {
                             public void onSuccess(List<FaraSenseSensor> response) {
                                 Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK);
                                 FaraSenseSensorDAO.saveFromServer(response);
-                                BaseDAO.saveDataBase(getApplicationContext());
+                                if (PermissionUtil.hasPermissions(getApplicationContext(), PermissionUtil.PERMISSIONS)) {
+                                    BaseDAO.saveDataBase(getApplicationContext());
+                                }
                             }
                         }, new ErrorListener() {
                             @Override
                             public void onError(RestError restError) {
                                 Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);
                             }
-                        }, cal.getTime()
+                        }, DateUtil.firstDayOfTheYear()
                         , new Date());
                         Thread.sleep(SLEEP_WAIT);
                     } else {
@@ -68,6 +63,20 @@ public class DownloadFaraSenseSensorService extends BaseService {
             }
             stopSelf(msg.arg1);
         }
+    }
+
+    public static void download(OnDownloadContentListener onDownloadContentListener, final Date dateStart, final Date dateEnd) {
+        new Thread(() -> RestClient.getInstance().getFaraSenseSensor(new SuccessListener<List<FaraSenseSensor>>() {
+            @Override
+            public void onSuccess(List<FaraSenseSensor> response) {
+                onDownloadContentListener.onSucess();
+            }
+        }, new ErrorListener() {
+            @Override
+            public void onError(RestError restError) {
+                onDownloadContentListener.onFail();
+            }
+        }, dateStart, dateEnd)).start();
     }
 
     @Override

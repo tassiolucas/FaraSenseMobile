@@ -8,11 +8,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.GsonBuilder;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import farasense.mobile.App;
 import farasense.mobile.api.base.ErrorListener;
 import farasense.mobile.api.base.GenericRequest;

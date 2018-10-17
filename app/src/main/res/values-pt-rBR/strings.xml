@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FaraSense</string>
+    <string name="error_network_timeout_title">Tempo limite de conexão alcançado</string>
+    <string name="error_network_timeout_message">Tempo limite de conexão alcançado</string>
+    <string name="error_network_title">Conexão falhou</string>
+    <string name="error_network_message">Erro ao tentar conectar o servidor</string>
+    <string name="error_unknown_error_title">Ocorreu um erro desconhecido. Tente novamente daqui a pouco.</string>
+    <string name="error_unknown_error_message">Ocorreu um erro desconhecido. Tente novamente daqui a pouco.</string>
+    <string name="error_no_connection_message">Verifique sua conexão com a Internet e tente novamente.</string>
+    <string name="error_downloading_message">Houve um problema ao baixar os dados. Tente novamente mais tarde.</string>
+    <string name="welcome_label">Olá, seja muito bem-vindo!</string>
+    <string name="menu_search_title">Pesquisar</string>
+</resources>

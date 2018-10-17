@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="btn_padding">8dp</dimen>
+    <dimen name="btn_double_padding">16dp</dimen>
+    <dimen name="btn_margin">4dp</dimen>
+    <dimen name="card_view_margin">8dp</dimen>
+    <dimen name="card_view_half_margin">4dp</dimen>
+    <dimen name="card_view_padding">16dp</dimen>
+    <dimen name="card_view_half_padding">8dp</dimen>
+    <dimen name="title_toolbar">15sp</dimen>
+    <dimen name="subttitle_toolbar">11sp</dimen>
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="screen_double_padding">32dp</dimen>
+    <dimen name="element_half_little_margin">4dp</dimen>
+    <dimen name="element_half_margin">8dp</dimen>
+    <dimen name="element_margin">16dp</dimen>
+    <dimen name="element_double_margin">32dp</dimen>
+    <dimen name="element_half_padding">8dp</dimen>
+    <dimen name="element_padding">16dp</dimen>
+    <dimen name="element_one_half_padding">24dp</dimen>
+    <dimen name="element_double_padding">32dp</dimen>
+    <dimen name="element_triple_padding">48dp</dimen>
+    <dimen name="text_logo">32dp</dimen>
+
+</resources>
