@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:gravity="center_horizontal"
-            tools:text="Some title"/>
+            tools:text="Olá, seja muito bem-vindo!"/>
 
             <farasense.mobile.view.components.FaraSenseTextViewRegular
             android:id="@+id/toolbar_subtitle"

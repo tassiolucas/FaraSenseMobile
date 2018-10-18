@@ -2,6 +2,8 @@ package farasense.mobile;
 
 import android.app.Activity;
 import android.app.Application;
+
+import farasense.mobile.view_model.base.BaseObservableViewModel;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

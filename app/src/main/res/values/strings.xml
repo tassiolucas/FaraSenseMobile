@@ -10,4 +10,7 @@
     <string name="error_downloading_message">There was a problem downloading the data. Try again later</string>
     <string name="welcome_label">Hello, be very welcome!</string>
     <string name="menu_search_title">Search</string>
+    <string name="daily">Daily</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
 </resources>

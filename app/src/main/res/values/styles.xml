@@ -27,4 +27,18 @@
         <item name="android:textSize">@dimen/subttitle_toolbar</item>
     </style>
 
+    <style name="FaraSenseCardView" parent="CardView">
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/card_view_half_margin</item>
+        <item name="android:layout_marginRight">@dimen/card_view_half_margin</item>
+    </style>
+
+    <style name="ChartCardView" parent="FaraSenseCardView">
+        <item name="android:clickable">false</item>
+        <item name="cardElevation">3dp</item>
+        <item name="cardCornerRadius">10dp</item>
+    </style>
+
 </resources>

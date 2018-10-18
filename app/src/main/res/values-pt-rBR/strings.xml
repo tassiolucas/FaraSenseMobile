@@ -11,4 +11,7 @@
     <string name="error_downloading_message">Houve um problema ao baixar os dados. Tente novamente mais tarde.</string>
     <string name="welcome_label">Olá, seja muito bem-vindo!</string>
     <string name="menu_search_title">Pesquisar</string>
+    <string name="daily">Diário</string>
+    <string name="monthly">Mensal</string>
+    <string name="yearly">Anual</string>
 </resources>

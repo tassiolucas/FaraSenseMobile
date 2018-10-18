@@ -19,19 +19,16 @@ import farasense.mobile.view_model.base.BaseObservableViewModel;
 
 public class SplashActivity extends BaseActivity {
 
-    private boolean shouldStopService = true;
     private static final int TAG_RESULT_PERMISSION_OK = 1;
     private SplashDataBinding binding;
     private SplashViewModel viewModel;
-    private boolean activityFinished;
+    private boolean shouldStopService = true;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         ButterKnife.bind(this);
-
-        activityFinished = false;
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -59,8 +56,6 @@ public class SplashActivity extends BaseActivity {
             Toast.makeText(this, R.string.error_no_connection_message, Toast.LENGTH_SHORT);
             viewModel.goToDashBoardActivity();
         }
-
-        activityFinished = false;
     }
 
     private void downloadContent() {
@@ -75,14 +70,12 @@ public class SplashActivity extends BaseActivity {
                 runOnUiThread(() ->
                         viewModel.goToDashBoardActivity()
                 );
+                shouldStopService = false;
             }
 
             @Override
             public void onFail() {
-                if (!activityFinished) {
-                    Toast.makeText(getApplicationContext(), R.string.error_downloading_message, Toast.LENGTH_SHORT);
-                    activityFinished = true;
-                }
+                Toast.makeText(getApplicationContext(), R.string.error_downloading_message, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -100,14 +93,14 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onBackPressed() {
+    }
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         if (shouldStopService) {
             BaseObservableViewModel.stopServices(this);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
     }
 }
