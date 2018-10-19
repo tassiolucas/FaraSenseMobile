@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6B5A8F</color>
-    <color name="colorPrimaryDark">#8977af</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#566ebc</color>
+    <color name="colorPrimaryDark">#3e5399</color>
+    <color name="colorAccent">#E39D44</color>
+    <color name="colorTabBar">#3e5399</color>
     <color name="colorLogo">#17234B</color>
     <color name="colorSplash">#F6F6F6</color>
     <color name="transparent">#00000000</color>

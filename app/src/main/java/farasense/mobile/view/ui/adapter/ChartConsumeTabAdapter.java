@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import farasense.mobile.view.ui.activity.fragment.AnnualChartConsumptionFragment;
+import farasense.mobile.view.ui.activity.fragment.YearlyChartConsumptionFragment;
 import farasense.mobile.view.ui.activity.fragment.DailyChartConsumptionFragment;
 import farasense.mobile.view.ui.activity.fragment.MonthlyChartConsumptionFragment;
 
@@ -16,7 +16,7 @@ public class ChartConsumeTabAdapter extends FragmentPagerAdapter {
     private int numOfTabs;
     private DailyChartConsumptionFragment dailyChartConsumptionFragment;
     private MonthlyChartConsumptionFragment monthlyChartConsumptionFragment;
-    private AnnualChartConsumptionFragment annualChartConsumptionFragment;
+    private YearlyChartConsumptionFragment yearlyChartConsumptionFragment;
     private List<Fragment> fragmentList;
 
     public ChartConsumeTabAdapter(FragmentManager fragmentManager, int numOfTabs) {
@@ -25,12 +25,12 @@ public class ChartConsumeTabAdapter extends FragmentPagerAdapter {
 
         dailyChartConsumptionFragment = new DailyChartConsumptionFragment();
         monthlyChartConsumptionFragment = new MonthlyChartConsumptionFragment();
-        annualChartConsumptionFragment = new AnnualChartConsumptionFragment();
+        yearlyChartConsumptionFragment = new YearlyChartConsumptionFragment();
 
         fragmentList = new ArrayList<>();
         fragmentList.add(dailyChartConsumptionFragment);
         fragmentList.add(monthlyChartConsumptionFragment);
-        fragmentList.add(annualChartConsumptionFragment);
+        fragmentList.add(yearlyChartConsumptionFragment);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ChartConsumeTabAdapter extends FragmentPagerAdapter {
             case 1:
                 return monthlyChartConsumptionFragment;
             case 2:
-                return annualChartConsumptionFragment;
+                return yearlyChartConsumptionFragment;
             default:
                 return null;
         }

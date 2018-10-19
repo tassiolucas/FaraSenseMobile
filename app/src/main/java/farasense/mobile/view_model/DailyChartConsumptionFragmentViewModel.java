@@ -7,6 +7,4 @@ public class DailyChartConsumptionFragmentViewModel extends AndroidViewModel {
 
     public DailyChartConsumptionFragmentViewModel(Application application) { super(application); }
 
-
-
 }

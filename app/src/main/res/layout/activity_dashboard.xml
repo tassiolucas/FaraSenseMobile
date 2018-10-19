@@ -18,13 +18,23 @@
             android:id="@+id/include_toolbar"
             layout="@layout/toolbar"/>
 
+        <TextView
+            android:id="@+id/title_consumption_text"
+            android:layout_below="@id/include_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            style="@style/FaraSenseTitleChart"
+            android:layout_marginTop="@dimen/element_double_padding"
+            android:layout_marginBottom="@dimen/element_margin"
+            android:text="@string/title_consumption_label"/>
+
         <include
             android:id="@+id/chart_consume_view"
-            android:layout_below="@id/include_toolbar"
+            android:layout_below="@id/title_consumption_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             layout="@layout/adapter_item_consume_chart_date"/>
-
 
     </RelativeLayout>
 
