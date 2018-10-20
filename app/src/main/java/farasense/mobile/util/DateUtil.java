@@ -1,23 +1,48 @@
 package farasense.mobile.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Instant;
+import org.joda.time.Interval;
+import org.joda.time.Period;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class DateUtil {
 
-    static Calendar calendar;
-
-    public static Date firstDayOfTheYear() {
-        calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-        calendar.set(Calendar.HOUR, 12);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
-        calendar.clear(Calendar.MONTH);
-        calendar.set(Calendar.DAY_OF_MONTH, 0);
-
-        return calendar.getTime();
+    public static Date getTodayDay() {
+        return new Date();
     }
+
+    public static Date getFirtsThirtyDayInPast() {
+        Date today = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(today);
+        cal.add(Calendar.DAY_OF_MONTH, -30);
+        Date firtDayOfTheYear = cal.getTime();
+
+        return firtDayOfTheYear;
+    }
+
+    public static Date getDayInPast(int day) {
+        Date today = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(today);
+        cal.add(Calendar.DAY_OF_MONTH, -day);
+        Date firtDayOfTheYear = cal.getTime();
+
+        return firtDayOfTheYear;
+    }
+
+    public static int getIntervalDate() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        DateTime start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+
+        return Days.daysBetween(start, new DateTime()).getDays();
+    }
+
 }

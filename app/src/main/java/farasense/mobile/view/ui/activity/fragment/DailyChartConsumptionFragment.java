@@ -31,6 +31,8 @@ public class DailyChartConsumptionFragment extends Fragment {
 
         binding.setDailyCompumptionFragment(viewModel);
 
+        viewModel.getDailyConsumption();
+
         return view;
     }
 

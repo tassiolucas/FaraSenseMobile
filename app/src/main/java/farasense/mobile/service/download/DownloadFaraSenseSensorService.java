@@ -49,8 +49,8 @@ public class DownloadFaraSenseSensorService extends BaseService {
                             public void onError(RestError restError) {
                                 Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);
                             }
-                        }, DateUtil.firstDayOfTheYear()
-                        , new Date());
+                        }, DateUtil.getFirtsThirtyDayInPast()
+                        , DateUtil.getTodayDay());
                         Thread.sleep(SLEEP_WAIT);
                     } else {
                         Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);
@@ -65,18 +65,19 @@ public class DownloadFaraSenseSensorService extends BaseService {
         }
     }
 
-    public static void download(OnDownloadContentListener onDownloadContentListener, final Date dateStart, final Date dateEnd) {
+    public static void download(OnDownloadContentListener onDownloadContentListener, Date startDate, Date finalDate) {
         new Thread(() -> RestClient.getInstance().getFaraSenseSensor(new SuccessListener<List<FaraSenseSensor>>() {
             @Override
             public void onSuccess(List<FaraSenseSensor> response) {
                 onDownloadContentListener.onSucess();
+                FaraSenseSensorDAO.saveFromServer(response);
             }
         }, new ErrorListener() {
             @Override
             public void onError(RestError restError) {
                 onDownloadContentListener.onFail();
             }
-        }, dateStart, dateEnd)).start();
+        }, startDate, finalDate)).start();
     }
 
     @Override

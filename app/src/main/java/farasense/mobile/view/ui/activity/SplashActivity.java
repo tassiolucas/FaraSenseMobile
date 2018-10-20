@@ -52,6 +52,9 @@ public class SplashActivity extends BaseActivity {
 
         if (ConnectionUtil.isDataConnectionAvailable(getApplicationContext())) {
             downloadContent();
+            // Para agilizar a programação...
+            // TODO: Remover após desenvolvimento
+            //viewModel.goToDashBoardActivity();
         } else {
             Toast.makeText(this, R.string.error_no_connection_message, Toast.LENGTH_SHORT);
             viewModel.goToDashBoardActivity();

@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.Date;
 
@@ -56,17 +57,25 @@ public class BaseService extends Service {
     }
 
     public static void initialDownloadDataSensors(final OnStartServiceDownload onStartServiceDownload) {
-        DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
-            @Override
-            public void onSucess() {
-                onStartServiceDownload.onFinish();
-            }
+        int quantDays = DateUtil.getIntervalDate();
+        int pastDays = 0;
 
-            @Override
-            public void onFail() {
-                onStartServiceDownload.onFail();
-            }
-        }, DateUtil.firstDayOfTheYear()
-        , new Date());
+//        do {
+//            pastDays++;
+//
+//            int finalPastDays = pastDays;
+//            DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
+//                @Override
+//                public void onSucess() {
+//                    Log.d("DIAS ATRAS", "DIA: " + finalPastDays);
+//                }
+//
+//                @Override
+//                public void onFail() {
+//                    Log.d("FALHOU", "DIA: " + finalPastDays);
+//                }
+//            }, DateUtil.getDayInPast(pastDays), DateUtil.getTodayDay());
+//
+//        } while(pastDays < quantDays);
     }
 }
