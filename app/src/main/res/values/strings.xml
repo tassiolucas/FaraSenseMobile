@@ -13,5 +13,10 @@
     <string name="daily">Daily</string>
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
+    <string name="hour">1 Hour</string>
+    <string name="thirty_minutes">30 min</string>
+    <string name="five_minutes">5 min</string>
     <string name="title_consumption_label">This is their consumption:</string>
+    <string name="title_last_consumption_label">Latest consumption:</string>
+    <string name="loading">Loading data...</string>
 </resources>

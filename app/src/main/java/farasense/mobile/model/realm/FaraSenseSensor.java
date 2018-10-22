@@ -16,7 +16,10 @@ public class FaraSenseSensor extends RealmObject {
     @SerializedName("power")
     Double power;
     @SerializedName("timestamp")
-    Date timestamp;
+    Date date;
+    @PrimaryKey
+    @SerializedName("long_timestamp")
+    Long timestamp;
 
     public int getId() {
         return id;
@@ -26,11 +29,19 @@ public class FaraSenseSensor extends RealmObject {
         this.id = id;
     }
 
-    public Date getTimestamp() {
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -49,4 +60,5 @@ public class FaraSenseSensor extends RealmObject {
     public void setPower(double power) {
         this.power = power;
     }
+
 }

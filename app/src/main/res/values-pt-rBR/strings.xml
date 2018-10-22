@@ -14,5 +14,10 @@
     <string name="daily">Diário</string>
     <string name="monthly">Mensal</string>
     <string name="yearly">Anual</string>
+    <string name="hour">1 Hora</string>
+    <string name="thirty_minutes">30 min</string>
+    <string name="five_minutes">5 min</string>
     <string name="title_consumption_label">Esse é seu consumo:</string>
+    <string name="title_last_consumption_label">Consumo mais recente:</string>
+    <string name="loading">Carregando dados...</string>
 </resources>

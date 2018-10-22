@@ -49,8 +49,8 @@ public class DownloadFaraSenseSensorService extends BaseService {
                             public void onError(RestError restError) {
                                 Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);
                             }
-                        }, DateUtil.getFirtsThirtyDayInPast()
-                        , DateUtil.getTodayDay());
+                        }, DateUtil.getFirstMomentOfTheDay()
+                        , DateUtil.getNow());
                         Thread.sleep(SLEEP_WAIT);
                     } else {
                         Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);

@@ -32,12 +32,4 @@ public class App extends Application {
         downloadingServices = false;
     }
 
-    public Activity getCurrentActivity() {
-        return currentActivity;
-    }
-
-    public void setCurrentActivity(Activity currentActivity) {
-        this.currentActivity = currentActivity;
-    }
-
 }

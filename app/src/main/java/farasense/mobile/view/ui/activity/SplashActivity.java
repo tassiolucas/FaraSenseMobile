@@ -65,7 +65,7 @@ public class SplashActivity extends BaseActivity {
         BaseService.initialDownloadDataSensors(new OnStartServiceDownload() {
             @Override
             public void onStart() {
-
+                Toast.makeText(getApplicationContext(), R.string.loading, Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -86,7 +86,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        App.getInstance().setCurrentActivity(this);
 
         if (!PermissionUtil.hasPermissions(this, PermissionUtil.PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PermissionUtil.PERMISSIONS, PermissionUtil.PERMISSION_ALL);

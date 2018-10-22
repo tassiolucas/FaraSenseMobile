@@ -7,11 +7,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.View;
+
 import butterknife.ButterKnife;
 import farasense.mobile.R;
 import farasense.mobile.databinding.DashboardDataBinding;
 import farasense.mobile.view.ui.activity.base.BaseActivity;
 import farasense.mobile.view.ui.adapter.ChartConsumeTabAdapter;
+import farasense.mobile.view.ui.adapter.ChartLastConsumptionTabAdapter;
+import farasense.mobile.view_model.FiveChartConsumptionFragmentViewModel;
+import farasense.mobile.view_model.HourChartConsumptionFragmentViewModel;
+import farasense.mobile.view_model.ThirtyChartConsumptionFragmentViewModel;
 import farasense.mobile.view_model.YearlyChartConsumptionFragmentViewModel;
 import farasense.mobile.view_model.DailyChartConsumptionFragmentViewModel;
 import farasense.mobile.view_model.MonthlyChartConsumptionFragmentViewModel;
@@ -27,9 +33,18 @@ public class DashboardActivity extends BaseActivity {
     private DailyChartConsumptionFragmentViewModel dailyConsumptionFragmentViewModel;
     private MonthlyChartConsumptionFragmentViewModel monthlyConsumptionFragmentViewModel;
     private YearlyChartConsumptionFragmentViewModel yearlyChartConsumptionFragmentViewModel;
-    private TabLayout tabLayout;
-    private ChartConsumeTabAdapter viewPagerAdapter;
-    private ViewPager viewPager;
+    private HourChartConsumptionFragmentViewModel hourChartConsumptionFragmentViewModel;
+    private ThirtyChartConsumptionFragmentViewModel thirtyChartConsumptionFragmentViewModel;
+    private FiveChartConsumptionFragmentViewModel fiveChartConsumptionFragmentViewModel;
+
+    private TabLayout tabLayoutConsumption;
+    private TabLayout tabLayoutLastConsumption;
+    private ChartConsumeTabAdapter viewPagerConsumptionAdapter;
+    private ChartLastConsumptionTabAdapter viewPagerLastConsumptionAdapter;
+
+    private ViewPager viewConsumptionPager;
+    private ViewPager viewLastConsumptionPager;
+
     private FragmentManager fragmentManager;
 
     @Override
@@ -44,22 +59,38 @@ public class DashboardActivity extends BaseActivity {
         monthlyConsumptionFragmentViewModel = ViewModelProviders.of(this).get(MonthlyChartConsumptionFragmentViewModel.class);
         yearlyChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(YearlyChartConsumptionFragmentViewModel.class);
 
-        tabLayout = (TabLayout) findViewById(R.id.consumption_chart_tabs);
+        hourChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(HourChartConsumptionFragmentViewModel.class);
+        monthlyConsumptionFragmentViewModel = ViewModelProviders.of(this).get(MonthlyChartConsumptionFragmentViewModel.class);
+        fiveChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(FiveChartConsumptionFragmentViewModel.class);
 
-        viewPagerAdapter = new ChartConsumeTabAdapter(getSupportFragmentManager(), 3);
+        tabLayoutConsumption = (TabLayout) findViewById(R.id.consumption_chart_tabs);
+        tabLayoutLastConsumption = (TabLayout) findViewById(R.id.last_consumption_chart_tabs);
 
-        viewPager = (ViewPager) findViewById(R.id.chart_consumption_container);
+        viewPagerConsumptionAdapter = new ChartConsumeTabAdapter(getSupportFragmentManager(), 3);
+        viewPagerLastConsumptionAdapter = new ChartLastConsumptionTabAdapter(getSupportFragmentManager(), 3);
 
-        viewPager.setAdapter(viewPagerAdapter);
+        viewConsumptionPager = (ViewPager) findViewById(R.id.chart_consumption_container);
+        viewLastConsumptionPager = (ViewPager) findViewById(R.id.last_chart_last_consumption_container);
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+        viewConsumptionPager.setAdapter(viewPagerConsumptionAdapter);
+        viewLastConsumptionPager.setAdapter(viewPagerLastConsumptionAdapter);
 
-        tabLayout.setupWithViewPager(viewPager);
+        viewConsumptionPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutConsumption));
+        viewLastConsumptionPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutLastConsumption));
 
-        tabLayout.getTabAt(FIRST_TAB).setText(R.string.daily);
-        tabLayout.getTabAt(SECOND_TAB).setText(R.string.monthly);
-        tabLayout.getTabAt(THIRD_TAB).setText(R.string.yearly);
+        tabLayoutConsumption.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewConsumptionPager));
+        tabLayoutLastConsumption.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewLastConsumptionPager));
+
+        tabLayoutConsumption.setupWithViewPager(viewConsumptionPager);
+        tabLayoutLastConsumption.setupWithViewPager(viewLastConsumptionPager);
+
+        tabLayoutConsumption.getTabAt(FIRST_TAB).setText(R.string.daily);
+        tabLayoutConsumption.getTabAt(SECOND_TAB).setText(R.string.monthly);
+        tabLayoutConsumption.getTabAt(THIRD_TAB).setText(R.string.yearly);
+
+        tabLayoutLastConsumption.getTabAt(FIRST_TAB).setText(R.string.hour);
+        tabLayoutLastConsumption.getTabAt(SECOND_TAB).setText(R.string.thirty_minutes);
+        tabLayoutLastConsumption.getTabAt(THIRD_TAB).setText(R.string.five_minutes);
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();

@@ -16,9 +16,7 @@ public class DailyChartConsumptionFragmentViewModel extends AndroidViewModel {
     public DailyChartConsumptionFragmentViewModel(Application application) { super(application); }
 
     public void getDailyConsumption() {
-        List<FaraSenseSensor> faraSenseSensorDailyList = FaraSenseSensorDAO.getDailyComsumption();
-
-
+        // List<FaraSenseSensor> faraSenseSensorDailyList = FaraSenseSensorDAO.getDailyComsumption();
     }
 
 

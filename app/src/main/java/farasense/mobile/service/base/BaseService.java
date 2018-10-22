@@ -7,9 +7,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import java.util.Date;
 
 import farasense.mobile.service.download.DownloadFaraSenseSensorService;
 import farasense.mobile.service.listener.OnDownloadContentListener;
@@ -57,25 +54,16 @@ public class BaseService extends Service {
     }
 
     public static void initialDownloadDataSensors(final OnStartServiceDownload onStartServiceDownload) {
-        int quantDays = DateUtil.getIntervalDate();
-        int pastDays = 0;
+            DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
+                @Override
+                public void onSucess() {
+                    onStartServiceDownload.onFinish();
+                }
 
-//        do {
-//            pastDays++;
-//
-//            int finalPastDays = pastDays;
-//            DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
-//                @Override
-//                public void onSucess() {
-//                    Log.d("DIAS ATRAS", "DIA: " + finalPastDays);
-//                }
-//
-//                @Override
-//                public void onFail() {
-//                    Log.d("FALHOU", "DIA: " + finalPastDays);
-//                }
-//            }, DateUtil.getDayInPast(pastDays), DateUtil.getTodayDay());
-//
-//        } while(pastDays < quantDays);
-    }
+                @Override
+                public void onFail() {
+                    onStartServiceDownload.onFail();
+                }
+            }, DateUtil.getFirstMomentOfTheDay(), DateUtil.getNow());
+        }
 }
