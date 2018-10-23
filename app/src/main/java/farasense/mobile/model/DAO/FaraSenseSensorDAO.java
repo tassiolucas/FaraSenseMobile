@@ -75,7 +75,7 @@ public class FaraSenseSensorDAO extends BaseDAO {
         }
     }
 
-    public static List<FaraSenseSensor> getByIntervalsHourMeasures(Date startIntervalHour, Date endIntervalHour) {
+    public static List<FaraSenseSensor> getMeasureByIntervals(Date startIntervalHour, Date endIntervalHour) {
         Realm realm = null;
         hourMeasures = new ArrayList<>();
 

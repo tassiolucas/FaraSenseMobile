@@ -17,27 +17,56 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
-    public static Date getNow() {
-        return new Date();
-    }
+    public static int THIRTY_MINUTES = 30;
 
     public static DateTimeZone getTimeZoneBrazil() { return DateTimeZone.forOffsetHours(-3); }
 
+    // Funções principais relativas ao tempo
+    public static Date getNow() {
+        return new DateTime().withZone(getTimeZoneBrazil()).toDate();
+    }
+
+    public static Date getFirts24Hours() {
+        DateTime firts24Hours = new DateTime().withZone(getTimeZoneBrazil()).minusHours(24);
+        return firts24Hours.toDate();
+    }
+
+    // Funções para os gráficos relativas ao tempo
     public static List<Interval> getAllIntervalsLast24Hours() {
-        DateTime startHour = new DateTime().withZone(DateTimeZone.forOffsetHours(-3));
-        DateTime endHour = new DateTime().withZone(DateTimeZone.forOffsetHours(-3));
-        List<Interval> intervalos = new ArrayList<>();
+        DateTime startHour = new DateTime().withZone(getTimeZoneBrazil());
+        DateTime endHour = new DateTime().withZone(getTimeZoneBrazil());
+        List<Interval> intervals = new ArrayList<>();
 
         int fimDaHora = 0;
         for (int inicioDaHora = 1; inicioDaHora < 25; inicioDaHora++) {
             Interval interval = new Interval(startHour.minusHours(inicioDaHora), endHour.minusHours(fimDaHora));
-            intervalos.add(interval);
+            intervals.add(interval);
             fimDaHora++;
         }
 
-        return intervalos;
+        // Retorna intervalos das últimas 24 horas (de hora em hora) (início da hora e fim da hora)
+        return intervals;
     }
 
+    public static List<Interval> getAllIntervalsLast12Hours() {
+        DateTime startThirty = new DateTime().withZone(getTimeZoneBrazil());
+        DateTime endThirty = new DateTime().withZone(getTimeZoneBrazil());
+        List<Interval> intervals = new ArrayList<>();
+
+        int inicio30Min = 0;
+        int fim30Min = THIRTY_MINUTES;
+        for (int count = 1; count < 25; count++) {
+            Interval interval = new Interval(startThirty.minusMinutes(fim30Min), endThirty.minusMinutes(inicio30Min));
+            intervals.add(interval);
+            inicio30Min = inicio30Min + THIRTY_MINUTES;
+            fim30Min = fim30Min + THIRTY_MINUTES;
+        }
+
+        return intervals;
+    }
+
+    // TODO: LIMPAR FUNCIONALIDADE DE FERRAMENTAS AO TERMINAR O DESENVOLVIMENTO (RETIRAR OS MÉTODOS INÚTEIS)
+    // Funções alternativas
     public static Date getFirtsThirtyDayInPast() {
         Date today = new Date();
         Calendar cal = new GregorianCalendar();
@@ -90,6 +119,8 @@ public class DateUtil {
 
         return dateTime.toDate();
     }
+
+
 
 //    public static int getIntervalDate() {
 //        int year = Calendar.getInstance().get(Calendar.YEAR);

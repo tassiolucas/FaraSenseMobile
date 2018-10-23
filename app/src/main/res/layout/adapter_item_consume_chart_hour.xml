@@ -18,8 +18,8 @@
                 android:id="@+id/last_chart_last_consumption_container"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/element_half_margin"
-                android:layout_marginRight="@dimen/element_half_margin"
-                android:layout_marginLeft="@dimen/element_margin"
+                android:layout_marginRight="@dimen/element_margin"
+                android:layout_marginLeft="@dimen/element_half_margin"
                 android:layout_height="220dp"/>
 
             <android.support.design.widget.AppBarLayout

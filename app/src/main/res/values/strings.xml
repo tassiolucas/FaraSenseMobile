@@ -19,4 +19,5 @@
     <string name="title_consumption_label">This is their consumption:</string>
     <string name="title_last_consumption_label">Latest consumption:</string>
     <string name="loading">Loading data...</string>
+    <string name="kilowatts">Kilowatts</string>
 </resources>

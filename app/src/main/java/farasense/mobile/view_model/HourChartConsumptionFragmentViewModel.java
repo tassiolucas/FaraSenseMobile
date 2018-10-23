@@ -3,15 +3,11 @@ package farasense.mobile.view_model;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.joda.time.Interval;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import farasense.mobile.model.DAO.FaraSenseSensorDAO;
 import farasense.mobile.model.realm.FaraSenseSensor;
@@ -24,54 +20,48 @@ public class HourChartConsumptionFragmentViewModel extends AndroidViewModel {
 
     public HourChartConsumptionFragmentViewModel(Application application) { super(application); }
 
-    // TODO: FAZER UM CÓDIGO QUE LEIA AS MEDIDAS RELATIVAS AO TEMPO EM 24 HORAS
+    // TODO: (OK!) - FAZER UM CÓDIGO QUE LEIA AS MEDIDAS RELATIVAS AO TEMPO EM 24 HORAS
+    // TODO: - FAZER UM CODIGO COM LIVEDATA
 
-    public List<Entry> getHoursPerDayConsumption() {
+    public List<Entry> getHourPer24Hours() {
         int hoursBehind = 0;
-        List<Entry> entryMeasuresHourPerHour = new ArrayList<>();
+        List<Entry> entriesMeasures = new ArrayList<>();
         List<Interval> intervals24Hours = DateUtil.getAllIntervalsLast24Hours();
-        setNewHourChartLabels();
+        hourChartLabels = new ArrayList<>();
 
         do {
-            List<FaraSenseSensor> faraSenseSensorDailyList = FaraSenseSensorDAO.getByIntervalsHourMeasures(intervals24Hours.get(hoursBehind).getStart().toDate(), intervals24Hours.get(hoursBehind).getEnd().toDate());
+            List<FaraSenseSensor> sensorMeasuresList = FaraSenseSensorDAO.getMeasureByIntervals(
+                    intervals24Hours.get(hoursBehind).getStart().toDate(),
+                    intervals24Hours.get(hoursBehind).getEnd().toDate()
+            );
 
-            if (faraSenseSensorDailyList != null) {
-
+            if (sensorMeasuresList != null) {
                 Double totalPowerMeasure = 0.0;
-                for (FaraSenseSensor measure : faraSenseSensorDailyList) {
+                for (FaraSenseSensor measure : sensorMeasuresList) {
                     totalPowerMeasure = totalPowerMeasure + measure.getPower();
                 }
 
                 Double measure = EnergyUtil.getKwhInPeriod(
                         totalPowerMeasure,
-                        faraSenseSensorDailyList.size(),
+                        sensorMeasuresList.size(),
                         intervals24Hours.get(hoursBehind).getStart().toDate(),
                         intervals24Hours.get(hoursBehind).getEnd().toDate());
 
-                entryMeasuresHourPerHour.add(new Entry(hoursBehind, measure.floatValue()));
-
+                entriesMeasures.add(new Entry(hoursBehind, measure.floatValue()));
             } else {
-                entryMeasuresHourPerHour.add(new Entry(hoursBehind, 0));
+                entriesMeasures.add(new Entry(hoursBehind, 0));
             }
 
-            addHourChartLabel(String.valueOf(intervals24Hours.get(hoursBehind).getEnd().getHourOfDay()) + "H");
+            hourChartLabels.add(String.valueOf(intervals24Hours.get(hoursBehind).getEnd().getHourOfDay()) + "H");
 
             hoursBehind++;
         } while (hoursBehind < intervals24Hours.size());
 
-        return entryMeasuresHourPerHour;
+        return entriesMeasures;
     }
 
     public List<String> getHourChartLabels() {
-        Collections.reverse(hourChartLabels);
         return hourChartLabels;
     }
 
-    public void addHourChartLabel(String label) {
-        hourChartLabels.add(label);
-    }
-
-    public void setNewHourChartLabels() {
-        hourChartLabels = new ArrayList<>();
-    }
 }

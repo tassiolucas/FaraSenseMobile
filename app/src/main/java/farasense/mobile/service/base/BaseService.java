@@ -64,6 +64,6 @@ public class BaseService extends Service {
                 public void onFail() {
                     onStartServiceDownload.onFail();
                 }
-            }, DateUtil.getFirstMomentOfTheDay(), DateUtil.getNow());
+            }, DateUtil.getFirts24Hours(), DateUtil.getNow());
         }
 }
