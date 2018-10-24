@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.View;
@@ -46,6 +47,7 @@ public class DashboardActivity extends BaseActivity {
     private ViewPager viewLastConsumptionPager;
 
     private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -94,11 +96,28 @@ public class DashboardActivity extends BaseActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
+
+        fragmentTransaction = fragmentManager.beginTransaction();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        tabLayoutLastConsumption.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                fragmentManager.getFragments().get(tab.getPosition()).onResume();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
     }
 
     @Override

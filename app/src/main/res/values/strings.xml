@@ -20,4 +20,6 @@
     <string name="title_last_consumption_label">Latest consumption:</string>
     <string name="loading">Loading data...</string>
     <string name="kilowatts">Kilowatts</string>
+    <string name="descriptionHourChart">Hourly</string>
+    <string name="descriptionThirtyChart">Every 30 minutes</string>
 </resources>

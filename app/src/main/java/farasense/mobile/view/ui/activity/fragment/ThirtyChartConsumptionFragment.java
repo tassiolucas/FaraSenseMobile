@@ -42,15 +42,24 @@ public class ThirtyChartConsumptionFragment extends Fragment {
 
         View view = binding.getRoot();
 
-        createHourChart();
+        createThirtyChart();
 
         binding.setThirtyCompumptionFragment(viewModel);
 
         return view;
     }
 
-    private void createHourChart() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        thirtyChart.animateY(3000);
+        thirtyChart.invalidate();
+    }
+
+    private void createThirtyChart() {
         thirtyChart = binding.thirtyChartConsumption;
+        thirtyChart.getDescription().setText(getResources().getString(R.string.descriptionThirtyChart));
+
         XAxis xAxis = thirtyChart.getXAxis();
         YAxis yAxis = thirtyChart.getAxisLeft();
         LineDataSet dataSet;
@@ -69,8 +78,8 @@ public class ThirtyChartConsumptionFragment extends Fragment {
         thirtyChart.setData(data);
     }
 
-    private void configureAxis(LineChart hourChart, XAxis xAxis, YAxis yAxis) {
-        hourChart.animateXY(3000, 3000);
+    private void configureAxis(LineChart thirtyChart, XAxis xAxis, YAxis yAxis) {
+        thirtyChart.animateY(3000);
 
         xAxis.setDrawAxisLine(false);
         xAxis.setEnabled(true);
@@ -88,12 +97,12 @@ public class ThirtyChartConsumptionFragment extends Fragment {
     private LineDataSet configureDataSet(List<Entry> entryList) {
         LineDataSet dataSet;
         dataSet = new LineDataSet(entryList, getResources().getString(R.string.kilowatts));
-        dataSet.setColor(R.color.colorPrimary);
-        dataSet.setCircleColor(R.color.colorPrimaryDark);
+        dataSet.setColor(R.color.colorThirtyChartLine);
+        dataSet.setCircleColor(R.color.colorThirtyChartPoint);
 
         dataSet.setDrawFilled(true);
 
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_blue);
+        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_thirty_chart);
 
         dataSet.setFillDrawable(drawable);
         return dataSet;

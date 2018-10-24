@@ -21,4 +21,6 @@
     <string name="title_last_consumption_label">Consumo mais recente:</string>
     <string name="loading">Carregando dados...</string>
     <string name="kilowatts">Kilowatts</string>
+    <string name="descriptionHourChart">Por hora em hora</string>
+    <string name="descriptionThirtyChart">De 30 em 30 minutos</string>
 </resources>

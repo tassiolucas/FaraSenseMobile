@@ -5,8 +5,20 @@
     <color name="colorAccent">#E39D44</color>
     <color name="colorTabBar">#3e5399</color>
     <color name="colorLogo">#17234B</color>
-    <color name="colorChartLine">#0800a5</color>
-    <color name="colorChartPoint">#0800a5</color>
+
+    <color name="colorHourChartLine">#0800a5</color>
+    <color name="colorHourChartPoint">#0800a5</color>
+    <color name="colorHourFadeChartStart">#b0aeef</color>
+    <color name="colorHourFadeChartEnd">#040056</color>
+
+    <color name="colorThirtyChartLine">#6bbcff</color>
+    <color name="colorThirtyChartPoint">#6bbcff</color>
+    <color name="colorThirtyFadeChartStart">#a5bed3</color>
+    <color name="colorThurtyFadeChartEnd">#5281a8</color>
+
+    <color name="colorFiveChartLine">#9893f2</color>
+    <color name="colorFiveChartPoint">#9893f2</color>
+
     <color name="colorSplash">#F6F6F6</color>
     <color name="transparent">#00000000</color>
     <color name="text">#222222</color>

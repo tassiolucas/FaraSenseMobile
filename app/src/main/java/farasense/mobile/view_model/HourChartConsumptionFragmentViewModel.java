@@ -8,6 +8,7 @@ import com.github.mikephil.charting.data.Entry;
 import org.joda.time.Interval;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import farasense.mobile.model.DAO.FaraSenseSensorDAO;
 import farasense.mobile.model.realm.FaraSenseSensor;
@@ -21,11 +22,13 @@ public class HourChartConsumptionFragmentViewModel extends AndroidViewModel {
     public HourChartConsumptionFragmentViewModel(Application application) { super(application); }
 
     // TODO: (OK!) - FAZER UM CÓDIGO QUE LEIA AS MEDIDAS RELATIVAS AO TEMPO EM 24 HORAS
+    // TODO: -(OK!) INVERTER A PLOTAGEM DOS GRÁFICOS
     // TODO: - FAZER UM CODIGO COM LIVEDATA
 
     public List<Entry> getHourPer24Hours() {
         int hoursBehind = 0;
         List<Entry> entriesMeasures = new ArrayList<>();
+        List<Double> measuresList = new ArrayList<>();
         List<Interval> intervals24Hours = DateUtil.getAllIntervalsLast24Hours();
         hourChartLabels = new ArrayList<>();
 
@@ -44,12 +47,12 @@ public class HourChartConsumptionFragmentViewModel extends AndroidViewModel {
                 Double measure = EnergyUtil.getKwhInPeriod(
                         totalPowerMeasure,
                         sensorMeasuresList.size(),
-                        intervals24Hours.get(hoursBehind).getStart().toDate(),
-                        intervals24Hours.get(hoursBehind).getEnd().toDate());
+                        sensorMeasuresList.get(0).getDate(),
+                        sensorMeasuresList.get(sensorMeasuresList.size() - 1).getDate());
 
-                entriesMeasures.add(new Entry(hoursBehind, measure.floatValue()));
+                measuresList.add(measure);
             } else {
-                entriesMeasures.add(new Entry(hoursBehind, 0));
+                measuresList.add(Double.valueOf(0));
             }
 
             hourChartLabels.add(String.valueOf(intervals24Hours.get(hoursBehind).getEnd().getHourOfDay()) + "H");
@@ -57,10 +60,19 @@ public class HourChartConsumptionFragmentViewModel extends AndroidViewModel {
             hoursBehind++;
         } while (hoursBehind < intervals24Hours.size());
 
+        Collections.reverse(measuresList);
+        int i = 0;
+        for (Double measure : measuresList) {
+            entriesMeasures.add(new Entry(i, measure.floatValue()));
+            i++;
+        }
+
         return entriesMeasures;
     }
 
+
     public List<String> getHourChartLabels() {
+        Collections.reverse(hourChartLabels);
         return hourChartLabels;
     }
 
