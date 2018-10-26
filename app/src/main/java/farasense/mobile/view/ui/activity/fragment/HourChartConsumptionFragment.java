@@ -11,25 +11,25 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 
 import java.util.List;
 import javax.annotation.Nullable;
+
 import farasense.mobile.R;
 import farasense.mobile.databinding.HourChartConsumptionFragmentDataBinding;
 import farasense.mobile.util.ChartUtil;
-import farasense.mobile.view.ui.activity.listener.OnChartValueSelectedListener;
 import farasense.mobile.view_model.HourChartConsumptionFragmentViewModel;
 
 public class HourChartConsumptionFragment extends Fragment {
 
-    private OnChartValueSelectedListener onChartValueSelectedListener;
     private HourChartConsumptionFragmentDataBinding binding;
     private HourChartConsumptionFragmentViewModel viewModel;
     private final LifecycleRegistry registry = new LifecycleRegistry(this);
@@ -54,17 +54,18 @@ public class HourChartConsumptionFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
         hourChart.animateY( 3000);
         hourChart.invalidate();
     }
 
     private void createHourChart() {
         hourChart = binding.hourChartConsumption;
-        hourChart.getDescription().setText(getResources().getString(R.string.descriptionHourChart));
+        hourChart.getDescription().setText(getResources().getString(R.string.description_hour_chart));
+        hourChart.setScaleYEnabled(false);
 
-        // hourChart.setOnChartValueSelectedListener();
+        configureValueSelectedListener(hourChart);
 
         XAxis xAxis = hourChart.getXAxis();
         YAxis yAxis = hourChart.getAxisLeft();
@@ -87,9 +88,12 @@ public class HourChartConsumptionFragment extends Fragment {
         hourChart.animateY(3000);
 
         xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(true);
         xAxis.setEnabled(true);
 
-        yAxis.setDrawLabels(false);
+        hourChart.getAxisRight().setEnabled(false);
+        yAxis.setDrawLabels(true);
+        yAxis.setDrawZeroLine(false);
         yAxis.setDrawAxisLine(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawZeroLine(true);
@@ -104,6 +108,7 @@ public class HourChartConsumptionFragment extends Fragment {
         dataSet = new LineDataSet(entryList, getResources().getString(R.string.kilowatts));
         dataSet.setColor(R.color.colorHourChartLine);
         dataSet.setCircleColor(R.color.colorHourChartPoint);
+        dataSet.setDrawValues(false);
 
         dataSet.setDrawFilled(true);
 
@@ -113,11 +118,28 @@ public class HourChartConsumptionFragment extends Fragment {
         return dataSet;
     }
 
-//    @Override
-//    public void onValueSelected(Entry e, Highlight h) {
-//
-//        final String x = chart.getXAxis().getValueFormatter().getFormattedValue(e.getX(), chart.getXAxis());
-//    }
+    private void configureValueSelectedListener(LineChart hourChart) {
+        hourChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry entry, Highlight h) {
+                if (binding.labelHourValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelHourValueSelected.setText(String.valueOf(entry.getY()));
+                } else {
+                    binding.labelHourValueSelected.setVisibility(View.VISIBLE);
+                    binding.labelHourValueSelected.setText(String.valueOf(entry.getY()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected() {
+                if (binding.labelHourValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelHourValueSelected.setVisibility(View.GONE);
+                } else {
+                    binding.labelHourValueSelected.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
 
     @Override
     public LifecycleRegistry getLifecycle() { return registry; }

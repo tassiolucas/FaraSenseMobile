@@ -107,11 +107,11 @@ public class DashboardActivity extends BaseActivity {
         tabLayoutLastConsumption.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                fragmentManager.getFragments().get(tab.getPosition()).onResume();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                fragmentManager.getFragments().get(tab.getPosition()).onPause();
             }
 
             @Override

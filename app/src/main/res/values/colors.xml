@@ -16,8 +16,10 @@
     <color name="colorThirtyFadeChartStart">#a5bed3</color>
     <color name="colorThurtyFadeChartEnd">#5281a8</color>
 
-    <color name="colorFiveChartLine">#9893f2</color>
-    <color name="colorFiveChartPoint">#9893f2</color>
+    <color name="colorFiveChartLine">#6af7ff</color>
+    <color name="colorFiveChartPoint">#4db1b7</color>
+    <color name="colorFiveFadeChartStart">#a5cdef</color>
+    <color name="colorFiveFadeChartEnd">#eff8ff</color>
 
     <color name="colorSplash">#F6F6F6</color>
     <color name="transparent">#00000000</color>

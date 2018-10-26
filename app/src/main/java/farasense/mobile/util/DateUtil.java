@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
+    public static final int FIVE_MINUTES = 5;
     public static int THIRTY_MINUTES = 30;
 
     public static DateTimeZone getTimeZoneBrazil() { return DateTimeZone.forOffsetHours(-3); }
@@ -53,13 +54,30 @@ public class DateUtil {
         DateTime endThirty = new DateTime().withZone(getTimeZoneBrazil());
         List<Interval> intervals = new ArrayList<>();
 
-        int inicio30Min = 0;
-        int fim30Min = THIRTY_MINUTES;
+        int start30Min = 0;
+        int end30Min = THIRTY_MINUTES;
         for (int count = 1; count < 25; count++) {
-            Interval interval = new Interval(startThirty.minusMinutes(fim30Min), endThirty.minusMinutes(inicio30Min));
+            Interval interval = new Interval(startThirty.minusMinutes(end30Min), endThirty.minusMinutes(start30Min));
             intervals.add(interval);
-            inicio30Min = inicio30Min + THIRTY_MINUTES;
-            fim30Min = fim30Min + THIRTY_MINUTES;
+            start30Min = start30Min + THIRTY_MINUTES;
+            end30Min = end30Min + THIRTY_MINUTES;
+        }
+
+        return intervals;
+    }
+
+    public static List<Interval> getAllIntervalsLast2Hours() {
+        DateTime startFive = new DateTime().withZone(getTimeZoneBrazil());
+        DateTime endFive = new DateTime().withZone(getTimeZoneBrazil());
+        List<Interval> intervals = new ArrayList<>();
+
+        int start5Min = 0;
+        int end5Min = FIVE_MINUTES;
+        for (int count = 1; count < 25; count++) {
+            Interval interval = new Interval(startFive.minusMinutes(end5Min), endFive.minusMinutes(start5Min));
+            intervals.add(interval);
+            start5Min = start5Min + FIVE_MINUTES;
+            end5Min = end5Min + FIVE_MINUTES;
         }
 
         return intervals;
@@ -119,6 +137,7 @@ public class DateUtil {
 
         return dateTime.toDate();
     }
+
 
 
 

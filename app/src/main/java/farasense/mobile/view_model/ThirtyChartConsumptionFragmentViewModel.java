@@ -18,7 +18,7 @@ import farasense.mobile.util.EnergyUtil;
 
 public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
 
-    private List<String> hourThirtyLabels = new ArrayList<>();
+    private List<String> xAxisLabels = new ArrayList<>();
 
     ThirtyChartConsumptionFragmentViewModel(Application application) { super(application); }
 
@@ -27,7 +27,7 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
         List<Entry> entriesMeasures = new ArrayList<>();
         List<Double> measuresList = new ArrayList<>();
         List<Interval> intervalsThirtyMinutes = DateUtil.getAllIntervalsLast12Hours();
-        hourThirtyLabels = new ArrayList<>();
+        xAxisLabels = new ArrayList<>();
 
         do {
            List<FaraSenseSensor> sensorMeasuresList = FaraSenseSensorDAO.getMeasureByIntervals(
@@ -45,7 +45,8 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
                        totalPowerMeasure,
                        sensorMeasuresList.size(),
                        intervalsThirtyMinutes.get(indexIntervals).getStart().toDate(),
-                       intervalsThirtyMinutes.get(indexIntervals).getEnd().toDate());
+                       intervalsThirtyMinutes.get(indexIntervals).getEnd().toDate()
+               );
 
                measuresList.add(measure);
            } else {
@@ -53,10 +54,11 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
            }
 
            if (intervalsThirtyMinutes.get(indexIntervals).getStart().getMinuteOfHour() < 30) {
-               hourThirtyLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":30 Hs");
+               xAxisLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":30H");
            } else {
-               hourThirtyLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + " Hs");
+               xAxisLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + "H");
            }
+
             indexIntervals++;
         } while (indexIntervals < intervalsThirtyMinutes.size());
 
@@ -70,9 +72,9 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
         return entriesMeasures;
     }
 
-    public List<String> getThirtyChartLabels() {
-        Collections.reverse(hourThirtyLabels);
-        return hourThirtyLabels;
+    public List<String> getXAxisChartLabels() {
+        Collections.reverse(xAxisLabels);
+        return xAxisLabels;
     }
 
 }

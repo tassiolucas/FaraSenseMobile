@@ -65,7 +65,7 @@ public class BaseDAO {
             }
 
             realm.writeCopyTo(file);
-            Toast.makeText(context, "Backup feito com sucesso!", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(context, "Backup feito com sucesso!", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             realm.close();
             e.printStackTrace();

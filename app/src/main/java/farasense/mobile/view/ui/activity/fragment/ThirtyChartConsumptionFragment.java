@@ -18,6 +18,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 
 import java.util.List;
 
@@ -50,15 +51,18 @@ public class ThirtyChartConsumptionFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        thirtyChart.animateY(3000);
+    public void onPause() {
+        super.onPause();
+        thirtyChart.animateY( 3000);
         thirtyChart.invalidate();
     }
 
     private void createThirtyChart() {
         thirtyChart = binding.thirtyChartConsumption;
-        thirtyChart.getDescription().setText(getResources().getString(R.string.descriptionThirtyChart));
+        thirtyChart.getDescription().setText(getResources().getString(R.string.description_thirty_chart));
+        thirtyChart.setScaleYEnabled(false);
+
+        configureValueSelectedListener(thirtyChart);
 
         XAxis xAxis = thirtyChart.getXAxis();
         YAxis yAxis = thirtyChart.getAxisLeft();
@@ -67,7 +71,7 @@ public class ThirtyChartConsumptionFragment extends Fragment {
 
         // Popula as entradas e os labels
         List<Entry> entryList = viewModel.getThirtyMinutesPer12Hours();
-        xAxis.setValueFormatter(ChartUtil.setChartLabels(viewModel.getThirtyChartLabels()));
+        xAxis.setValueFormatter(ChartUtil.setChartLabels(viewModel.getXAxisChartLabels()));
 
         configureAxis(thirtyChart, xAxis, yAxis);
 
@@ -82,9 +86,12 @@ public class ThirtyChartConsumptionFragment extends Fragment {
         thirtyChart.animateY(3000);
 
         xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(true);
         xAxis.setEnabled(true);
 
-        yAxis.setDrawLabels(false);
+        thirtyChart.getAxisRight().setEnabled(false);
+        yAxis.setDrawLabels(true);
+        yAxis.setDrawZeroLine(false);
         yAxis.setDrawAxisLine(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawZeroLine(true);
@@ -99,6 +106,7 @@ public class ThirtyChartConsumptionFragment extends Fragment {
         dataSet = new LineDataSet(entryList, getResources().getString(R.string.kilowatts));
         dataSet.setColor(R.color.colorThirtyChartLine);
         dataSet.setCircleColor(R.color.colorThirtyChartPoint);
+        dataSet.setDrawValues(false);
 
         dataSet.setDrawFilled(true);
 
@@ -106,6 +114,29 @@ public class ThirtyChartConsumptionFragment extends Fragment {
 
         dataSet.setFillDrawable(drawable);
         return dataSet;
+    }
+
+    private void configureValueSelectedListener(LineChart hourChart) {
+        hourChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry entry, Highlight h) {
+                if (binding.labelThirtyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelThirtyValueSelected.setText(String.valueOf(entry.getY()));
+                } else {
+                    binding.labelThirtyValueSelected.setVisibility(View.VISIBLE);
+                    binding.labelThirtyValueSelected.setText(String.valueOf(entry.getY()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected() {
+                if (binding.labelThirtyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelThirtyValueSelected.setVisibility(View.GONE);
+                } else {
+                    binding.labelThirtyValueSelected.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
