@@ -112,7 +112,7 @@ public class FiveChartConsumptionFragment extends Fragment {
 
         dataSet.setDrawFilled(true);
 
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_five_chart);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_five_chart);
 
         dataSet.setFillDrawable(drawable);
         return dataSet;

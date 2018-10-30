@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +111,7 @@ public class ThirtyChartConsumptionFragment extends Fragment {
 
         dataSet.setDrawFilled(true);
 
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_thirty_chart);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_thirty_chart);
 
         dataSet.setFillDrawable(drawable);
         return dataSet;

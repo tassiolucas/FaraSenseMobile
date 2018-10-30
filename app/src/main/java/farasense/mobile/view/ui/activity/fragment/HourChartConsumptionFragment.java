@@ -112,7 +112,7 @@ public class HourChartConsumptionFragment extends Fragment {
 
         dataSet.setDrawFilled(true);
 
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_hour_chart);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_hour_chart);
 
         dataSet.setFillDrawable(drawable);
         return dataSet;
