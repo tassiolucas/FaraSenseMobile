@@ -69,12 +69,14 @@ public class DownloadFaraSenseSensorService extends BaseService {
         new Thread(() -> RestClient.getInstance().getFaraSenseSensor(new SuccessListener<List<FaraSenseSensor>>() {
             @Override
             public void onSuccess(List<FaraSenseSensor> response) {
+                Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK);
                 onDownloadContentListener.onSucess();
                 FaraSenseSensorDAO.saveFromServer(response);
             }
         }, new ErrorListener() {
             @Override
             public void onError(RestError restError) {
+                Log.d("ERROR FARASENSE SENSOR", LOG_DSERVICE_ERROR);
                 onDownloadContentListener.onFail();
             }
         }, startDate, finalDate)).start();

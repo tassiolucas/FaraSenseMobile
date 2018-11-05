@@ -32,6 +32,12 @@ public class DateUtil {
         return firts24Hours.toDate();
     }
 
+    public static Date getFirts24HoursWithMinutesReset() {
+        DateTime firts24Hours = new DateTime().withZone(getTimeZoneBrazil()).minusHours(24);
+        firts24Hours = firts24Hours.withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0);
+        return firts24Hours.toDate();
+    }
+
     // Funções para os gráficos relativas ao tempo
     public static List<Interval> getAllIntervalsLast24Hours() {
         DateTime startHour = new DateTime().withZone(getTimeZoneBrazil());
@@ -137,9 +143,6 @@ public class DateUtil {
 
         return dateTime.toDate();
     }
-
-
-
 
 //    public static int getIntervalDate() {
 //        int year = Calendar.getInstance().get(Calendar.YEAR);

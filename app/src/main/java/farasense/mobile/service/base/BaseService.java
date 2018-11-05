@@ -7,7 +7,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import farasense.mobile.service.download.DownloadFaraSenseSensorHoursService;
 import farasense.mobile.service.download.DownloadFaraSenseSensorService;
 import farasense.mobile.service.listener.OnDownloadContentListener;
 import farasense.mobile.service.listener.OnStartServiceDownload;
@@ -15,13 +17,14 @@ import farasense.mobile.util.DateUtil;
 
 public class BaseService extends Service {
 
-    protected static int SLEEP_WAIT = 300000;
-    protected static int SLEEP_TRY_AGAIN = 5000;
-    protected static int SLEEP_TRY_AGAIN_DOUBLE = 10000;
-    protected static String LOG_DSERVICE_OK = "DOWNLOAD ;) Serviço realizado com sucesso!";
-    protected static String LOG_DSERVICE_ERROR = "DOWNLOAD :( Serviço falhou...";
-    protected static String LOG_USERVICE_OK = "UPLOAD ;) Serviço realizado com sucesso!";
-    protected static String LOG_USERVICE_ERROR = "UPLOAD :( Serviço falhou...";
+    public static final int totalInitialsServices = 2;
+    protected static final int SLEEP_WAIT = 300000;
+    protected static final int SLEEP_TRY_AGAIN = 5000;
+    protected static final int SLEEP_TRY_AGAIN_DOUBLE = 10000;
+    protected static final String LOG_DSERVICE_OK = "DOWNLOAD ;) Serviço realizado com sucesso!";
+    protected static final String LOG_DSERVICE_ERROR = "DOWNLOAD :( Serviço falhou...";
+    protected static final String LOG_USERVICE_OK = "UPLOAD ;) Serviço realizado com sucesso!";
+    protected static final String LOG_USERVICE_ERROR = "UPLOAD :( Serviço falhou...";
 
     protected Looper looper;
     protected Message msg;
@@ -54,16 +57,40 @@ public class BaseService extends Service {
     }
 
     public static void initialDownloadDataSensors(final OnStartServiceDownload onStartServiceDownload) {
-            DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
-                @Override
-                public void onSucess() {
+        final int[] finishedServices = {0};
+        onStartServiceDownload.onStart();
+
+        DownloadFaraSenseSensorService.download(new OnDownloadContentListener() {
+            @Override
+            public void onSucess() {
+                finishedServices[0]++;
+
+                if (finishedServices[0] >= totalInitialsServices) {
                     onStartServiceDownload.onFinish();
                 }
+            }
 
-                @Override
-                public void onFail() {
-                    onStartServiceDownload.onFail();
+            @Override
+            public void onFail() {
+                onStartServiceDownload.onFail();
+
+            }
+        }, DateUtil.getFirts24Hours(), DateUtil.getNow());
+
+        DownloadFaraSenseSensorHoursService.download(new OnDownloadContentListener() {
+            @Override
+            public void onSucess() {
+                finishedServices[0]++;
+
+                if (finishedServices[0] >= totalInitialsServices) {
+                    onStartServiceDownload.onFinish();
                 }
-            }, DateUtil.getFirts24Hours(), DateUtil.getNow());
-        }
+            }
+
+            @Override
+            public void onFail() {
+                onStartServiceDownload.onFail();
+            }
+        }, DateUtil.getFirts24HoursWithMinutesReset(), DateUtil.getNow());
+    }
 }
