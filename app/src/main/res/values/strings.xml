@@ -23,4 +23,6 @@
     <string name="description_hour_chart">Hourly</string>
     <string name="description_thirty_chart">Every 30 minutes</string>
     <string name="description_five_chart">De 5 em 5 minutos</string>
+    <string name="date_1">until</string>
+    <string name="approx_value">Approximate Value:</string>
 </resources>
