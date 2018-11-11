@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import farasense.mobile.service.download.DownloadFaraSenseSensorDailyService;
 import farasense.mobile.service.download.DownloadFaraSenseSensorHoursService;
 import farasense.mobile.service.download.DownloadFaraSenseSensorService;
 import farasense.mobile.service.listener.OnDownloadContentListener;
@@ -17,7 +18,7 @@ import farasense.mobile.util.DateUtil;
 
 public class BaseService extends Service {
 
-    public static final int totalInitialsServices = 2;
+    public static final int totalInitialsServices = 3;
     protected static final int SLEEP_WAIT = 300000;
     protected static final int SLEEP_TRY_AGAIN = 5000;
     protected static final int SLEEP_TRY_AGAIN_DOUBLE = 10000;
@@ -92,5 +93,22 @@ public class BaseService extends Service {
                 onStartServiceDownload.onFail();
             }
         }, DateUtil.getFirts24HoursWithMinutesReset(), DateUtil.getNow());
+
+        DownloadFaraSenseSensorDailyService.download(new OnDownloadContentListener() {
+            @Override
+            public void onSucess() {
+                finishedServices[0]++;
+
+                if (finishedServices[0] >= totalInitialsServices) {
+                    onStartServiceDownload.onFinish();
+                }
+            }
+
+            @Override
+            public void onFail() {
+                onStartServiceDownload.onFail();;
+            }
+        }, DateUtil.getFirts30Days(), DateUtil.getNow());
+
     }
 }

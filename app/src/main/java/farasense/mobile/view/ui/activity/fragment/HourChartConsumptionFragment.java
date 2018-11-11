@@ -93,7 +93,6 @@ public class HourChartConsumptionFragment extends Fragment {
 
         hourChart.getAxisRight().setEnabled(false);
         yAxis.setDrawLabels(true);
-        yAxis.setDrawZeroLine(false);
         yAxis.setDrawAxisLine(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawZeroLine(true);

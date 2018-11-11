@@ -17,6 +17,7 @@ import farasense.mobile.api.base.GenericRequest;
 import farasense.mobile.api.base.RestError;
 import farasense.mobile.api.base.SuccessListener;
 import farasense.mobile.model.realm.FaraSenseSensor;
+import farasense.mobile.model.realm.FaraSenseSensorDaily;
 import farasense.mobile.model.realm.FaraSenseSensorHours;
 import farasense.mobile.util.ConnectionUtil;
 
@@ -97,13 +98,25 @@ public class RestClient {
         }, errorListener);
     }
 
-    public void getFaraSenseSensorDaily(final SuccessListener<List<FaraSenseSensorHours>> successListener,
+    public void getFaraSenseSensorHours(final SuccessListener<List<FaraSenseSensorHours>> successListener,
                                         final ErrorListener errorListener, Date start, Date end) {
         String resource = "get_hour/" + SENSOR_ID + "/" + start.getTime() + "/" + end.getTime();
 
         request(FaraSenseSensorHours[].class, Request.Method.GET, resource, null, new Response.Listener<FaraSenseSensorHours[]>() {
             @Override
             public void onResponse(FaraSenseSensorHours[] response) {
+                successListener.onSuccess(Arrays.asList(response));
+            }
+        }, errorListener);
+    }
+
+    public void getFaraSenseSensorDaily(final SuccessListener<List<FaraSenseSensorDaily>> successListener,
+                                        final ErrorListener errorListener, Date start, Date end) {
+        String resource = "get_day/" + SENSOR_ID + "/" + start.getTime() + "/" + end.getTime();
+
+        request(FaraSenseSensorDaily[].class, Request.Method.GET, resource, null, new Response.Listener<FaraSenseSensorDaily[]>() {
+            @Override
+            public void onResponse(FaraSenseSensorDaily[] response) {
                 successListener.onSuccess(Arrays.asList(response));
             }
         }, errorListener);

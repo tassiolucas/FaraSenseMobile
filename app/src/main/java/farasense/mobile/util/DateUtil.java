@@ -38,7 +38,28 @@ public class DateUtil {
         return firts24Hours.toDate();
     }
 
-    // Funções para os gráficos relativas ao tempo
+    public static Date getFirts30Days() {
+        DateTime firts30Days = new DateTime().withZone(getTimeZoneBrazil()).minusDays(30);
+        firts30Days = firts30Days.withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0);
+        return firts30Days.toDate();
+    }
+
+    public static List<Interval> getAllIntervalsLast30Days() {
+        DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+        List<Interval> intervals = new ArrayList<>();
+
+        int endOfTheDay = 0;
+        for (int beginningDay = 1; beginningDay < 30; beginningDay++) {
+            Interval interval = new Interval(startDay.minusDays(beginningDay), endDay.minusDays(endOfTheDay));
+            intervals.add(interval);
+            endOfTheDay++;
+        }
+
+        return intervals;
+    }
+
+    // Funções para os gráficos relativos ao tempo
     public static List<Interval> getAllIntervalsLast24Hours() {
         DateTime startHour = new DateTime().withZone(getTimeZoneBrazil());
         DateTime endHour = new DateTime().withZone(getTimeZoneBrazil());
@@ -143,12 +164,5 @@ public class DateUtil {
 
         return dateTime.toDate();
     }
-
-//    public static int getIntervalDate() {
-//        int year = Calendar.getInstance().get(Calendar.YEAR);
-//        DateTime start = new DateTime(year, 1, 1, 0, 0, 0, 0);
-//
-//        return Days.daysBetween(start, new DateTime()).getDays();
-//    }
 
 }
