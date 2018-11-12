@@ -15,12 +15,15 @@ import java.util.List;
 
 import farasense.mobile.model.DAO.FaraSenseSensorDAO;
 import farasense.mobile.model.DAO.FaraSenseSensorDailyDAO;
+import farasense.mobile.model.DAO.FaraSenseSensorHoursDAO;
 import farasense.mobile.model.realm.FaraSenseSensor;
 import farasense.mobile.model.realm.FaraSenseSensorDaily;
+import farasense.mobile.model.realm.FaraSenseSensorHours;
 import farasense.mobile.util.DateUtil;
 
 public class DailyChartConsumptionFragmentViewModel extends AndroidViewModel {
 
+    public static final int FIRST_MEASURE = 0;
     private List<String> dayChartLabels = new ArrayList<>();
 
     public DailyChartConsumptionFragmentViewModel(Application application) { super(application); }
@@ -48,10 +51,19 @@ public class DailyChartConsumptionFragmentViewModel extends AndroidViewModel {
                 measureList.add(Double.valueOf(0));
             }
 
-            dayChartLabels.add(String.valueOf(intervals30Days.get(daysBehind).getEnd().getDayOfMonth()));
+            dayChartLabels.add(String.valueOf(intervals30Days.get(daysBehind).getEnd().getDayOfMonth()) + "/" + String.valueOf(intervals30Days.get(daysBehind).getEnd().getMonthOfYear()));
 
             daysBehind++;
         } while (daysBehind < intervals30Days.size());
+
+        List<FaraSenseSensorHours> todayMeauseres = FaraSenseSensorHoursDAO.getDailyComsumption();
+
+        Double todayTotalKwh = 0D;
+        for (FaraSenseSensorHours todayMeausere : todayMeauseres) {
+            todayTotalKwh = todayTotalKwh + todayMeausere.getKwh();
+        }
+
+        measureList.set(FIRST_MEASURE, todayTotalKwh);
 
         Collections.reverse(measureList);
 

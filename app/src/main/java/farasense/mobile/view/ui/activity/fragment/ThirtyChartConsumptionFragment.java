@@ -52,8 +52,8 @@ public class ThirtyChartConsumptionFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         thirtyChart.animateY( 3000);
         thirtyChart.invalidate();
     }
@@ -116,8 +116,8 @@ public class ThirtyChartConsumptionFragment extends Fragment {
         return dataSet;
     }
 
-    private void configureValueSelectedListener(LineChart hourChart) {
-        hourChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
+    private void configureValueSelectedListener(LineChart thirtyChart) {
+        thirtyChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry entry, Highlight h) {
                 if (binding.labelThirtyValueSelected.getVisibility() == View.VISIBLE) {

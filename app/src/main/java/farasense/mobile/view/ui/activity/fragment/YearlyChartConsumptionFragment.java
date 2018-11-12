@@ -27,6 +27,8 @@ public class YearlyChartConsumptionFragment extends Fragment {
 
         View view = binding.getRoot();
 
+
+
         binding.setYearlyCompumptionFragment(viewModel);
 
         return view;

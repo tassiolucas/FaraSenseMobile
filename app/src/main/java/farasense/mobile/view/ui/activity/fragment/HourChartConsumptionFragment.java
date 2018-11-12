@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -19,10 +18,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
-
 import java.util.List;
 import javax.annotation.Nullable;
-
 import farasense.mobile.R;
 import farasense.mobile.databinding.HourChartConsumptionFragmentDataBinding;
 import farasense.mobile.util.ChartUtil;
@@ -54,8 +51,8 @@ public class HourChartConsumptionFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         hourChart.animateY( 3000);
         hourChart.invalidate();
     }

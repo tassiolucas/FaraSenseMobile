@@ -44,6 +44,37 @@ public class DateUtil {
         return firts30Days.toDate();
     }
 
+    public static Date getFirts12Monthly() {
+        DateTime firts30Days = new DateTime().withZone(getTimeZoneBrazil()).minusMonths(12);
+        firts30Days = firts30Days.withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0);
+        return firts30Days.toDate();
+    }
+
+    public static Date getFirstMomentOfTheDay() {
+        DateTime dateTime = new DateTime().withZone(DateUtil.getTimeZoneBrazil())
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+
+        return dateTime.toDate();
+    }
+
+    public static List<Interval> getAllIntervalsLast12Monthly() {
+        DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(0).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(31).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+        List<Interval> intervals = new ArrayList<>();
+
+        int endMonthly = 0;
+        for (int beginningMonthly = 1; beginningMonthly < 12; beginningMonthly++) {
+            Interval interval = new Interval(startDay.minusMonths(beginningMonthly), endDay.minusMonths(endMonthly));
+            intervals.add(interval);
+            endMonthly++;
+        }
+
+        return intervals;
+    }
+
     public static List<Interval> getAllIntervalsLast30Days() {
         DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
         DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
@@ -132,16 +163,7 @@ public class DateUtil {
         return firtDayOfTheYear;
     }
 
-    public static Date getFirstMomentOfTheDay() {
-        DateTime dateTime = new DateTime()
-                .withZone(DateUtil.getTimeZoneBrazil())
-                .withHourOfDay(1)
-                .withMinuteOfHour(0)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
 
-        return dateTime.toDate();
-    }
 
     public static Date getFirstMomentOfTheHour(int hourOfDay) {
         DateTime dateTime = new DateTime()

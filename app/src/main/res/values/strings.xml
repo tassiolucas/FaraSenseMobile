@@ -23,5 +23,5 @@
     <string name="description_hour_chart">Hourly</string>
     <string name="description_thirty_chart">Every 30 minutes</string>
     <string name="description_five_chart">De 5 em 5 minutos</string>
-    <string name="description_daily_chart">Daily</string>
+    <string name="description_daily_chart">Day by day</string>
 </resources>

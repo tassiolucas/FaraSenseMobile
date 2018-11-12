@@ -2,16 +2,12 @@ package farasense.mobile.view.ui.activity.fragment;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -19,11 +15,9 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-
+import com.github.mikephil.charting.highlight.Highlight;
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import farasense.mobile.R;
 import farasense.mobile.databinding.DailyChartConsumptionFragmentDataBinding;
 import farasense.mobile.util.ChartUtil;
@@ -54,11 +48,21 @@ public class DailyChartConsumptionFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        dailyChart.animateY( 3000);
+        dailyChart.invalidate();
+    }
+
     private void createDailyChart() {
         dailyChart = binding.dailyChartConsumption;
         dailyChart.getDescription().setText(getResources().getString(R.string.description_daily_chart));
         dailyChart.setScaleYEnabled(false);
         dailyChart.setFitBars(true);
+        dailyChart.zoom(3.4F, 0, 0,0);
+
+        dailyChart.moveViewToX(20);
 
         configureValueSelectedListener(dailyChart);
 
@@ -97,17 +101,34 @@ public class DailyChartConsumptionFragment extends Fragment {
     private BarDataSet configureDataSet(List<BarEntry> entryList) {
         BarDataSet dataSet;
         dataSet = new BarDataSet(entryList, getResources().getString(R.string.kilowatts));
-        dataSet.setColor(R.color.colorHourChartLine);
+        dataSet.setColor(getResources().getColor(R.color.colorTabBar));
         dataSet.setDrawValues(false);
 
         return dataSet;
     }
 
     private void configureValueSelectedListener(BarChart dailyChart) {
+        dailyChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry entry, Highlight h) {
+                if (binding.labelDailyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelDailyValueSelected.setText(String.valueOf(entry.getY()));
+                } else {
+                    binding.labelDailyValueSelected.setVisibility(View.VISIBLE);
+                    binding.labelDailyValueSelected.setText(String.valueOf(entry.getY()));
+                }
+            }
 
-
+            @Override
+            public void onNothingSelected() {
+                if (binding.labelDailyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelDailyValueSelected.setVisibility(View.GONE);
+                } else {
+                    binding.labelDailyValueSelected.setVisibility(View.GONE);
+                }
+            }
+        });
     }
-
 
     @Override
     public LifecycleRegistry getLifecycle() { return registry; }

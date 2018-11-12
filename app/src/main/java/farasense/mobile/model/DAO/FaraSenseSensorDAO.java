@@ -44,37 +44,6 @@ public class FaraSenseSensorDAO extends BaseDAO {
         return savedFromServer;
     }
 
-    public static List<FaraSenseSensor> getDailyComsumption() {
-        Realm realm = null;
-        dailyCompumption = new ArrayList<>();
-
-        try {
-            realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    Date now = DateUtil.getNow();
-                    Date beginningDay = DateUtil.getFirtsThirtyDayInPast();
-
-                    RealmResults<FaraSenseSensor> results = realm.where(FaraSenseSensor.class)
-                            .between(FIELD_TIMESTAMP, beginningDay, now)
-                            .findAll();
-
-                    if (results.size() != 0) {
-                        dailyCompumption = realm.copyFromRealm(results);
-                    } else {
-                        dailyCompumption = null;
-                    }
-                }
-            });
-        } finally {
-            if (realm != null) {
-                realm.close();
-            }
-            return dailyCompumption;
-        }
-    }
-
     public static List<FaraSenseSensor> getMeasureByIntervals(Date startIntervalHour, Date endIntervalHour) {
         Realm realm = null;
         hourMeasures = new ArrayList<>();
