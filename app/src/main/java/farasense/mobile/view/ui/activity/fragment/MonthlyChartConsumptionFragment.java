@@ -45,7 +45,7 @@ public class MonthlyChartConsumptionFragment extends Fragment {
 
         View view = binding.getRoot();
 
-        // createMonthlyChart();
+        createMonthlyChart();
 
         binding.setMonthlyCompumptionFragment(viewModel);
 
@@ -54,10 +54,10 @@ public class MonthlyChartConsumptionFragment extends Fragment {
 
     private void createMonthlyChart() {
         monthlyChart = binding.monthlyChartConsumption;
-        monthlyChart.getDescription().setText(getResources().getString(R.string.description_daily_chart));
+        monthlyChart.getDescription().setText(getResources().getString(R.string.description_monthly_chart));
         monthlyChart.setScaleYEnabled(false);
         monthlyChart.setFitBars(true);
-        monthlyChart.zoom(3.4F, 0, 0,0);
+        monthlyChart.zoom(3.0F, 0, 0,0);
 
         monthlyChart.moveViewToX(20);
 
@@ -98,33 +98,33 @@ public class MonthlyChartConsumptionFragment extends Fragment {
     private BarDataSet configureDataSet(List<BarEntry> entryList) {
         BarDataSet dataSet;
         dataSet = new BarDataSet(entryList, getResources().getString(R.string.kilowatts));
-        dataSet.setColor(getResources().getColor(R.color.colorTabBar));
+        dataSet.setColor(getResources().getColor(R.color.colorMonthlyChartBar));
         dataSet.setDrawValues(false);
 
         return dataSet;
     }
 
     private void configureValueSelectedListener(BarChart monthlyChart) {
-//        monthlyChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
-//            @Override
-//            public void onValueSelected(Entry entry, Highlight h) {
-//                if (binding.labelDailyValueSelected.getVisibility() == View.VISIBLE) {
-//                    binding.labelDailyValueSelected.setText(String.valueOf(entry.getY()));
-//                } else {
-//                    binding.labelDailyValueSelected.setVisibility(View.VISIBLE);
-//                    binding.labelDailyValueSelected.setText(String.valueOf(entry.getY()));
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected() {
-//                if (binding.labelDailyValueSelected.getVisibility() == View.VISIBLE) {
-//                    binding.labelDailyValueSelected.setVisibility(View.GONE);
-//                } else {
-//                    binding.labelDailyValueSelected.setVisibility(View.GONE);
-//                }
-//            }
-//        });
+        monthlyChart.setOnChartValueSelectedListener(new com.github.mikephil.charting.listener.OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry entry, Highlight h) {
+                if (binding.labelMonthlyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelMonthlyValueSelected.setText(String.valueOf(entry.getY()));
+                } else {
+                    binding.labelMonthlyValueSelected.setVisibility(View.VISIBLE);
+                    binding.labelMonthlyValueSelected.setText(String.valueOf(entry.getY()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected() {
+                if (binding.labelMonthlyValueSelected.getVisibility() == View.VISIBLE) {
+                    binding.labelMonthlyValueSelected.setVisibility(View.GONE);
+                } else {
+                    binding.labelMonthlyValueSelected.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override

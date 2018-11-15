@@ -101,7 +101,7 @@ public class DailyChartConsumptionFragment extends Fragment {
     private BarDataSet configureDataSet(List<BarEntry> entryList) {
         BarDataSet dataSet;
         dataSet = new BarDataSet(entryList, getResources().getString(R.string.kilowatts));
-        dataSet.setColor(getResources().getColor(R.color.colorTabBar));
+        dataSet.setColor(getResources().getColor(R.color.colorDailyChartBar));
         dataSet.setDrawValues(false);
 
         return dataSet;

@@ -13,11 +13,11 @@ import java.util.List;
 
 import farasense.mobile.model.DAO.FaraSenseSensorDailyDAO;
 import farasense.mobile.model.realm.FaraSenseSensorDaily;
+import farasense.mobile.model.realm.FaraSenseSensorHours;
 import farasense.mobile.util.DateUtil;
 
 public class MonthlyChartConsumptionFragmentViewModel extends AndroidViewModel {
-
-    public static final int FIRST_MEASURE = 0;
+    
     private List<String> monthlyChartLabels = new ArrayList<>();
 
     public MonthlyChartConsumptionFragmentViewModel(Application application) { super(application); }
@@ -31,7 +31,7 @@ public class MonthlyChartConsumptionFragmentViewModel extends AndroidViewModel {
         do {
             List<FaraSenseSensorDaily> sensorMeasuresList = FaraSenseSensorDailyDAO.getMeasureByIntervals(
                     intervals12Monthly.get(monthlyBehind).getStart().toDate(),
-                    intervals12Monthly.get(monthlyBehind).getStart().toDate()
+                    intervals12Monthly.get(monthlyBehind).getEnd().toDate()
             );
 
             if (sensorMeasuresList != null) {
@@ -45,12 +45,23 @@ public class MonthlyChartConsumptionFragmentViewModel extends AndroidViewModel {
                 measureList.add(Double.valueOf(0));
             }
 
-            monthlyChartLabels.add(String.valueOf(intervals12Monthly.get(monthlyBehind).getEnd().getDayOfMonth()));
+            monthlyChartLabels.add(String.valueOf(intervals12Monthly.get(monthlyBehind).getStart().getMonthOfYear() + "/" + intervals12Monthly.get(monthlyBehind).getStart().getYear()));
 
+            monthlyBehind++;
         } while (monthlyBehind < intervals12Monthly.size());
 
-        return entriesMeasures;
+        Collections.reverse(measureList);
 
+        int i = 0;
+        for (Double measure : measureList) {
+            entriesMeasures.add(i, new BarEntry(
+                    Float.valueOf(i),
+                    Float.valueOf(measure.floatValue())
+            ));
+            i++;
+        }
+
+        return entriesMeasures;
     }
 
     public List<String> getMonthlyChartLabels() {

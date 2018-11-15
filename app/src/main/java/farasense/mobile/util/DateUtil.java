@@ -61,15 +61,13 @@ public class DateUtil {
     }
 
     public static List<Interval> getAllIntervalsLast12Monthly() {
-        DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(0).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
-        DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(31).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+        DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withDayOfMonth(30).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
         List<Interval> intervals = new ArrayList<>();
 
-        int endMonthly = 0;
-        for (int beginningMonthly = 1; beginningMonthly < 12; beginningMonthly++) {
-            Interval interval = new Interval(startDay.minusMonths(beginningMonthly), endDay.minusMonths(endMonthly));
+        for (int indexMonthly = 0; indexMonthly < 13; indexMonthly++) {
+            Interval interval = new Interval(startDay.minusMonths(indexMonthly), endDay.minusMonths(indexMonthly));
             intervals.add(interval);
-            endMonthly++;
         }
 
         return intervals;
