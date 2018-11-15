@@ -23,6 +23,7 @@
 
     <color name="colorDailyChartBar">#807EC5</color>
     <color name="colorMonthlyChartBar">#6992B4</color>
+    <color name="colorYearlyChartBar">#A6CEEF</color>
 
     <color name="colorSplash">#F6F6F6</color>
     <color name="transparent">#00000000</color>

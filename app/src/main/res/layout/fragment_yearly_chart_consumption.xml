@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data class="YearlyChartConsumptionFragmentDataBinding">
         <variable
@@ -12,11 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/yearly_chart_consumption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
         <TextView
+            android:id="@+id/label_yearly_value_selected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ANUAL"
-            android:layout_centerInParent="true"/>
+            android:textColor="@color/text"
+            android:layout_alignEnd="@+id/yearly_chart_consumption"
+            android:layout_alignBottom="@+id/yearly_chart_consumption"
+            android:layout_marginEnd="@dimen/element_double_margin"
+            android:layout_marginBottom="@dimen/element_half_little_margin"
+            android:typeface="serif"
+            android:textSize="12dp"
+            tools:text="0.9 Kw/h"
+            android:visibility="visible"/>
 
     </RelativeLayout>
 

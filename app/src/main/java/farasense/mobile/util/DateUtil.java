@@ -73,6 +73,19 @@ public class DateUtil {
         return intervals;
     }
 
+    public static List<Interval> getAllIntervalsLast10Year() {
+        DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withMonthOfYear(1).withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withMonthOfYear(12).withDayOfMonth(30).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+        List<Interval> intervals = new ArrayList<>();
+
+        for (int indexYear = 0; indexYear < 10; indexYear++) {
+            Interval interval = new Interval(startDay.minusYears(indexYear), endDay.minusYears(indexYear));
+            intervals.add(interval);
+        }
+
+        return intervals;
+    }
+
     public static List<Interval> getAllIntervalsLast30Days() {
         DateTime startDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
         DateTime endDay = new DateTime().withZone(getTimeZoneBrazil()).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);

@@ -26,4 +26,5 @@
     <string name="description_five_chart">De 5 em 5 minutos</string>
     <string name="description_daily_chart">Dia a dia</string>
     <string name="description_monthly_chart">Mês a mês</string>
+    <string name="description_yearly_chart">Ano a ano</string>
 </resources>
