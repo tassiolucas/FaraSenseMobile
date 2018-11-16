@@ -39,7 +39,7 @@
                 android:layout_below="@id/title_consumption_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                layout="@layout/adapter_item_consume_chart_date"/>
+                layout="@layout/adapter_item_consumption_chart_date"/>
 
             <TextView
                 android:id="@+id/title_last_consumption_text"
@@ -57,7 +57,7 @@
                 android:layout_below="@id/title_last_consumption_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                layout="@layout/adapter_item_consume_chart_hour"/>
+                layout="@layout/adapter_item_consumption_chart_hour"/>
 
         </RelativeLayout>
     </ScrollView>
