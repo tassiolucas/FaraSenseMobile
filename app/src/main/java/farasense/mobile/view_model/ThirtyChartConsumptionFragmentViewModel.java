@@ -18,16 +18,16 @@ import farasense.mobile.util.EnergyUtil;
 
 public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
 
-    private List<String> xAxisLabels = new ArrayList<>();
+    private List<String> thirtyChartLabels = new ArrayList<>();
 
-    ThirtyChartConsumptionFragmentViewModel(Application application) { super(application); }
+    public ThirtyChartConsumptionFragmentViewModel(Application application) { super(application); }
 
     public List<Entry> getThirtyMinutesPer12Hours() {
         int indexIntervals = 0;
         List<Entry> entriesMeasures = new ArrayList<>();
         List<Double> measuresList = new ArrayList<>();
         List<Interval> intervalsThirtyMinutes = DateUtil.getAllIntervalsLast12Hours();
-        xAxisLabels = new ArrayList<>();
+        thirtyChartLabels = new ArrayList<>();
 
         do {
            List<FaraSenseSensor> sensorMeasuresList = FaraSenseSensorDAO.getMeasureByIntervals(
@@ -54,9 +54,9 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
            }
 
            if (intervalsThirtyMinutes.get(indexIntervals).getStart().getMinuteOfHour() < 30) {
-               xAxisLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":30H");
+               thirtyChartLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":30H");
            } else {
-               xAxisLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + "H");
+               thirtyChartLabels.add(String.valueOf(intervalsThirtyMinutes.get(indexIntervals).getEnd().getHourOfDay()) + "H");
            }
 
             indexIntervals++;
@@ -73,8 +73,8 @@ public class ThirtyChartConsumptionFragmentViewModel extends AndroidViewModel {
     }
 
     public List<String> getXAxisChartLabels() {
-        Collections.reverse(xAxisLabels);
-        return xAxisLabels;
+        Collections.reverse(thirtyChartLabels);
+        return thirtyChartLabels;
     }
 
 }

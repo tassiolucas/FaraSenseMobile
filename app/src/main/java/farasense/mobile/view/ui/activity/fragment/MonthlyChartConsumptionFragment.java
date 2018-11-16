@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity.fragment;
 
-import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -17,11 +15,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
-
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import farasense.mobile.R;
 import farasense.mobile.databinding.MonthlyChartConsumptionFragmentDataBinding;
 import farasense.mobile.util.ChartUtil;
@@ -29,7 +24,6 @@ import farasense.mobile.view_model.MonthlyChartConsumptionFragmentViewModel;
 
 public class MonthlyChartConsumptionFragment extends Fragment {
 
-    private final LifecycleRegistry registry = new LifecycleRegistry(this);
     private MonthlyChartConsumptionFragmentDataBinding binding;
     private MonthlyChartConsumptionFragmentViewModel viewModel;
     private BarChart monthlyChart;
@@ -126,8 +120,4 @@ public class MonthlyChartConsumptionFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public LifecycleRegistry getLifecycle() { return registry; }
-
 }

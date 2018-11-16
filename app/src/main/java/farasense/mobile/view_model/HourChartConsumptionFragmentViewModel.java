@@ -70,7 +70,6 @@ public class HourChartConsumptionFragmentViewModel extends AndroidViewModel {
         return entriesMeasures;
     }
 
-
     public List<String> getHourChartLabels() {
         Collections.reverse(hourChartLabels);
         return hourChartLabels;

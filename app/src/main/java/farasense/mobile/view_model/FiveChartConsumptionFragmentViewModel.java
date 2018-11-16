@@ -18,16 +18,16 @@ import farasense.mobile.util.EnergyUtil;
 
 public class FiveChartConsumptionFragmentViewModel extends AndroidViewModel {
 
-    private List<String> xAxisLabels = new ArrayList<>();
+    private List<String> fiveChartLabels = new ArrayList<>();
 
-    FiveChartConsumptionFragmentViewModel(Application application) { super(application); }
+    public FiveChartConsumptionFragmentViewModel(Application application) { super(application); }
 
     public List<Entry> getHourPerFiveMinutes() {
         int indexIntervals = 0;
         List<Entry> entriesMeasures = new ArrayList<>();
         List<Double> measuresList = new ArrayList<>();
         List<Interval> intervalsFiveMinutes = DateUtil.getAllIntervalsLast2Hours();
-        xAxisLabels = new ArrayList<>();
+        fiveChartLabels = new ArrayList<>();
 
         do {
             List<FaraSenseSensor> sensorMeasureList = FaraSenseSensorDAO.getMeasureByIntervals(
@@ -54,9 +54,9 @@ public class FiveChartConsumptionFragmentViewModel extends AndroidViewModel {
             }
 
             if (intervalsFiveMinutes.get(indexIntervals).getEnd().getMinuteOfHour() < 10) {
-                xAxisLabels.add(String.valueOf(intervalsFiveMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":0" + intervalsFiveMinutes.get(indexIntervals).getEnd().getMinuteOfHour()+"H");
+                fiveChartLabels.add(String.valueOf(intervalsFiveMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":0" + intervalsFiveMinutes.get(indexIntervals).getEnd().getMinuteOfHour()+"H");
             } else {
-                xAxisLabels.add(String.valueOf(intervalsFiveMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":" + intervalsFiveMinutes.get(indexIntervals).getEnd().getMinuteOfHour()+"H");
+                fiveChartLabels.add(String.valueOf(intervalsFiveMinutes.get(indexIntervals).getEnd().getHourOfDay()) + ":" + intervalsFiveMinutes.get(indexIntervals).getEnd().getMinuteOfHour()+"H");
             }
 
             indexIntervals++;
@@ -74,7 +74,7 @@ public class FiveChartConsumptionFragmentViewModel extends AndroidViewModel {
     }
 
     public List<String> getXAxisChartLabels() {
-        Collections.reverse(xAxisLabels);
-        return xAxisLabels;
+        Collections.reverse(fiveChartLabels);
+        return fiveChartLabels;
     }
 }

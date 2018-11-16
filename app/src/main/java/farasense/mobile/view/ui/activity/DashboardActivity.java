@@ -30,13 +30,13 @@ public class DashboardActivity extends BaseActivity {
     private final int SECOND_TAB = 1;
     private final int THIRD_TAB = 2;
 
-    private DashboardDataBinding binding;
-    private DailyChartConsumptionFragmentViewModel dailyConsumptionFragmentViewModel;
-    private MonthlyChartConsumptionFragmentViewModel monthlyConsumptionFragmentViewModel;
-    private YearlyChartConsumptionFragmentViewModel yearlyChartConsumptionFragmentViewModel;
-    private HourChartConsumptionFragmentViewModel hourChartConsumptionFragmentViewModel;
-    private ThirtyChartConsumptionFragmentViewModel thirtyChartConsumptionFragmentViewModel;
-    private FiveChartConsumptionFragmentViewModel fiveChartConsumptionFragmentViewModel;
+    public DashboardDataBinding binding;
+    public DailyChartConsumptionFragmentViewModel dailyConsumptionFragmentViewModel;
+    public MonthlyChartConsumptionFragmentViewModel monthlyConsumptionFragmentViewModel;
+    public YearlyChartConsumptionFragmentViewModel yearlyChartConsumptionFragmentViewModel;
+    public HourChartConsumptionFragmentViewModel hourChartConsumptionFragmentViewModel;
+    public ThirtyChartConsumptionFragmentViewModel thirtyChartConsumptionFragmentViewModel;
+    public FiveChartConsumptionFragmentViewModel fiveChartConsumptionFragmentViewModel;
 
     private TabLayout tabLayoutConsumption;
     private TabLayout tabLayoutLastConsumption;
@@ -62,7 +62,7 @@ public class DashboardActivity extends BaseActivity {
         yearlyChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(YearlyChartConsumptionFragmentViewModel.class);
 
         hourChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(HourChartConsumptionFragmentViewModel.class);
-        monthlyConsumptionFragmentViewModel = ViewModelProviders.of(this).get(MonthlyChartConsumptionFragmentViewModel.class);
+        thirtyChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(ThirtyChartConsumptionFragmentViewModel.class);
         fiveChartConsumptionFragmentViewModel = ViewModelProviders.of(this).get(FiveChartConsumptionFragmentViewModel.class);
 
         tabLayoutConsumption = (TabLayout) findViewById(R.id.consumption_chart_tabs);
