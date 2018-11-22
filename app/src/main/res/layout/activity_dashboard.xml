@@ -59,6 +59,24 @@
                 android:layout_height="wrap_content"
                 layout="@layout/adapter_item_consumption_chart_hour"/>
 
+            <TextView
+                android:id="@+id/title_consumption_cost_text"
+                android:layout_below="@id/chart_last_consumption_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/FaraSenseTitleChart"
+                android:layout_marginTop="@dimen/element_double_padding"
+                android:layout_marginBottom="@dimen/element_margin"
+                android:text="@string/title_cost_consumption_label"/>
+
+            <include
+                android:id="@+id/consumption_cost_view"
+                android:layout_below="@id/title_consumption_cost_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/adapter_item_consumption_cost"/>
+
         </RelativeLayout>
     </ScrollView>
 </layout>
