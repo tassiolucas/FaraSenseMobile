@@ -59,10 +59,11 @@ public class DailyChartConsumptionFragmentViewModel extends AndroidViewModel {
         List<FaraSenseSensorHours> todayMeauseres = FaraSenseSensorHoursDAO.getDailyComsumption();
 
         Double todayTotalKwh = 0D;
-        for (FaraSenseSensorHours todayMeausere : todayMeauseres) {
-            todayTotalKwh = todayTotalKwh + todayMeausere.getKwh();
+        if (todayMeauseres != null) {
+            for (FaraSenseSensorHours todayMeausere : todayMeauseres) {
+                todayTotalKwh = todayTotalKwh + todayMeausere.getKwh();
+            }
         }
-
         measureList.set(FIRST_MEASURE, todayTotalKwh);
 
         Collections.reverse(measureList);

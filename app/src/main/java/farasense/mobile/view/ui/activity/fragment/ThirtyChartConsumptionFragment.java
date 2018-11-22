@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity.fragment;
 
-import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -8,11 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -20,9 +17,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
-
 import java.util.List;
-
 import javax.annotation.Nullable;
 import farasense.mobile.R;
 import farasense.mobile.databinding.ThirtyChartConsumptionFragmentDataBinding;
@@ -33,7 +28,6 @@ public class ThirtyChartConsumptionFragment extends Fragment {
 
     private ThirtyChartConsumptionFragmentDataBinding binding;
     private ThirtyChartConsumptionFragmentViewModel viewModel;
-    private final LifecycleRegistry registry = new LifecycleRegistry(this);
     private LineChart thirtyChart;
 
     @Override
@@ -138,8 +132,4 @@ public class ThirtyChartConsumptionFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public LifecycleRegistry getLifecycle() { return registry; }
-
 }

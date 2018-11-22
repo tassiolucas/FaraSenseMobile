@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity.fragment;
 
-import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -29,7 +28,6 @@ public class HourChartConsumptionFragment extends Fragment {
 
     private HourChartConsumptionFragmentDataBinding binding;
     private HourChartConsumptionFragmentViewModel viewModel;
-    private final LifecycleRegistry registry = new LifecycleRegistry(this);
     private LineChart hourChart;
     private List<Entry> entryList;
     private LineDataSet dataSet;
@@ -136,8 +134,4 @@ public class HourChartConsumptionFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public LifecycleRegistry getLifecycle() { return registry; }
-
 }

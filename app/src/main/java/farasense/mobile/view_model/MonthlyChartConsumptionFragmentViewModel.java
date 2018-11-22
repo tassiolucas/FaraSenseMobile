@@ -69,9 +69,4 @@ public class MonthlyChartConsumptionFragmentViewModel extends AndroidViewModel {
         return monthlyChartLabels;
     }
 
-
-
-
-
-
 }

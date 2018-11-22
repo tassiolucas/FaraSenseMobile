@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity.fragment;
 
-import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ public class DailyChartConsumptionFragment extends Fragment {
 
     private DailyChartConsumptionFragmentDataBinding binding;
     private DailyChartConsumptionFragmentViewModel viewModel;
-    private final LifecycleRegistry registry = new LifecycleRegistry(this);
     private BarChart dailyChart;
     private List<BarEntry> entryList;
     private BarDataSet dataSet;
@@ -129,10 +127,6 @@ public class DailyChartConsumptionFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public LifecycleRegistry getLifecycle() { return registry; }
-
 }
 
 
