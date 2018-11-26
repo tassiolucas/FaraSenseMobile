@@ -1,5 +1,6 @@
 package farasense.mobile.view.ui.activity;
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -7,8 +8,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageButton;
 
 import butterknife.ButterKnife;
 import farasense.mobile.R;
@@ -98,6 +101,16 @@ public class DashboardActivity extends BaseActivity {
         fragmentManager.executePendingTransactions();
 
         fragmentTransaction = fragmentManager.beginTransaction();
+
+        final ImageButton button = findViewById(R.id.cost_button_option);
+        button.setOnClickListener(v -> {
+            final Dialog dialog = new Dialog(this);
+
+            dialog.setContentView(R.layout.adapter_item_cost_option_dialog);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            dialog.show();
+        });
     }
 
     @Override

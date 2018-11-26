@@ -14,6 +14,7 @@
     <dimen name="screen_double_padding">32dp</dimen>
     <dimen name="element_half_little_margin">4dp</dimen>
     <dimen name="element_half_margin">8dp</dimen>
+    <dimen name="element_half_margin_and_more">9dp</dimen>
     <dimen name="element_margin">16dp</dimen>
     <dimen name="element_double_margin">32dp</dimen>
     <dimen name="element_half_padding">8dp</dimen>
