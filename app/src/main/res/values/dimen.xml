@@ -22,6 +22,7 @@
     <dimen name="element_one_half_padding">24dp</dimen>
     <dimen name="element_double_padding">32dp</dimen>
     <dimen name="element_triple_padding">48dp</dimen>
+    <dimen name="element_quadriple_padding">58dp</dimen>
     <dimen name="text_logo">32dp</dimen>
 
 </resources>
