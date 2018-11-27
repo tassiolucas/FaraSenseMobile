@@ -28,16 +28,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/element_double_margin"
                     android:layout_marginEnd="@dimen/element_double_margin"
-                    tools:text="Dia de Vencimento da Fatura:"/>
+                    android:text="Dia de Vencimento da Fatura:"
+                    tools:text="Dia de Vencimento da Fatura:"
+                    android:fontFamily="sans-serif"/>
 
-                <android.support.design.widget.TextInputLayout
+                <EditText
                     android:id="@+id/maturity_date_input"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/element_double_margin"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/maturity_date_label"
                     android:layout_marginTop="@dimen/element_margin"
                     android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"/>
+                    android:layout_marginEnd="@dimen/element_double_margin"
+                    android:hint="23/11/28"
+                    android:theme="@style/FaraSenseEditText"/>
 
                 <TextView
                     android:id="@+id/rate_kwh_label"
@@ -47,16 +51,20 @@
                     android:layout_marginTop="@dimen/element_margin"
                     android:layout_marginStart="@dimen/element_double_margin"
                     android:layout_marginEnd="@dimen/element_double_margin"
-                    tools:text="Tarira do Kwh:"/>
+                    android:text="Tarifa do Kwh:"
+                    tools:text="Tarifa do Kwh:"
+                    android:fontFamily="sans-serif"/>
 
-                <android.support.design.widget.TextInputLayout
+                <EditText
                     android:id="@+id/rate_kwh_input"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/element_double_margin"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/element_margin"
                     android:layout_marginStart="@dimen/element_double_margin"
                     android:layout_marginEnd="@dimen/element_double_margin"
-                    android:layout_below="@id/rate_kwh_label"/>
+                    android:layout_below="@id/rate_kwh_label"
+                    android:hint="Insira o valor do kWh"
+                    android:theme="@style/FaraSenseEditText" />
 
                 <TextView
                     android:id="@+id/rate_flag_label"
@@ -66,22 +74,29 @@
                     android:layout_marginTop="@dimen/element_margin"
                     android:layout_marginStart="@dimen/element_double_margin"
                     android:layout_marginEnd="@dimen/element_double_margin"
-                    tools:text="Tarira da Bandeira:"/>
+                    android:text="Tarifa da Bandeira:"
+                    tools:text="Tarifa da Bandeira:"
+                    android:fontFamily="sans-serif"/>
 
-                <android.support.design.widget.TextInputLayout
+                <EditText
                     android:id="@+id/rate_flag_input"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/element_double_margin"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/element_margin"
                     android:layout_marginStart="@dimen/element_double_margin"
                     android:layout_marginEnd="@dimen/element_double_margin"
-                    android:layout_below="@id/rate_flag_label"/>
+                    android:layout_below="@id/rate_flag_label"
+                    android:hint="Insira o valor da bandeira"
+                    android:theme="@style/FaraSenseEditText" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/element_half_margin"
+                android:layout_marginStart="@dimen/element_double_margin"
+                android:layout_marginEnd="@dimen/element_margin">
 
                 <Button
                     android:id="@+id/button_cancel"
@@ -89,7 +104,9 @@
                     android:layout_height="@dimen/element_quadriple_padding"
                     android:text="Cancelar"
                     android:background="@color/transparent"
-                    android:layout_alignEnd="@id/button_cancel"/>
+                    android:layout_toLeftOf="@id/button_save"
+                    android:textColor="@color/colorTabBar"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/button_save"
@@ -97,8 +114,9 @@
                     android:layout_height="@dimen/element_quadriple_padding"
                     android:text="Salvar"
                     android:background="@color/transparent"
-                    android:layout_alignRight="@id/button_cancel"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/colorTabBar"
+                    android:textStyle="bold"/>
             </RelativeLayout>
 
         </LinearLayout>
