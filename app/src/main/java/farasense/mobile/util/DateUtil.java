@@ -50,6 +50,11 @@ public class DateUtil {
         return firts30Days.toDate();
     }
 
+    public static DateTime get30DaysAgo(DateTime selectedDay) {
+        DateTime selectedMaturityDay = new DateTime(selectedDay).minusMonths(1);
+        return selectedMaturityDay;
+    }
+
     public static Date getFirstMomentOfTheDay() {
         DateTime dateTime = new DateTime().withZone(DateUtil.getTimeZoneBrazil())
                 .withHourOfDay(0)

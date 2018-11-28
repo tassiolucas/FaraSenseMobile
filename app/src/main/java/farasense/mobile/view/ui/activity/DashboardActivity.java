@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity;
 
-import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,17 +7,27 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import org.joda.time.DateTime;
+
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import farasense.mobile.R;
 import farasense.mobile.databinding.DashboardDataBinding;
+import farasense.mobile.util.DateUtil;
+import farasense.mobile.util.EnergyUtil;
+import farasense.mobile.util.Preferences;
 import farasense.mobile.view.ui.activity.base.BaseActivity;
 import farasense.mobile.view.ui.adapter.ChartConsumeTabAdapter;
 import farasense.mobile.view.ui.adapter.ChartLastConsumptionTabAdapter;
+import farasense.mobile.view.ui.dialog.CostOptionDialog;
 import farasense.mobile.view_model.FiveChartConsumptionFragmentViewModel;
 import farasense.mobile.view_model.HourChartConsumptionFragmentViewModel;
 import farasense.mobile.view_model.ThirtyChartConsumptionFragmentViewModel;
@@ -51,6 +60,11 @@ public class DashboardActivity extends BaseActivity {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+    private TextView startDateLabel;
+    private TextView endDateLabel;
+    private TextView aoLabel;
+    private TextView costValue;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -104,13 +118,17 @@ public class DashboardActivity extends BaseActivity {
 
         final ImageButton button = findViewById(R.id.cost_button_option);
         button.setOnClickListener(v -> {
-            final Dialog dialog = new Dialog(this);
-
+            final CostOptionDialog dialog = new CostOptionDialog(this);
             dialog.setContentView(R.layout.adapter_item_cost_option_dialog);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+            dialog.setCancelable(false);
             dialog.show();
         });
+
+        startDateLabel = findViewById(R.id.label_start_period_comsumption);
+        endDateLabel = findViewById(R.id.label_end_period_comsumption);
+        aoLabel = findViewById(R.id.label_ao);
+        costValue = findViewById(R.id.label_cost_comsumption);
     }
 
     @Override
@@ -131,6 +149,39 @@ public class DashboardActivity extends BaseActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        Long maturityLong = Preferences.getInstance().getMaturityDate();
+        if(maturityLong != null && maturityLong != 0) {
+            startDateLabel.setVisibility(View.VISIBLE);
+            endDateLabel.setVisibility(View.VISIBLE);
+            aoLabel.setVisibility(View.VISIBLE);
+
+            Timestamp maturityTimestamp = new Timestamp(maturityLong);
+            DateTime maturityDate = new DateTime(maturityTimestamp);
+            DateTime startDate = DateUtil.get30DaysAgo(maturityDate);
+            DateTime endDate = maturityDate;
+
+            startDateLabel.setText(startDate.getDayOfMonth() + "/" + startDate.getMonthOfYear());
+            endDateLabel.setText(endDate.getDayOfMonth() + "/" + (endDate.getMonthOfYear()));
+
+            Float rateKwh = Preferences.getInstance().getRateKwh();
+            Float rateFlag = Preferences.getInstance().getRateFlag();
+
+            Double totalCost = EnergyUtil.getValueCost(maturityDate, rateKwh, rateFlag);
+
+            DecimalFormat format = new DecimalFormat("0.00");
+
+            String formatted = format.format(totalCost);
+            if (totalCost != null && totalCost != 0) {
+                costValue.setText("RS " + formatted);
+            }
+        } else {
+            startDateLabel.setVisibility(View.GONE);
+            endDateLabel.setVisibility(View.GONE);
+            aoLabel.setVisibility(View.GONE);
+            costValue.setText("Insira suas opções");
+            costValue.setTextSize(24);
+        }
     }
 
     @Override
@@ -143,5 +194,4 @@ public class DashboardActivity extends BaseActivity {
         super.onDestroy();
         BaseObservableViewModel.stopServices(this);
     }
-
 }

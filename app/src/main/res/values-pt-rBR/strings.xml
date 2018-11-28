@@ -27,5 +27,6 @@
     <string name="description_daily_chart">Dia a dia</string>
     <string name="description_monthly_chart">Mês a mês</string>
     <string name="description_yearly_chart">Ano a ano</string>
-    <string name="title_cost_consumption_label">Custo Calculado</string>
+    <string name="title_cost_consumption_label">Custo Calculado no Mês</string>
+    <string name="alert_save_sucess">Opções salvas com sucesso!</string>
 </resources>

@@ -53,4 +53,8 @@
         <item name="colorControlHighlight">@color/colorLogo</item>
     </style>
 
+    <style name="dialog_theme">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>

@@ -26,5 +26,7 @@
     <string name="description_daily_chart">Day by day</string>
     <string name="description_monthly_chart">Monthly by monthly</string>
     <string name="description_yearly_chart">Year by year</string>
-    <string name="title_cost_consumption_label">Calculated Cost</string>
+    <string name="title_cost_consumption_label">Estimated Cost in Month</string>
+    <string name="alert_empty_or_value_invalid">Valor inválido ou vazio! Tente novamente.</string>
+    <string name="alert_save_sucess">Opções salvas com sucesso!</string>
 </resources>

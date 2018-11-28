@@ -2,12 +2,13 @@
 <RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         android:id="@+id/consumption_cost_view"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/ChartCardView">
 
@@ -18,52 +19,54 @@
 
             <RelativeLayout
                 android:id="@+id/relative_cost"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/element_double_margin">
+                android:layout_marginTop="@dimen/element_double_margin"
+                android:layout_marginBottom="@dimen/element_double_margin">
 
                 <TextView
                     android:id="@+id/maturity_date_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
+                    android:layout_marginStart="@dimen/element_margin"
+                    android:layout_marginEnd="@dimen/element_margin"
+                    android:fontFamily="sans-serif"
                     android:text="Dia de Vencimento da Fatura:"
-                    tools:text="Dia de Vencimento da Fatura:"
-                    android:fontFamily="sans-serif"/>
+                    tools:text="Dia de Vencimento da Fatura:" />
 
                 <EditText
                     android:id="@+id/maturity_date_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/maturity_date_label"
+                    android:layout_marginStart="@dimen/element_margin"
                     android:layout_marginTop="@dimen/element_margin"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
-                    android:hint="23/11/28"
-                    android:theme="@style/FaraSenseEditText"/>
+                    android:layout_marginEnd="@dimen/element_margin"
+                    android:hint="Insira o próximo vencimento"
+                    android:theme="@style/FaraSenseEditText" />
 
                 <TextView
                     android:id="@+id/rate_kwh_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/maturity_date_input"
+                    android:layout_marginStart="@dimen/element_margin"
                     android:layout_marginTop="@dimen/element_margin"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
+                    android:layout_marginEnd="@dimen/element_margin"
+                    android:fontFamily="sans-serif"
                     android:text="Tarifa do Kwh:"
-                    tools:text="Tarifa do Kwh:"
-                    android:fontFamily="sans-serif"/>
+                    tools:text="Tarifa do Kwh:" />
 
                 <EditText
                     android:id="@+id/rate_kwh_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/element_margin"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
                     android:layout_below="@id/rate_kwh_label"
+                    android:layout_marginStart="@dimen/element_margin"
+                    android:layout_marginTop="@dimen/element_margin"
+                    android:layout_marginEnd="@dimen/element_margin"
                     android:hint="Insira o valor do kWh"
+                    android:inputType="number"
                     android:theme="@style/FaraSenseEditText" />
 
                 <TextView
@@ -71,52 +74,55 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rate_kwh_input"
+                    android:layout_marginStart="@dimen/element_margin"
                     android:layout_marginTop="@dimen/element_margin"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
+                    android:layout_marginEnd="@dimen/element_margin"
+                    android:fontFamily="sans-serif"
                     android:text="Tarifa da Bandeira:"
-                    tools:text="Tarifa da Bandeira:"
-                    android:fontFamily="sans-serif"/>
+                    tools:text="Tarifa da Bandeira:" />
 
                 <EditText
                     android:id="@+id/rate_flag_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/element_margin"
-                    android:layout_marginStart="@dimen/element_double_margin"
-                    android:layout_marginEnd="@dimen/element_double_margin"
                     android:layout_below="@id/rate_flag_label"
+                    android:layout_marginStart="@dimen/element_margin"
+                    android:layout_marginTop="@dimen/element_margin"
+                    android:layout_marginEnd="@dimen/element_margin"
+                    android:layout_marginBottom="@dimen/element_half_margin"
                     android:hint="Insira o valor da bandeira"
-                    android:theme="@style/FaraSenseEditText" />
+                    android:inputType="number"
+                    android:theme="@style/FaraSenseEditText"
+                    />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/element_half_margin"
-                android:layout_marginStart="@dimen/element_double_margin"
-                android:layout_marginEnd="@dimen/element_margin">
+                android:layout_marginStart="@dimen/element_margin"
+                android:layout_marginEnd="@dimen/element_margin" >
 
                 <Button
                     android:id="@+id/button_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/element_quadriple_padding"
-                    android:text="Cancelar"
-                    android:background="@color/transparent"
                     android:layout_toLeftOf="@id/button_save"
+                    android:background="@color/transparent"
+                    android:text="Cancelar"
                     android:textColor="@color/colorTabBar"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_marginEnd="@dimen/element_half_margin"/>
 
                 <Button
                     android:id="@+id/button_save"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/element_quadriple_padding"
-                    android:text="Salvar"
-                    android:background="@color/transparent"
                     android:layout_alignParentRight="true"
+                    android:background="@color/transparent"
+                    android:text="Salvar"
                     android:textColor="@color/colorTabBar"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </RelativeLayout>
 
         </LinearLayout>

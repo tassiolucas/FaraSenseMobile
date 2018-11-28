@@ -4,6 +4,10 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import java.util.Date;
+import java.util.List;
+
+import farasense.mobile.model.DAO.FaraSenseSensorDailyDAO;
+import farasense.mobile.model.realm.FaraSenseSensorDaily;
 
 public class EnergyUtil {
 
@@ -29,6 +33,24 @@ public class EnergyUtil {
         Double kwh = wh / KILO;
 
         return kwh;
+    }
+
+    public static Double getValueCost(DateTime maturityDate, Float rateKhw, Float rateFlag) {
+        Double totalCost = 0.0;
+        DateTime endPeriod = maturityDate;
+        DateTime startPeriod = DateUtil.get30DaysAgo(endPeriod);
+
+        List<FaraSenseSensorDaily> faraSenseSensorDailyList = FaraSenseSensorDailyDAO.getMeasureByIntervals(startPeriod.toDate(), endPeriod.toDate());
+
+        Double measure = 0.0;
+        for(FaraSenseSensorDaily faraSenseSensorDaily : faraSenseSensorDailyList) {
+            measure = measure + faraSenseSensorDaily.getTotalKwh();
+        }
+
+        totalCost = measure * rateKhw;
+        totalCost = totalCost + rateFlag;
+
+        return totalCost;
     }
 
 }
