@@ -45,11 +45,11 @@ public class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnable);
 
-        final Drawable backArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
-        if (backArrow != null) {
-            backArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(backArrow);
-        }
+//        final Drawable backArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
+//        if (backArrow != null) {
+//            backArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+//            getSupportActionBar().setHomeAsUpIndicator(backArrow);
+//        }
     }
 
     @Override
