@@ -31,5 +31,4 @@ public class App extends Application {
 
         downloadingServices = false;
     }
-
 }
