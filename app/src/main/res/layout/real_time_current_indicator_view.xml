@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_chart_outer"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        style="@style/ChartCardView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.shinelw.library.ColorArcProgressBar
+            android:id="@+id/current_indicator"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:is_need_content="true"
+            app:front_color1="@color/colorAccent"
+            app:max_value="100"
+            app:back_width="10dp"
+            app:front_width="10dp"
+            app:total_engle="360"
+            app:is_need_unit="true"
+            app:string_unit="Indicator Teste"
+            app:back_color="@android:color/darker_gray"
+            android:layout_gravity="center" />
+
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

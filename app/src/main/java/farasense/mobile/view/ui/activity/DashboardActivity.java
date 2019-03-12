@@ -25,6 +25,7 @@ import farasense.mobile.util.DateUtil;
 import farasense.mobile.util.EnergyUtil;
 import farasense.mobile.util.Preferences;
 import farasense.mobile.view.ui.activity.base.BaseActivity;
+import farasense.mobile.view.ui.activity.fragment.RealTimeCurrentIndicatorView;
 import farasense.mobile.view.ui.adapter.ChartConsumeTabAdapter;
 import farasense.mobile.view.ui.adapter.ChartLastConsumptionTabAdapter;
 import farasense.mobile.view.ui.dialog.CostOptionDialog;
@@ -49,6 +50,7 @@ public class DashboardActivity extends BaseActivity {
     public HourChartConsumptionFragmentViewModel hourChartConsumptionFragmentViewModel;
     public ThirtyChartConsumptionFragmentViewModel thirtyChartConsumptionFragmentViewModel;
     public FiveChartConsumptionFragmentViewModel fiveChartConsumptionFragmentViewModel;
+    public RealTimeCurrentIndicatorView realTimeCurrentIndicatorView;
 
     private TabLayout tabLayoutConsumption;
     private TabLayout tabLayoutLastConsumption;
@@ -115,6 +117,8 @@ public class DashboardActivity extends BaseActivity {
         fragmentManager.executePendingTransactions();
 
         fragmentTransaction = fragmentManager.beginTransaction();
+
+        realTimeCurrentIndicatorView = binding.realTimeCurrentIndicator;
 
         final ImageButton button = findViewById(R.id.cost_button_option);
         button.setOnClickListener(v -> {

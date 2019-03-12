@@ -47,4 +47,5 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'net.danlew:android.joda:2.9.9.4'
+    implementation 'com.github.shinelw.colorarcprogressbar:library:1.0.3'
 }
