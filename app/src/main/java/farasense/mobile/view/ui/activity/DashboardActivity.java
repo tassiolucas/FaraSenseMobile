@@ -50,6 +50,7 @@ public class DashboardActivity extends BaseActivity {
     public HourChartConsumptionFragmentViewModel hourChartConsumptionFragmentViewModel;
     public ThirtyChartConsumptionFragmentViewModel thirtyChartConsumptionFragmentViewModel;
     public FiveChartConsumptionFragmentViewModel fiveChartConsumptionFragmentViewModel;
+
     public RealTimeCurrentIndicatorView realTimeCurrentIndicatorView;
 
     private TabLayout tabLayoutConsumption;
@@ -118,7 +119,7 @@ public class DashboardActivity extends BaseActivity {
 
         fragmentTransaction = fragmentManager.beginTransaction();
 
-        realTimeCurrentIndicatorView = binding.realTimeCurrentIndicator;
+        realTimeCurrentIndicatorView = findViewById(R.id.real_time_current_indicator);
 
         final ImageButton button = findViewById(R.id.cost_button_option);
         button.setOnClickListener(v -> {
