@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.ParcelUuid;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 import farasense.mobile.bluetooth.BleScanCallback;
 import farasense.mobile.view.ui.activity.DashboardActivity;
@@ -34,6 +37,8 @@ public class RealTimeCurrentIndicatorView extends View {
     private final static int REQUEST_FINE_LOCATION = 0;
     private static final long SCAN_PERIOD = 10000;
     private static final String TAG = RealTimeCurrentIndicatorView.class.toString();
+    private static final UUID FARASENSE_SERVICE_UUID_SENSOR_1 = UUID.fromString("129fecfc-3f58-11e9-b210-d663bd873d93");
+    private static final UUID RANDOM = UUID.randomUUID();
 
     private Context context;
     private Handler bleHandler;
@@ -98,7 +103,7 @@ public class RealTimeCurrentIndicatorView extends View {
                     .build();
 
             bleScanResults = new HashMap<>();
-            bleScanCallback = new BleScanCallback(bleScanResults);
+            bleScanCallback = new BleScanCallback(context, bleScanResults);
 
             startScan(true);
         }
@@ -112,7 +117,12 @@ public class RealTimeCurrentIndicatorView extends View {
                 return;
             }
             bleHandler = new Handler();
+           // bleFilters = new ArrayList<>();
+//            ScanFilter bleScanFilter = new ScanFilter.Builder()
+//                    .setServiceUuid(new ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
+//                    .build();
             bleHandler.postDelayed(this::stopScan, SCAN_PERIOD);
+            // bleFilters.add(bleScanFilter);
             bleScanner.startScan(bleFilters, bleSettings, bleScanCallback);
             bleBluetoothLeScanner = sensorBleAdapter.getBluetoothLeScanner();
             bleScanning = true;
@@ -167,5 +177,6 @@ public class RealTimeCurrentIndicatorView extends View {
         for (Object deviceAddress : bleScanResults.keySet()) {
             Log.d(TAG, "Found device: " + deviceAddress.toString());
         }
+
     }
 }
