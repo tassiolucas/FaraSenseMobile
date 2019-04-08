@@ -15,22 +15,24 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import com.shinelw.library.ColorArcProgressBar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
+import farasense.mobile.R;
 import farasense.mobile.bluetooth.BleScanCallback;
 import farasense.mobile.view.ui.activity.DashboardActivity;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 
-public class RealTimeCurrentIndicatorView extends View {
+public class RealTimeCurrentIndicatorView extends ConstraintLayout {
 
     private final static String BLE_NOT_SUPPORTED_MESSAGE = "Bluetooth Low Energy não suportado.";
     private final static int REQUEST_ENABLE_BT = 1;
@@ -55,6 +57,9 @@ public class RealTimeCurrentIndicatorView extends View {
     private boolean bleDeviceConnected = false;
     private boolean bleScanning = false;
 
+    private View rootView;
+    private ColorArcProgressBar indicatorProgressBar;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public RealTimeCurrentIndicatorView(Context context) {
         super(context);
@@ -73,15 +78,12 @@ public class RealTimeCurrentIndicatorView extends View {
         init(context);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public RealTimeCurrentIndicatorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void init(Context context) {
         this.context = context;
+        rootView = View.inflate(context, R.layout.real_time_current_indicator_view, this);
+
+        indicatorProgressBar = rootView.findViewById(R.id.indicator);
 
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(context, BLE_NOT_SUPPORTED_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -95,6 +97,7 @@ public class RealTimeCurrentIndicatorView extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        bleHandler = new Handler();
         if (Build.VERSION.SDK_INT >= 21) {
             bleScanner = sensorBleAdapter.getBluetoothLeScanner();
 
@@ -103,27 +106,49 @@ public class RealTimeCurrentIndicatorView extends View {
                     .build();
 
             bleScanResults = new HashMap<>();
-            bleScanCallback = new BleScanCallback(context, bleScanResults);
+            bleScanCallback = new BleScanCallback(this, context, FARASENSE_SERVICE_UUID_SENSOR_1);
 
-            startScan(true);
+            bleHandler.postDelayed(this::startScan, SCAN_PERIOD);
         }
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void disconnectAllDevices() {
+        bleScanCallback.disconnectAllDevices();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void startScan(final boolean enable) {
+    private void startScan() {
+            Log.d(TAG, "Start Scan!!!");
+            if (!hasPermissions() || bleScanning) {
+                return;
+            }
+            bleFilters = new ArrayList<>();
+            ScanFilter bleScanFilter = new ScanFilter.Builder()
+                    .setServiceUuid(new ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
+                    .build();
+            bleFilters.add(bleScanFilter);
+            bleScanner.startScan(bleFilters, bleSettings, bleScanCallback);
+
+            bleBluetoothLeScanner = sensorBleAdapter.getBluetoothLeScanner();
+            bleScanning = true;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void switchScan(final boolean enable) {
         if (enable) {
             if (!hasPermissions() || bleScanning) {
                 return;
             }
-            bleHandler = new Handler();
-           // bleFilters = new ArrayList<>();
-//            ScanFilter bleScanFilter = new ScanFilter.Builder()
-//                    .setServiceUuid(new ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
-//                    .build();
-            bleHandler.postDelayed(this::stopScan, SCAN_PERIOD);
-            // bleFilters.add(bleScanFilter);
+            bleFilters = new ArrayList<>();
+            ScanFilter bleScanFilter = new ScanFilter.Builder()
+                    .setServiceUuid(new ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
+                    .build();
+            bleFilters.add(bleScanFilter);
             bleScanner.startScan(bleFilters, bleSettings, bleScanCallback);
+            bleHandler.postDelayed(this::stopScan, SCAN_PERIOD);
             bleBluetoothLeScanner = sensorBleAdapter.getBluetoothLeScanner();
             bleScanning = true;
         } else {
@@ -159,10 +184,11 @@ public class RealTimeCurrentIndicatorView extends View {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void stopScan() {
+    public void stopScan() {
         if (bleScanning && sensorBleAdapter != null && sensorBleAdapter.isEnabled()) {
-            bleBluetoothLeScanner.stopScan(bleScanCallback);
-            scanComplete();
+            if (scanComplete()) {
+                bleBluetoothLeScanner.stopScan(bleScanCallback);
+            }
         }
 
         bleScanCallback = null;
@@ -170,13 +196,13 @@ public class RealTimeCurrentIndicatorView extends View {
         bleHandler = null;
     }
 
-    private void scanComplete() {
+    private boolean scanComplete() {
         if (bleScanResults.isEmpty()) {
-            return;
+            return false;
         }
         for (Object deviceAddress : bleScanResults.keySet()) {
             Log.d(TAG, "Found device: " + deviceAddress.toString());
         }
-
+        return true;
     }
 }

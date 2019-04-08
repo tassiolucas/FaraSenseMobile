@@ -11,13 +11,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import org.joda.time.DateTime;
-
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.Date;
-
 import butterknife.ButterKnife;
 import farasense.mobile.R;
 import farasense.mobile.databinding.DashboardDataBinding;
@@ -196,7 +192,7 @@ public class DashboardActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         BaseObservableViewModel.stopServices(this);
+        super.onDestroy();
     }
 }
