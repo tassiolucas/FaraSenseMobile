@@ -24,11 +24,13 @@ public class BleScanCallback extends ScanCallback {
         private RealTimeCurrentIndicatorView view;
         private UUID sensorUUID;
         private ArrayList<BluetoothGatt> bleDevicesGatt;
+        private BleStatusListener bleStatusListener;
 
-    public BleScanCallback(RealTimeCurrentIndicatorView realTimeCurrentIndicatorView, Context context, UUID sensorUUID) {
+    public BleScanCallback(RealTimeCurrentIndicatorView realTimeCurrentIndicatorView, Context context, UUID sensorUUID, BleStatusListener bleStatusListener) {
         this.view = realTimeCurrentIndicatorView;
         this.context = context;
         this.sensorUUID = sensorUUID;
+        this.bleStatusListener = bleStatusListener;
         bleDevicesGatt = new ArrayList<>();
     }
 
@@ -60,7 +62,7 @@ public class BleScanCallback extends ScanCallback {
     }
 
     public BluetoothGatt connectDevice(BluetoothDevice device) {
-        BleGattClientCallback gattClientCallback = new BleGattClientCallback(sensorUUID);
+        BleGattClientCallback gattClientCallback = new BleGattClientCallback(sensorUUID, bleStatusListener);
         BluetoothGatt bleGatt = device.connectGatt(context, false, gattClientCallback);
         bleDevicesGatt.add(bleGatt);
         return bleGatt;

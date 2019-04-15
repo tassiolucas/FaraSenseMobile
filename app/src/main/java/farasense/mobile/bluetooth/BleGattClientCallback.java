@@ -24,11 +24,13 @@ public class BleGattClientCallback extends BluetoothGattCallback {
     private boolean bleConnected = false;
     private BluetoothGatt gatt;
     private UUID sensorUUID;
+    private BleStatusListener bleStatusListener;
 
     private ArrayList<ParcelUuid[]> bluetoothUUIDs = new ArrayList<>();
 
-    public BleGattClientCallback(UUID sensorUUID) {
+    public BleGattClientCallback(UUID sensorUUID, BleStatusListener bleStatusListener) {
         this.sensorUUID = sensorUUID;
+        this.bleStatusListener = bleStatusListener;
     }
 
     @Override
@@ -47,9 +49,11 @@ public class BleGattClientCallback extends BluetoothGattCallback {
         }
         if (newState == BluetoothProfile.STATE_CONNECTED) {
             bleConnected = true;
+            bleStatusListener.onConnect();
             Log.d(BLE_LOG, "Ble conectado: " + gatt.getDevice().getUuids());
             bluetoothUUIDs.add(gatt.getDevice().getUuids());
             gatt.discoverServices();
+
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             Log.d(BLE_LOG, "Ble disconectado: " + status);
             disconnectGattServer();
@@ -71,7 +75,6 @@ public class BleGattClientCallback extends BluetoothGattCallback {
             enableCharacteristicNotification(gatt, characteristic);
             characteristic.notify();
         }
-
         Log.d(BLE_LOG, "Características salvas");
     }
 
@@ -86,7 +89,8 @@ public class BleGattClientCallback extends BluetoothGattCallback {
         } catch (UnsupportedEncodingException e) {
             Log.e(BLE_LOG, "Incapaz de converter messagem para texto.");
         }
-        Log.d(BLE_LOG,"Mensagem: " + messageString);
+        // Log.d(BLE_LOG,"Mensagem: " + messageString);
+        bleStatusListener.onReciveMessage(messageString);
     }
 
     private void enableCharacteristicNotification(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {

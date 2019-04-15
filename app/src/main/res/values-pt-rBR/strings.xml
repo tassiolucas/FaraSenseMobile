@@ -31,4 +31,7 @@
     <string name="title_cost_consumption_label">Custo Calculado no Mês</string>
     <string name="alert_empty_or_value_invalid">Valor inválido ou vazio! Tente novamente.</string>
     <string name="alert_save_sucess">Opções salvas com sucesso!</string>
+    <string name="alert_gps_accept">Aceitar</string>
+    <string name="alert_gps_exit">Sair</string>
+    <string name="aler_gps_message">Para acessar ao FaraSense Mobile é necessária a ativação do GPS para localização dos sensores.</string>
 </resources>

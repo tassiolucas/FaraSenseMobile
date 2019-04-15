@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -15,31 +15,52 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_view_chart_outer"
             android:layout_width="match_parent"
-            android:layout_height="255dp"
+            android:layout_height="270dp"
+            android:layout_marginBottom="@dimen/element_margin"
             android:layout_gravity="center"
             style="@style/ChartCardView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-            <com.shinelw.library.ColorArcProgressBar
+            
+            <io.github.dvegasa.arcpointer.ArcPointer
                 android:id="@+id/indicator"
                 android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
-                app:is_need_content="true"
-                app:max_value="10"
-                app:back_width="10dp"
-                app:front_width="10dp"
-                app:total_engle="270"
-                app:is_need_unit="true"
-                app:string_unit="Corrente (A)"
-                app:back_color="@color/colorPrimaryDark"
-                android:layout_marginBottom="150dp"
-                app:front_color1="#00ff00"
-                app:front_color2="#ffff00"
-                app:front_color3="#ff0000"
-                />
+                android:layout_marginTop="@dimen/element_margin"
+                app:radius="150dp"
+                android:padding="8dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/element_margin"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/indicator_label"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="40dp"
+                    android:fontFamily="sans-serif"
+                    android:background="@color/transparent"
+                    android:textColor="@color/colorLabelCost"
+                    android:textSize="36dp"
+                    android:text="0.0"
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/indicator_sublabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:gravity="center"
+                    android:layout_below="@id/indicator_label"
+                    android:text="Amper(s)"
+                    android:textColor="@color/colorDailyChartBar" />
+            </RelativeLayout>
 
         </android.support.v7.widget.CardView>
     </RelativeLayout>

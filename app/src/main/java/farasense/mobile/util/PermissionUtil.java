@@ -9,8 +9,11 @@ public class PermissionUtil {
 
     public static final int PERMISSION_ALL = 1;
     public static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.BLUETOOTH
     };
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -24,5 +27,4 @@ public class PermissionUtil {
         }
         return true;
     }
-
 }

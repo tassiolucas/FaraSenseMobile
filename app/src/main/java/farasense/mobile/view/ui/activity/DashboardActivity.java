@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import butterknife.ButterKnife;
 import farasense.mobile.R;
 import farasense.mobile.databinding.DashboardDataBinding;
+import farasense.mobile.util.GpsUtil;
 import farasense.mobile.util.DateUtil;
 import farasense.mobile.util.EnergyUtil;
 import farasense.mobile.util.Preferences;
@@ -136,6 +137,9 @@ public class DashboardActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
+        if (!GpsUtil.isLocationEnabled(getApplicationContext()))
+            GpsUtil.alertGgpDialog(this);
+        
         tabLayoutLastConsumption.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
