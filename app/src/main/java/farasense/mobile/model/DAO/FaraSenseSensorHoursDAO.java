@@ -53,8 +53,8 @@ public class FaraSenseSensorHoursDAO extends BaseDAO {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    Date now = DateUtil.getNow();
-                    Date firtsMomentInTheDay = DateUtil.getFirstMomentOfTheDay();
+                    Date now = DateUtil.INSTANCE.getNow();
+                    Date firtsMomentInTheDay = DateUtil.INSTANCE.getFirstMomentOfTheDay();
 
                     RealmResults<FaraSenseSensorHours> results = realm.where(FaraSenseSensorHours.class)
                             .between(FIELD_DATE, firtsMomentInTheDay, now)

@@ -54,7 +54,7 @@ public class RestClient {
             url = "https://p4b2zvd5pi.execute-api.us-east-1.amazonaws.com/dev/current_sensor/";
         } catch (Exception e) {}
 
-        if (ConnectionUtil.isDataConnectionAvailable(context)) {
+        if (ConnectionUtil.INSTANCE.isDataConnectionAvailable(context)) {
             request(url, clazz, method, resource, requestBody, successListener, errorListener);
         } else {
             errorListener.onErrorResponse(new RestError(NO_CONNECTION_CODE));
