@@ -33,7 +33,7 @@ object EnergyUtil {
         var totalCost: Double?
         val startPeriod = DateUtil.get30DaysAgo(maturityDate)
 
-        val faraSenseSensorDailyList = FaraSenseSensorDailyDAO.getMeasureByIntervals(startPeriod.toDate(), maturityDate.toDate())
+        val faraSenseSensorDailyList = FaraSenseSensorDailyDAO().getMeasureByIntervals(startPeriod.toDate(), maturityDate.toDate())
 
         var measure: Double? = 0.0
         for (faraSenseSensorDaily in faraSenseSensorDailyList) {

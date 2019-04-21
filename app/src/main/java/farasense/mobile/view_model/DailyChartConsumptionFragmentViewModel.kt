@@ -20,7 +20,7 @@ class DailyChartConsumptionFragmentViewModel(application: Application) : Android
             val intervals30Days = DateUtil.allIntervalsLast30Days
 
             do {
-                val sensorMeasuresList = FaraSenseSensorDailyDAO.getMeasureByIntervals(
+                val sensorMeasuresList = FaraSenseSensorDailyDAO().getMeasureByIntervals(
                         intervals30Days[daysBehind].start.toDate(),
                         intervals30Days[daysBehind].end.toDate()
                 )
@@ -41,7 +41,7 @@ class DailyChartConsumptionFragmentViewModel(application: Application) : Android
                 daysBehind++
             } while (daysBehind < intervals30Days.size)
 
-            val todayMeauseres = FaraSenseSensorHoursDAO.getDailyComsumption()
+            val todayMeauseres = FaraSenseSensorHoursDAO().dailyComsumption
 
             var todayTotalKwh: Double? = 0.0
             if (todayMeauseres != null) {

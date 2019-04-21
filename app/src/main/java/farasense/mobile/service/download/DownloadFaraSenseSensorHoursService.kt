@@ -23,7 +23,7 @@ class DownloadFaraSenseSensorHoursService : BaseService() {
                     override fun onSuccess(response: List<FaraSenseSensorHours>) {
                         Log.d("ERROR FARASENSE HOURS", LOG_DSERVICE_OK)
                         onDownloadContentListener.onSucess()
-                        FaraSenseSensorHoursDAO.saveFromServer(response)
+                        FaraSenseSensorHoursDAO().saveFromServer(response)
 
                     }
                 }, object : ErrorListener() {

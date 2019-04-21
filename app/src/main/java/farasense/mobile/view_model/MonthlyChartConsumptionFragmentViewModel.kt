@@ -19,7 +19,7 @@ class MonthlyChartConsumptionFragmentViewModel(application: Application) : Andro
             val intervals12Monthly = DateUtil.allIntervalsLast12Monthly
 
             do {
-                val sensorMeasuresList = FaraSenseSensorDailyDAO.getMeasureByIntervals(
+                val sensorMeasuresList = FaraSenseSensorDailyDAO().getMeasureByIntervals(
                         intervals12Monthly[monthlyBehind].start.toDate(),
                         intervals12Monthly[monthlyBehind].end.toDate()
                 )

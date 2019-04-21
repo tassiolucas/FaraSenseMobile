@@ -21,7 +21,7 @@ class FiveChartConsumptionFragmentViewModel(application: Application) : AndroidV
             fiveChartLabels = ArrayList()
 
             do {
-                val sensorMeasureList = FaraSenseSensorDAO.getMeasureByIntervals(
+                val sensorMeasureList = FaraSenseSensorDAO().getMeasureByIntervals(
                         intervalsFiveMinutes[indexIntervals].start.toDate(),
                         intervalsFiveMinutes[indexIntervals].end.toDate()
                 )

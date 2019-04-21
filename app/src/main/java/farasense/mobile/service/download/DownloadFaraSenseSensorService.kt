@@ -31,9 +31,9 @@ class DownloadFaraSenseSensorService : BaseService() {
                         RestClient.getInstance().getFaraSenseSensor(object : SuccessListener<List<FaraSenseSensor>>() {
                             override fun onSuccess(response: List<FaraSenseSensor>) {
                                 Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK)
-                                FaraSenseSensorDAO.saveFromServer(response)
+                                FaraSenseSensorDAO().saveFromServer(response)
                                 if (PermissionUtil.hasPermissions(applicationContext, *PermissionUtil.PERMISSIONS)) {
-                                    BaseDAO.saveDataBase(applicationContext)
+                                    // BaseDAO().saveDataBase(applicationContext)
                                 }
                             }
                         }, object : ErrorListener() {
@@ -70,7 +70,7 @@ class DownloadFaraSenseSensorService : BaseService() {
                     override fun onSuccess(response: List<FaraSenseSensor>) {
                         Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK)
                         onDownloadContentListener.onSucess()
-                        FaraSenseSensorDAO.saveFromServer(response)
+                        FaraSenseSensorDAO().saveFromServer(response)
                     }
                 }, object : ErrorListener() {
                     override fun onError(restError: RestError) {

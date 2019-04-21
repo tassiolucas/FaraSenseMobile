@@ -21,7 +21,7 @@ class DownloadFaraSenseSensorDailyService : BaseService() {
                 RestClient.getInstance().getFaraSenseSensorDaily(object : SuccessListener<List<FaraSenseSensorDaily>>() {
                     override fun onSuccess(response: List<FaraSenseSensorDaily>) {
                         onDownloadContentListener.onSucess()
-                        FaraSenseSensorDailyDAO.saveFromServer(response)
+                        FaraSenseSensorDailyDAO().saveFromServer(response)
                     }
                 }, object : ErrorListener() {
                     override fun onError(restError: RestError) {

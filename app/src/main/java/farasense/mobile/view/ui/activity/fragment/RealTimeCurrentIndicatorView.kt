@@ -134,7 +134,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         bleFilters.add(bleScanFilter)
         bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
 
-        bleBluetoothLeScanner = sensorBleAdapter!!.bluetoothLeScanner
+        bleBluetoothLeScanner = sensorBleAdapter.bluetoothLeScanner
         bleScanning = true
     }
 
@@ -188,9 +188,9 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun stopScan() {
-        if (bleScanning && sensorBleAdapter != null && sensorBleAdapter!!.isEnabled) {
+        if (bleScanning && sensorBleAdapter.isEnabled) {
             if (scanComplete()) {
-                bleBluetoothLeScanner!!.stopScan(bleScanCallback)
+                bleBluetoothLeScanner.stopScan(bleScanCallback)
             }
         }
 
@@ -198,25 +198,21 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     private fun scanComplete(): Boolean {
-        if (bleScanResults!!.isEmpty()) {
+        if (bleScanResults.isEmpty()) {
             return false
         }
-        for (deviceAddress in bleScanResults!!.keys) {
+        for (deviceAddress in bleScanResults.keys) {
             Log.d(TAG, "Found device: $deviceAddress")
         }
         return true
     }
 
     // BLE Manager Interface
-    override fun onReciveMessage(message: String?) {
-        if (message != null) {
-            if (isReciveMessage) {
-                bleHandler2!!.postDelayed(bleAnimationRunnable, UPDATE_INDICATOR_SPEED.toLong())
-            }
-            bleMessage = java.lang.Float.parseFloat(message)
-        } else {
-            isReciveMessage = false
+    override fun onReciveMessage(message: String) {
+        if (isReciveMessage) {
+            bleHandler2.postDelayed(bleAnimationRunnable, UPDATE_INDICATOR_SPEED.toLong())
         }
+        bleMessage = java.lang.Float.parseFloat(message)
     }
 
     override fun onConnect() {

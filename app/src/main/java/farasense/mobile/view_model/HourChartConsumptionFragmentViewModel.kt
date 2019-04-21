@@ -25,7 +25,7 @@ class HourChartConsumptionFragmentViewModel(application: Application) : AndroidV
             hourChartLabels = ArrayList()
 
             do {
-                val sensorMeasuresList = FaraSenseSensorDAO.getMeasureByIntervals(
+                val sensorMeasuresList = FaraSenseSensorDAO().getMeasureByIntervals(
                         intervals24Hours[hoursBehind].start.toDate(),
                         intervals24Hours[hoursBehind].end.toDate()
                 )

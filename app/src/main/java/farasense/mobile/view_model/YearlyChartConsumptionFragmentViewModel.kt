@@ -19,7 +19,7 @@ class YearlyChartConsumptionFragmentViewModel(application: Application) : Androi
             val intervals10Year = DateUtil.allIntervalsLast10Year
 
             do {
-                val sensorMeasuresList = FaraSenseSensorDailyDAO.getMeasureByIntervals(
+                val sensorMeasuresList = FaraSenseSensorDailyDAO().getMeasureByIntervals(
                         intervals10Year[yearlyBehind].start.toDate(),
                         intervals10Year[yearlyBehind].end.toDate()
                 )

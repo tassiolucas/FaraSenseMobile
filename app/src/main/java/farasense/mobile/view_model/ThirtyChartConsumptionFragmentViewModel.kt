@@ -21,7 +21,7 @@ class ThirtyChartConsumptionFragmentViewModel(application: Application) : Androi
             thirtyChartLabels = ArrayList()
 
             do {
-                val sensorMeasuresList = FaraSenseSensorDAO.getMeasureByIntervals(
+                val sensorMeasuresList = FaraSenseSensorDAO().getMeasureByIntervals(
                         intervalsThirtyMinutes[indexIntervals].start.toDate(),
                         intervalsThirtyMinutes[indexIntervals].end.toDate()
                 )
