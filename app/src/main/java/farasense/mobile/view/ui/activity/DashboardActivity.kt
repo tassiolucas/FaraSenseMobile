@@ -12,30 +12,35 @@ import android.view.Menu
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import org.joda.time.DateTime
-import java.sql.Timestamp
-import java.text.DecimalFormat
+import butterknife.BindView
 import butterknife.ButterKnife
 import farasense.mobile.R
 import farasense.mobile.databinding.DashboardDataBinding
-import farasense.mobile.util.GpsUtil
 import farasense.mobile.util.DateUtil
 import farasense.mobile.util.EnergyUtil
+import farasense.mobile.util.GpsUtil
 import farasense.mobile.util.Preferences
+import farasense.mobile.view.components.FaraSenseTextViewBold
+import farasense.mobile.view.components.FaraSenseTextViewRegular
 import farasense.mobile.view.ui.activity.base.BaseActivity
 import farasense.mobile.view.ui.activity.fragment.RealTimeCurrentIndicatorView
 import farasense.mobile.view.ui.adapter.ChartConsumeTabAdapter
 import farasense.mobile.view.ui.adapter.ChartLastConsumptionTabAdapter
 import farasense.mobile.view.ui.dialog.CostOptionDialog
-import farasense.mobile.view_model.FiveChartConsumptionFragmentViewModel
-import farasense.mobile.view_model.HourChartConsumptionFragmentViewModel
-import farasense.mobile.view_model.ThirtyChartConsumptionFragmentViewModel
-import farasense.mobile.view_model.YearlyChartConsumptionFragmentViewModel
-import farasense.mobile.view_model.DailyChartConsumptionFragmentViewModel
-import farasense.mobile.view_model.MonthlyChartConsumptionFragmentViewModel
+import farasense.mobile.view_model.*
 import farasense.mobile.view_model.base.BaseObservableViewModel
+import org.joda.time.DateTime
+import java.sql.Timestamp
+import java.text.DecimalFormat
 
 class DashboardActivity : BaseActivity() {
+
+    @BindView(R.id.toolbar)
+    lateinit var toolbar: android.support.v7.widget.Toolbar
+    @BindView(R.id.toolbar_title)
+    lateinit var toolbarTitle: FaraSenseTextViewBold
+    @BindView(R.id.toolbar_subtitle)
+    lateinit var toolbarSubtitle: FaraSenseTextViewRegular
 
     private val FIRST_TAB = 0
     private val SECOND_TAB = 1
@@ -150,7 +155,7 @@ class DashboardActivity : BaseActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        val maturityLong = Preferences.getInstance().maturityDate
+        val maturityLong = Preferences.getInstance(this).maturityDate
         if (maturityLong != null && maturityLong != 0L) {
             startDateLabel?.visibility = View.VISIBLE
             endDateLabel?.visibility = View.VISIBLE
@@ -163,8 +168,8 @@ class DashboardActivity : BaseActivity() {
             startDateLabel?.text = startDate.dayOfMonth.toString() + "/" + startDate.monthOfYear
             endDateLabel?.text = maturityDate.dayOfMonth.toString() + "/" + maturityDate.monthOfYear
 
-            val rateKwh = Preferences.getInstance().rateKwh
-            val rateFlag = Preferences.getInstance().rateFlag
+            val rateKwh = Preferences.getInstance(this).rateKwh
+            val rateFlag = Preferences.getInstance(this).rateFlag
 
             val totalCost = EnergyUtil.getValueCost(maturityDate, rateKwh, rateFlag)
 
@@ -190,5 +195,23 @@ class DashboardActivity : BaseActivity() {
     public override fun onDestroy() {
         BaseObservableViewModel.stopServices(this)
         super.onDestroy()
+    }
+
+    private fun setToolbar(title: String, subtitle: String?, homeAsUpEnable: Boolean) {
+        toolbar.title = ""
+        toolbar.subtitle = ""
+        toolbarTitle.text = title
+        if (subtitle != null) {
+            toolbarSubtitle.visibility = View.VISIBLE
+            toolbarSubtitle.text = subtitle
+        }
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(homeAsUpEnable)
+
+        //        final Drawable backArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
+        //        if (backArrow != null) {
+        //            backArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+        //            getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        //        }
     }
 }

@@ -1,6 +1,7 @@
 package farasense.mobile.service.download
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import java.util.Date
 import farasense.mobile.api.RestClient
@@ -16,10 +17,10 @@ import farasense.mobile.service.listener.OnDownloadContentListener
 class DownloadFaraSenseSensorHoursService : BaseService() {
     companion object {
 
-        fun download(onDownloadContentListener: OnDownloadContentListener, startDate: Date, finalDate: Date) {
+        fun download(context: Context, onDownloadContentListener: OnDownloadContentListener, startDate: Date, finalDate: Date) {
 
             Thread {
-                RestClient.getInstance().getFaraSenseSensorHours(object : SuccessListener<List<FaraSenseSensorHours>>() {
+                RestClient.getFaraSenseSensorHours(context, object : SuccessListener<List<FaraSenseSensorHours>>() {
                     override fun onSuccess(response: List<FaraSenseSensorHours>) {
                         Log.d("ERROR FARASENSE HOURS", LOG_DSERVICE_OK)
                         onDownloadContentListener.onSucess()

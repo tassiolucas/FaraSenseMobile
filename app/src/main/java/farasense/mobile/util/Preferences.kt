@@ -48,11 +48,10 @@ class Preferences {
 
         private var instance: Preferences? = null
 
-        fun getInstance(): Preferences {
+        fun getInstance(context: Context): Preferences {
             if (instance == null) {
                 instance = Preferences()
-                val app = App.getInstance()
-                instance!!.sharedPreferences = app.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+                instance!!.sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
             }
             return instance as Preferences
         }

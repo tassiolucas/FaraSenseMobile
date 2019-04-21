@@ -53,7 +53,7 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
         initDialog()
 
         maturityDateInput!!.inputType = InputType.TYPE_NULL
-        maturityDateInput!!.setOnClickListener { v ->
+        maturityDateInput!!.setOnClickListener {
             val datePickerDialog = DatePickerDialog(context, R.style.dialog_theme, dateChose, dateCalendar!!.get(Calendar.YEAR), dateCalendar!!.get(Calendar.MONTH), dateCalendar!!.get(Calendar.DAY_OF_MONTH))
             datePickerDialog.show()
         }
@@ -117,9 +117,9 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
 
         saveButton!!.setOnClickListener {
             if (dateCalendar != null && rateKhwValue != null && rateFlagValue != null && rateKhwValue != 0.0 && rateFlagValue != 0.0) {
-                Preferences.getInstance().setMaturityDate(dateCalendar!!.time)
-                Preferences.getInstance().rateKwh = rateKhwValue!!.toFloat()
-                Preferences.getInstance().rateFlag = rateFlagValue!!.toFloat()
+                Preferences.getInstance(context).setMaturityDate(dateCalendar!!.time)
+                Preferences.getInstance(context).rateKwh = rateKhwValue!!.toFloat()
+                Preferences.getInstance(context).rateFlag = rateFlagValue!!.toFloat()
 
                 dismiss()
 

@@ -1,24 +1,20 @@
 package farasense.mobile.service.download
 
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
-import android.os.Message
-import android.os.Process
+import android.content.Context
+import android.os.*
 import android.util.Log
-import java.util.Date
 import farasense.mobile.api.RestClient
 import farasense.mobile.api.base.ErrorListener
 import farasense.mobile.api.base.RestError
 import farasense.mobile.api.base.SuccessListener
 import farasense.mobile.model.DAO.FaraSenseSensorDAO
-import farasense.mobile.model.DAO.base.BaseDAO
 import farasense.mobile.model.realm.FaraSenseSensor
 import farasense.mobile.service.base.BaseService
 import farasense.mobile.service.listener.OnDownloadContentListener
-import farasense.mobile.util.DateUtil
 import farasense.mobile.util.ConnectionUtil
+import farasense.mobile.util.DateUtil
 import farasense.mobile.util.PermissionUtil
+import java.util.*
 
 class DownloadFaraSenseSensorService : BaseService() {
 
@@ -28,7 +24,7 @@ class DownloadFaraSenseSensorService : BaseService() {
             while (!shouldStop) {
                 try {
                     if (ConnectionUtil.isDataConnectionAvailable(applicationContext)) {
-                        RestClient.getInstance().getFaraSenseSensor(object : SuccessListener<List<FaraSenseSensor>>() {
+                        RestClient.getFaraSenseSensor(applicationContext, object : SuccessListener<List<FaraSenseSensor>>() {
                             override fun onSuccess(response: List<FaraSenseSensor>) {
                                 Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK)
                                 FaraSenseSensorDAO().saveFromServer(response)
@@ -64,9 +60,9 @@ class DownloadFaraSenseSensorService : BaseService() {
 
     companion object {
 
-        fun download(onDownloadContentListener: OnDownloadContentListener, startDate: Date, finalDate: Date) {
+        fun download(context: Context, onDownloadContentListener: OnDownloadContentListener, startDate: Date, finalDate: Date) {
             Thread {
-                RestClient.getInstance().getFaraSenseSensor(object : SuccessListener<List<FaraSenseSensor>>() {
+                RestClient.getFaraSenseSensor(context, object : SuccessListener<List<FaraSenseSensor>>() {
                     override fun onSuccess(response: List<FaraSenseSensor>) {
                         Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK)
                         onDownloadContentListener.onSucess()
