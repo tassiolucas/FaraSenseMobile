@@ -12,6 +12,8 @@ class HourChartConsumptionFragmentViewModel(application: Application) : AndroidV
 
     private var hourChartLabels: MutableList<String> = ArrayList()
 
+    private var measure = 0.0
+
     // TODO: (OK!) - FAZER UM CÓDIGO QUE LEIA AS MEDIDAS RELATIVAS AO TEMPO EM 24 HORAS
     // TODO: -(OK!) INVERTER A PLOTAGEM DOS GRÁFICOS
     // TODO: - FAZER UM CODIGO COM LIVEDATA
@@ -36,11 +38,16 @@ class HourChartConsumptionFragmentViewModel(application: Application) : AndroidV
                         totalPowerMeasure = totalPowerMeasure!! + measure.power!!
                     }
 
-                    val measure = EnergyUtil.getKwhInPeriod(
-                            totalPowerMeasure,
-                            sensorMeasuresList.size,
-                            sensorMeasuresList[0].date,
-                            sensorMeasuresList[sensorMeasuresList.size - 1].date)
+                    measure = if (!sensorMeasuresList.isEmpty()) {
+                        EnergyUtil.getKwhInPeriod(
+                                totalPowerMeasure,
+                                sensorMeasuresList.size,
+                                sensorMeasuresList[0].date,
+                                sensorMeasuresList[sensorMeasuresList.size - 1].date
+                        )!!
+                    } else {
+                        0.0
+                    }
 
                     measuresList.add(measure!!)
                 } else {
