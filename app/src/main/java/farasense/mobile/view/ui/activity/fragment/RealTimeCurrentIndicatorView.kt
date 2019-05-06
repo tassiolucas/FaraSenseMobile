@@ -43,6 +43,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private var bleMessage: Float = 0F
     private var isReciveMessage = false
     private var bleScanning = false
+    private var bleUnavailable = false
 
     private lateinit var bleAnimationRunnable: Runnable
     private lateinit var indicatorCurrent: ArcPointer
@@ -72,11 +73,12 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         indicatorLabel = rootView.findViewById(R.id.indicator_label)
 
         if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(context, BLE_NOT_SUPPORTED_MESSAGE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(getContext(), BLE_NOT_SUPPORTED_MESSAGE, Toast.LENGTH_SHORT).show()
+            bleUnavailable = true
+        } else {
+            val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+            sensorBleAdapter = bluetoothManager.adapter
         }
-
-        val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
-        sensorBleAdapter = bluetoothManager.adapter
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -93,28 +95,29 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         indicatorCurrent.isAnimated = true
         indicatorCurrent.animationVelocity = 500L
 
-        bleHandler = Handler()
-        bleHandler2 = Handler()
+        if (!bleUnavailable) {
+            bleHandler = Handler()
+            bleHandler2 = Handler()
 
-        bleAnimationRunnable = Runnable {
-            indicatorCurrent.value = bleMessage * 0.1f
-            indicatorLabel.text = String.format("%.2f", bleMessage)
-        }
+            bleAnimationRunnable = Runnable {
+                indicatorCurrent.value = bleMessage * 0.1f
+                indicatorLabel.text = String.format("%.2f", bleMessage)
+            }
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            bleScanner = sensorBleAdapter.bluetoothLeScanner
+            if (Build.VERSION.SDK_INT >= 21) {
+                bleScanner = sensorBleAdapter.bluetoothLeScanner
 
-            bleSettings = ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                    .build()
+                bleSettings = ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                        .build()
 
-            bleScanResults = HashMap()
-            bleScanCallback = BleScanCallback(this, context, FARASENSE_SERVICE_UUID_SENSOR_1, this)
+                bleScanResults = HashMap()
+                bleScanCallback = BleScanCallback(this, context, FARASENSE_SERVICE_UUID_SENSOR_1, this)
 
-            bleHandler.postDelayed({ this.startScan() }, SCAN_PERIOD)
+                bleHandler.postDelayed({ this.startScan() }, SCAN_PERIOD)
+            }
         }
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun disconnectAllDevices() {
