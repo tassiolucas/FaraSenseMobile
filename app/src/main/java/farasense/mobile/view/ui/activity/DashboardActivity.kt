@@ -1,6 +1,5 @@
 package farasense.mobile.view.ui.activity
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -129,6 +128,9 @@ class DashboardActivity : BaseActivity() {
             dialog.setContentView(R.layout.adapter_item_cost_option_dialog)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCancelable(false)
+            dialog.setOnDismissListener {
+
+            }
             dialog.show()
         }
 
@@ -138,7 +140,6 @@ class DashboardActivity : BaseActivity() {
         costValue = findViewById(R.id.label_cost_comsumption)
     }
 
-    @SuppressLint("SetTextI18n")
     public override fun onResume() {
         super.onResume()
 

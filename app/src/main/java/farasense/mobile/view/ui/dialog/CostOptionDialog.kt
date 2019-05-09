@@ -3,6 +3,7 @@ package farasense.mobile.view.ui.dialog
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
@@ -116,22 +117,34 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
         cancelButton!!.setOnClickListener { this.dismiss() }
 
         saveButton!!.setOnClickListener {
-            if (dateCalendar != null && rateKhwValue != null && rateFlagValue != null && rateKhwValue != 0.0 && rateFlagValue != 0.0) {
+            if (dateCalendar != null && rateKhwValue != null && rateKhwValue != 0.0) {
                 Preferences.getInstance(context).setMaturityDate(dateCalendar!!.time)
                 Preferences.getInstance(context).rateKwh = rateKhwValue!!.toFloat()
-                Preferences.getInstance(context).rateFlag = rateFlagValue!!.toFloat()
+                if(rateFlagValue != null && rateFlagValue != 0.0)
+                    Preferences.getInstance(context).rateFlag = rateFlagValue!!.toFloat()
 
                 dismiss()
 
-                val intent = activity.intent
-                activity.finish()
-                activity.startActivity(intent)
+
+
+//                val intent = activity.intent
+//                activity.finish()
+//                activity.startActivity(intent)
 
                 Toast.makeText(context, R.string.alert_save_sucess, Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, R.string.alert_empty_or_value_invalid, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun setOnDismissListener(listener: DialogInterface.OnDismissListener?) {
+        super.setOnDismissListener(listener)
+
+        this.setOnDismissListener {
+
+        }
+
     }
 
     private fun updateDateLabel() {

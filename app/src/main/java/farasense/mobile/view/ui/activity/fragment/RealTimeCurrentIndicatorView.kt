@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.ParcelUuid
-import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.util.Log
@@ -49,22 +48,18 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var indicatorCurrent: ArcPointer
     private lateinit var indicatorLabel: TextView
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     constructor(context: Context) : super(context) {
         init(context)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init(context)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init(context)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private fun init(context: Context) {
 
         val rootView = View.inflate(context, R.layout.real_time_current_indicator_view, this)
@@ -81,7 +76,6 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         indicatorCurrent.setNotches(5)
@@ -104,7 +98,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
                 indicatorLabel.text = String.format("%.2f", bleMessage)
             }
 
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 bleScanner = sensorBleAdapter.bluetoothLeScanner
 
                 bleSettings = ScanSettings.Builder()
@@ -119,12 +113,10 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun disconnectAllDevices() {
         bleScanCallback.disconnectAllDevices()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun startScan() {
         Log.d(TAG, "Start Scan!!!")
         if (!hasPermissions() || bleScanning) {
@@ -141,7 +133,6 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         bleScanning = true
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun switchScan(enable: Boolean) {
         if (enable) {
             if (!hasPermissions() || bleScanning) {
@@ -161,7 +152,6 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun hasPermissions(): Boolean {
         if (!sensorBleAdapter.isEnabled) {
             requestBluetoothEnable()
@@ -173,12 +163,10 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         return true
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun hasLocationPermissions(): Boolean {
         return context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun requestLocationPermission() {
         (context as DashboardActivity).requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
     }
@@ -189,7 +177,6 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         Log.d(TAG, "Requested user enables Bluetooth. Try starting the scan again.")
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun stopScan() {
         if (bleScanning && sensorBleAdapter.isEnabled) {
             if (scanComplete()) {
@@ -223,7 +210,6 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     companion object {
-
         private val BLE_NOT_SUPPORTED_MESSAGE = "Bluetooth Low Energy não suportado."
         private val REQUEST_ENABLE_BT = 1
         private val REQUEST_FINE_LOCATION = 0
