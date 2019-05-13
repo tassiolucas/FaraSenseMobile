@@ -3,17 +3,20 @@ package farasense.mobile.service.download
 import android.content.Context
 import android.os.*
 import android.util.Log
+import farasense.mobile.BuildConfig
 import farasense.mobile.api.RestClient
 import farasense.mobile.api.base.ErrorListener
 import farasense.mobile.api.base.RestError
 import farasense.mobile.api.base.SuccessListener
 import farasense.mobile.model.DAO.FaraSenseSensorDAO
+import farasense.mobile.model.DAO.base.BaseDAO
 import farasense.mobile.model.realm.FaraSenseSensor
 import farasense.mobile.service.base.BaseService
 import farasense.mobile.service.listener.OnDownloadContentListener
 import farasense.mobile.util.ConnectionUtil
 import farasense.mobile.util.DateUtil
 import farasense.mobile.util.PermissionUtil
+import farasense.mobile.view_model.base.BaseObservableViewModel
 import java.util.*
 
 class DownloadFaraSenseSensorService : BaseService() {
@@ -23,13 +26,13 @@ class DownloadFaraSenseSensorService : BaseService() {
         override fun handleMessage(msg: Message) {
             while (!shouldStop) {
                 try {
-                    if (ConnectionUtil.isDataConnectionAvailable(applicationContext)) {
+                    if (BaseObservableViewModel.serviceStarted && ConnectionUtil.isDataConnectionAvailable(applicationContext)) {
                         RestClient.getFaraSenseSensor(applicationContext, object : SuccessListener<List<FaraSenseSensor>>() {
                             override fun onSuccess(response: List<FaraSenseSensor>) {
                                 Log.d("FARASENSE SENSOR", LOG_DSERVICE_OK)
                                 FaraSenseSensorDAO().saveFromServer(response)
-                                if (PermissionUtil.hasPermissions(applicationContext, *PermissionUtil.PERMISSIONS)) {
-                                    // BaseDAO().saveDataBase(applicationContext)
+                                if (BuildConfig.DEBUG && PermissionUtil.hasPermissions(applicationContext, *PermissionUtil.PERMISSIONS_DEBUG)) {
+                                    BaseDAO().saveDataBase(applicationContext)
                                 }
                             }
                         }, object : ErrorListener() {

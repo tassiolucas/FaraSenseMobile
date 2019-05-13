@@ -1,6 +1,7 @@
 package farasense.mobile
 
 import android.app.Application
+import farasense.mobile.aws.AWSProvider
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -19,6 +20,8 @@ class App : Application() {
                 .build()
 
         Realm.setDefaultConfiguration(realmConfig)
+
+        AWSProvider.initialize(applicationContext)
 
         downloadingServices = false
     }

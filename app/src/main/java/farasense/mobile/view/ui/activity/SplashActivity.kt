@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.widget.Toast
+import farasense.mobile.BuildConfig
 import farasense.mobile.R
 import farasense.mobile.databinding.SplashDataBinding
 import farasense.mobile.service.base.BaseService
@@ -14,7 +15,6 @@ import farasense.mobile.util.ConnectionUtil
 import farasense.mobile.util.PermissionUtil
 import farasense.mobile.view.ui.activity.base.BaseActivity
 import farasense.mobile.view_model.SplashViewModel
-import farasense.mobile.view_model.base.BaseObservableViewModel
 
 class SplashActivity : BaseActivity() {
     private lateinit var binding: SplashDataBinding
@@ -29,14 +29,24 @@ class SplashActivity : BaseActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             TAG_RESULT_PERMISSION_OK -> {
-                if (grantResults.size > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    initScreen()
+                if (BuildConfig.DEBUG) {
+                    if (grantResults.size > 0 &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                            grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                        initScreen()
+                    } else {
+                        finish()
+                    }
+                    return
                 } else {
-                    finish()
+                    if (grantResults.size > 0 &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        initScreen()
+                    } else {
+                        finish()
+                    }
+                    return
                 }
-                return
             }
         }
     }
@@ -80,7 +90,10 @@ class SplashActivity : BaseActivity() {
         super.onResume()
 
         if (!PermissionUtil.hasPermissions(this, *PermissionUtil.PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PermissionUtil.PERMISSIONS, PermissionUtil.PERMISSION_ALL)
+            if (BuildConfig.DEBUG)
+                ActivityCompat.requestPermissions(this, PermissionUtil.PERMISSIONS_DEBUG, PermissionUtil.PERMISSION_ALL)
+            else
+                ActivityCompat.requestPermissions(this, PermissionUtil.PERMISSIONS, PermissionUtil.PERMISSION_ALL)
         } else {
             initScreen()
         }
@@ -91,7 +104,7 @@ class SplashActivity : BaseActivity() {
     public override fun onDestroy() {
         super.onDestroy()
         if (shouldStopService) {
-            BaseObservableViewModel.stopServices(this)
+            viewModel.stopServices(this)
         }
     }
 

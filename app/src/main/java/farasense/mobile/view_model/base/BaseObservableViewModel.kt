@@ -11,9 +11,22 @@ open class BaseObservableViewModel : BaseObservable() {
     protected var context: Context? = null
 
     companion object {
-        fun stopServices(context: Context) {
+        var serviceStarted = false
+    }
+
+    fun startServices(context: Context) {
+        if (!serviceStarted) {
             val intent = Intent(context, DownloadFaraSenseSensorService::class.java)
             context.startService(intent)
+            serviceStarted = true
+        }
+    }
+
+    fun stopServices(context: Context) {
+        if (serviceStarted) {
+            val intent = Intent(context, DownloadFaraSenseSensorService::class.java)
+            context.stopService(intent)
+            serviceStarted = false
         }
     }
 }

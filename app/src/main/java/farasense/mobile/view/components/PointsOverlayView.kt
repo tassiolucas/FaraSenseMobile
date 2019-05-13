@@ -13,17 +13,17 @@ class PointsOverlayView : View {
     private var points: Array<PointF>? = null
     private var paint: Paint? = null
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+constructor(context: Context) : super(context) {
+    init()
+}
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    init()
+}
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    init()
+}
 
     private fun init() {
         paint = Paint()

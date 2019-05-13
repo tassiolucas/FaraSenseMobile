@@ -20,8 +20,8 @@
                 android:id="@+id/relative_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/element_double_margin"
-                android:layout_marginBottom="@dimen/element_double_margin">
+                android:layout_marginTop="@dimen/element_margin"
+                android:layout_marginBottom="@dimen/element_half_margin">
 
                 <TextView
                     android:id="@+id/maturity_date_label"

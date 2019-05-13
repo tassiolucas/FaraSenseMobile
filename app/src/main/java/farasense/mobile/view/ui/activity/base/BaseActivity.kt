@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
 
-    // TODO: Implementar separadamente nas Activitys
+// TODO: Implementar separadamente nas Activitys
 //    @BindView(R.id.toolbar)
 //    protected lateinit var toolbar: Toolbar
 //    @BindView(R.id.search_view)

@@ -22,12 +22,11 @@ import farasense.mobile.util.Preferences
 import farasense.mobile.view.components.FaraSenseTextViewBold
 import farasense.mobile.view.components.FaraSenseTextViewRegular
 import farasense.mobile.view.ui.activity.base.BaseActivity
-import farasense.mobile.view.ui.activity.fragment.RealTimeCurrentIndicatorView
+import farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
 import farasense.mobile.view.ui.adapter.ChartConsumeTabAdapter
 import farasense.mobile.view.ui.adapter.ChartLastConsumptionTabAdapter
 import farasense.mobile.view.ui.dialog.CostOptionDialog
 import farasense.mobile.view_model.*
-import farasense.mobile.view_model.base.BaseObservableViewModel
 import org.joda.time.DateTime
 import java.sql.Timestamp
 import java.text.DecimalFormat
@@ -46,6 +45,7 @@ class DashboardActivity : BaseActivity() {
     private val THIRD_TAB = 2
 
     lateinit var binding: DashboardDataBinding
+    lateinit var viewModel: DashboardViewModel
     lateinit var dailyConsumptionFragmentViewModel: DailyChartConsumptionFragmentViewModel
     lateinit var monthlyConsumptionFragmentViewModel: MonthlyChartConsumptionFragmentViewModel
     lateinit var yearlyChartConsumptionFragmentViewModel: YearlyChartConsumptionFragmentViewModel
@@ -74,6 +74,7 @@ class DashboardActivity : BaseActivity() {
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        viewModel = DashboardViewModel(this)
         ButterKnife.bind(this)
 
         setToolbar(getString(R.string.welcome_label), null, false)
@@ -194,7 +195,7 @@ class DashboardActivity : BaseActivity() {
     }
 
     public override fun onDestroy() {
-        BaseObservableViewModel.stopServices(this)
+        viewModel.stopServices(this)
         super.onDestroy()
     }
 

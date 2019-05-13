@@ -1,4 +1,4 @@
-package farasense.mobile.view.ui.activity.fragment
+package farasense.mobile.view.ui.activity.custom_view
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -27,6 +27,7 @@ import farasense.mobile.bluetooth.BleStatusListener
 import farasense.mobile.view.ui.activity.DashboardActivity
 import io.github.dvegasa.arcpointer.ArcPointer
 import android.content.Context.BLUETOOTH_SERVICE
+import farasense.mobile.view.components.LedStatusIndicatorView
 
 class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
@@ -48,6 +49,8 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var indicatorCurrent: ArcPointer
     private lateinit var indicatorLabel: TextView
 
+    private lateinit var ledStatusIndicator: LedStatusIndicatorView
+
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -61,11 +64,11 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     private fun init(context: Context) {
-
         val rootView = View.inflate(context, R.layout.real_time_current_indicator_view, this)
 
         indicatorCurrent = rootView.findViewById(R.id.indicator)
         indicatorLabel = rootView.findViewById(R.id.indicator_label)
+        ledStatusIndicator = rootView.findViewById(R.id.led_indicator_view)
 
         if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(getContext(), BLE_NOT_SUPPORTED_MESSAGE, Toast.LENGTH_SHORT).show()
@@ -109,16 +112,15 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
                 bleScanCallback = BleScanCallback(this, context, FARASENSE_SERVICE_UUID_SENSOR_1, this)
 
                 bleHandler.postDelayed({ this.startScan() }, SCAN_PERIOD)
+            } else {
+                ledStatusIndicator.setStatus(LedStatusIndicatorView.ERROR)
             }
         }
     }
 
-    fun disconnectAllDevices() {
-        bleScanCallback.disconnectAllDevices()
-    }
-
     private fun startScan() {
         Log.d(TAG, "Start Scan!!!")
+
         if (!hasPermissions() || bleScanning) {
             return
         }
@@ -128,28 +130,13 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
                 .build()
         bleFilters.add(bleScanFilter)
         bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
-
+        bleHandler.postDelayed({
+            this.stopScan()
+        }, SCAN_PERIOD)
         bleBluetoothLeScanner = sensorBleAdapter.bluetoothLeScanner
         bleScanning = true
-    }
 
-    private fun switchScan(enable: Boolean) {
-        if (enable) {
-            if (!hasPermissions() || bleScanning) {
-                return
-            }
-            bleFilters = ArrayList()
-            val bleScanFilter = ScanFilter.Builder()
-                    .setServiceUuid(ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
-                    .build()
-            bleFilters.add(bleScanFilter)
-            bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
-            bleHandler.postDelayed({ this.stopScan() }, SCAN_PERIOD)
-            bleBluetoothLeScanner = sensorBleAdapter.bluetoothLeScanner
-            bleScanning = true
-        } else {
-            bleScanner.stopScan(bleScanCallback)
-        }
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.TRY)
     }
 
     private fun hasPermissions(): Boolean {
@@ -197,7 +184,10 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         return true
     }
 
-    // BLE Manager Interface
+    override fun onTry() {
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.TRY)
+    }
+
     override fun onReciveMessage(message: String) {
         if (isReciveMessage) {
             bleHandler2.postDelayed(bleAnimationRunnable, UPDATE_INDICATOR_SPEED.toLong())
@@ -207,6 +197,14 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
     override fun onConnect() {
         isReciveMessage = true
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.CONNECT)
+    }
+
+    override fun onDisconnect() {
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.DISCONNECT)
+    }
+
+    override fun onError() {
     }
 
     companion object {

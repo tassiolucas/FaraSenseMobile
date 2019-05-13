@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
-import farasense.mobile.view.ui.activity.fragment.RealTimeCurrentIndicatorView
+import farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

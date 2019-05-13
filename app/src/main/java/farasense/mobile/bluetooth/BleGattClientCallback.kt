@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.ParcelUuid
 import android.support.annotation.RequiresApi
 import android.util.Log
+import farasense.mobile.view.components.LedStatusIndicatorView
 import java.io.UnsupportedEncodingException
 import java.util.*
 
@@ -13,7 +14,6 @@ class BleGattClientCallback(private val sensorUUID: UUID,
                             private val bleStatusListener: BleStatusListener) : BluetoothGattCallback() {
 
     private val BLE_LOG = "BLE MANAGER"
-    private val CHARACTERISTIC_UUID = "129fefae-3f58-11e9-b210-d663bd873d93"
 
     private var bleConnected = false
     private var gatt: BluetoothGatt? = null
@@ -28,8 +28,10 @@ class BleGattClientCallback(private val sensorUUID: UUID,
             Log.d(BLE_LOG, "Ble gatt failure: $status")
             disconnectGattServer()
             return
-        } else if (status != BluetoothGatt.GATT_SUCCESS) {
+        }
+        if (status != BluetoothGatt.GATT_SUCCESS) {
             Log.d(BLE_LOG, "Ble gatt sucess: $status")
+            bleStatusListener.onTry()
             disconnectGattServer()
             return
         }
@@ -39,9 +41,10 @@ class BleGattClientCallback(private val sensorUUID: UUID,
             Log.d(BLE_LOG, "Ble conectado: " + gatt.device.uuids)
             bluetoothUUIDs.add(gatt.device.uuids)
             gatt.discoverServices()
-
-        } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+        }
+        if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             Log.d(BLE_LOG, "Ble disconectado: $status")
+            bleStatusListener.onDisconnect()
             disconnectGattServer()
         }
     }
@@ -58,7 +61,6 @@ class BleGattClientCallback(private val sensorUUID: UUID,
         for (characteristic in listCharacteristic) {
             characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
             enableCharacteristicNotification(gatt, characteristic)
-            // characteristic.notify()
         }
         Log.d(BLE_LOG, "Características salvas")
     }
@@ -74,7 +76,6 @@ class BleGattClientCallback(private val sensorUUID: UUID,
             Log.e(BLE_LOG, "Incapaz de converter messagem para texto.")
         }
 
-        // Log.d(BLE_LOG,"Mensagem: " + messageString);
         bleStatusListener.onReciveMessage(messageString!!)
     }
 
@@ -102,6 +103,7 @@ class BleGattClientCallback(private val sensorUUID: UUID,
         if (gatt != null) {
             gatt!!.disconnect()
             gatt!!.close()
+            Log.d(BLE_LOG, "GattServer Disconectado.")
         }
     }
 }

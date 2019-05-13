@@ -15,8 +15,9 @@ class SplashViewModel(context: Context) : BaseObservableViewModel() {
     }
 
     private fun startServices() {
-        val intent = Intent(context, DownloadFaraSenseSensorService::class.java)
-        context!!.startService(intent)
+        context?.let {
+            startServices(it)
+        }
     }
 
     fun goToDashBoardActivity() {

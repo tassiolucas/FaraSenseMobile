@@ -126,7 +126,6 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
                 dismiss()
 
 
-
 //                val intent = activity.intent
 //                activity.finish()
 //                activity.startActivity(intent)

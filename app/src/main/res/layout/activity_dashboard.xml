@@ -33,7 +33,7 @@
                 android:layout_marginBottom="@dimen/element_margin"
                 android:text="@string/title_real_time_consumption"/>
 
-            <farasense.mobile.view.ui.activity.fragment.RealTimeCurrentIndicatorView
+            <farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
                 android:id="@+id/real_time_current_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
