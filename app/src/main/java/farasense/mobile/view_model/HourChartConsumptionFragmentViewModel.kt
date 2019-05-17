@@ -32,7 +32,7 @@ class HourChartConsumptionFragmentViewModel(application: Application) : AndroidV
                         intervals24Hours[hoursBehind].end.toDate()
                 )
 
-                if (sensorMeasuresList != null) {
+                if (sensorMeasuresList.isNotEmpty()) {
                     var totalPowerMeasure: Double? = 0.0
                     for (measure in sensorMeasuresList) {
                         totalPowerMeasure = totalPowerMeasure!! + measure.power!!

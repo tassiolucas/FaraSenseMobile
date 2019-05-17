@@ -64,7 +64,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     private fun init(context: Context) {
-        val rootView = View.inflate(context, R.layout.real_time_current_indicator_view, this)
+        val rootView = View.inflate(context, R.layout.real_time_indicator_view, this)
 
         indicatorCurrent = rootView.findViewById(R.id.indicator)
         indicatorLabel = rootView.findViewById(R.id.indicator_label)

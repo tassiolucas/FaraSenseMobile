@@ -26,7 +26,7 @@ class FiveChartConsumptionFragmentViewModel(application: Application) : AndroidV
                         intervalsFiveMinutes[indexIntervals].end.toDate()
                 )
 
-                if (sensorMeasureList != null) {
+                if (sensorMeasureList.isNotEmpty()) {
                     var totalPowerMeasure: Double? = 0.0
                     for (measure in sensorMeasureList) {
                         totalPowerMeasure = totalPowerMeasure!! + measure.power!!
@@ -41,7 +41,7 @@ class FiveChartConsumptionFragmentViewModel(application: Application) : AndroidV
 
                     measuresList.add(measure!!)
                 } else {
-                    measuresList.add(java.lang.Double.valueOf(0.0))
+                    measuresList.add((0.0).toDouble())
                 }
 
                 if (intervalsFiveMinutes[indexIntervals].end.minuteOfHour < 10) {

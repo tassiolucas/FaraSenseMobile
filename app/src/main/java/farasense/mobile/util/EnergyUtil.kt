@@ -29,7 +29,7 @@ object EnergyUtil {
         return wh / KILO
     }
 
-    fun getValueCost(maturityDate: DateTime, rateKhw: Float?, rateFlag: Float?): Double? {
+    fun getValueCost(maturityDate: DateTime, rateKhw: Float?, rateFlag: Float? = 0F): Double? {
         var totalCost: Double?
         val startPeriod = DateUtil.get30DaysAgo(maturityDate)
 

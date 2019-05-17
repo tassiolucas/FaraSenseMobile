@@ -86,7 +86,7 @@ class FiveChartConsumptionFragment : Fragment() {
         yAxis.setDrawGridLines(false)
         yAxis.setDrawZeroLine(true)
 
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        // xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f
     }
 

@@ -26,7 +26,7 @@ class ThirtyChartConsumptionFragmentViewModel(application: Application) : Androi
                         intervalsThirtyMinutes[indexIntervals].end.toDate()
                 )
 
-                if (sensorMeasuresList != null) {
+                if (sensorMeasuresList.isNotEmpty()) {
                     var totalPowerMeasure: Double? = 0.0
                     for (measure in sensorMeasuresList) {
                         totalPowerMeasure = totalPowerMeasure!! + measure.power!!
@@ -41,7 +41,7 @@ class ThirtyChartConsumptionFragmentViewModel(application: Application) : Androi
 
                     measure?.let { measuresList.add(it) }
                 } else {
-                    measuresList.add(java.lang.Double.valueOf(0.0))
+                    measuresList.add((0.0).toDouble())
                 }
 
                 if (intervalsThirtyMinutes[indexIntervals].start.minuteOfHour < 30) {

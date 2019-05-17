@@ -4,21 +4,26 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import farasense.mobile.R
+import farasense.mobile.databinding.AdapterItemConsumptionCostBinding
+import farasense.mobile.util.DateUtil
+import farasense.mobile.util.EnergyUtil
+import farasense.mobile.util.Preferences
+import org.joda.time.DateTime
+import java.sql.Timestamp
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import farasense.mobile.R
-import farasense.mobile.util.Preferences
+import java.util.*
 
-class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
+class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemConsumptionCostBinding?) : Dialog(activity) {
 
     private var maturityDateInput: EditText? = null
     private var rateKhwInput: EditText? = null
@@ -31,6 +36,7 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
 
     private var rateKhwValue: Double? = null
     private var rateFlagValue: Double? = null
+    private var itemConsumptionCost = itemConsumptionCost
 
     internal var dateChose: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
         dateCalendar!!.set(Calendar.YEAR, year)
@@ -63,22 +69,24 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString() != rateKhw) {
-                    rateKhwInput!!.removeTextChangedListener(this)
+                if (count > 0) {
+                    if (s.toString() != rateKhw) {
+                        rateKhwInput!!.removeTextChangedListener(this)
 
-                    val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
+                        val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
 
-                    val parsed = java.lang.Double.parseDouble(cleanString)
-                    val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
+                        val parsed = java.lang.Double.parseDouble(cleanString)
+                        val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
 
-                    rateKhwValue = parsed / 100
+                        rateKhwValue = parsed / 100
 
-                    if (!formatted.isEmpty()) {
-                        rateKhw = formatted
-                        rateKhwInput!!.setText(formatted)
-                        rateKhwInput!!.setSelection(formatted.length)
+                        if (!formatted.isEmpty()) {
+                            rateKhw = formatted
+                            rateKhwInput!!.setText(formatted)
+                            rateKhwInput!!.setSelection(formatted.length)
 
-                        rateKhwInput!!.addTextChangedListener(this)
+                            rateKhwInput!!.addTextChangedListener(this)
+                        }
                     }
                 }
             }
@@ -90,22 +98,24 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString() != rateFlag) {
-                    rateFlagInput!!.removeTextChangedListener(this)
+                if (count > 0) {
+                    if (s.toString() != rateFlag) {
+                        rateFlagInput!!.removeTextChangedListener(this)
 
-                    val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
+                        val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
 
-                    val parsed = java.lang.Double.parseDouble(cleanString)
-                    val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
+                        val parsed = java.lang.Double.parseDouble(cleanString)
+                        val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
 
-                    rateFlagValue = parsed / 100
+                        rateFlagValue = parsed / 100
 
-                    if (!formatted.isEmpty()) {
-                        rateFlag = formatted
-                        rateFlagInput!!.setText(formatted)
-                        rateFlagInput!!.setSelection(formatted.length)
+                        if (!formatted.isEmpty()) {
+                            rateFlag = formatted
+                            rateFlagInput!!.setText(formatted)
+                            rateFlagInput!!.setSelection(formatted.length)
 
-                        rateFlagInput!!.addTextChangedListener(this)
+                            rateFlagInput!!.addTextChangedListener(this)
+                        }
                     }
                 }
             }
@@ -123,12 +133,31 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
                 if(rateFlagValue != null && rateFlagValue != 0.0)
                     Preferences.getInstance(context).rateFlag = rateFlagValue!!.toFloat()
 
+                val maturityDate = DateTime(dateCalendar!!.timeInMillis)
+                val startDate = DateUtil.get30DaysAgo(maturityDate)
+
+                itemConsumptionCost?.labelEndPeriodComsumption?.visibility = View.VISIBLE
+                itemConsumptionCost?.labelStartPeriodComsumption?.visibility = View.VISIBLE
+                itemConsumptionCost?.labelAo?.visibility = View.VISIBLE
+                itemConsumptionCost?.labelCostComsumption?.visibility = View.VISIBLE
+
+                itemConsumptionCost?.labelCostComsumption?.text = "???"
+                itemConsumptionCost?.labelStartPeriodComsumption?.text = startDate.dayOfMonth.toString() + "/" + startDate.monthOfYear.toString()
+                itemConsumptionCost?.labelEndPeriodComsumption?.text = maturityDate!!.dayOfMonth.toString() + "/" + maturityDate!!.monthOfYear.toString()
+
+                val totalCost = if (rateFlagValue!!.toFloat() != 0F)
+                    EnergyUtil.getValueCost(maturityDate, rateKhwValue!!.toFloat(), rateFlagValue!!.toFloat())
+                else
+                    EnergyUtil.getValueCost(maturityDate, rateKhwValue!!.toFloat())
+
+                val format = DecimalFormat("0.00")
+
+                val formatted = format.format(totalCost)
+                if (totalCost != null && totalCost != 0.0) {
+                    itemConsumptionCost?.labelCostComsumption?.text = "RS $formatted"
+                }
+
                 dismiss()
-
-
-//                val intent = activity.intent
-//                activity.finish()
-//                activity.startActivity(intent)
 
                 Toast.makeText(context, R.string.alert_save_sucess, Toast.LENGTH_SHORT).show()
             } else {
@@ -139,11 +168,7 @@ class CostOptionDialog(private val activity: Activity) : Dialog(activity) {
 
     override fun setOnDismissListener(listener: DialogInterface.OnDismissListener?) {
         super.setOnDismissListener(listener)
-
-        this.setOnDismissListener {
-
-        }
-
+        this.setOnDismissListener {  }
     }
 
     private fun updateDateLabel() {

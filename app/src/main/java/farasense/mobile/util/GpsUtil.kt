@@ -13,7 +13,7 @@ object GpsUtil {
 
     fun alertGgpDialog(activity: Activity) {
         val alertDialog = AlertGpsDialog(activity)
-        alertDialog.setContentView(R.layout.adapter_alert_gps_dialog)
+        alertDialog.setContentView(R.layout.alert_gps_dialog)
         alertDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         alertDialog.setCancelable(false)
         alertDialog.show()

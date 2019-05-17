@@ -14,6 +14,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import farasense.mobile.R
+import farasense.mobile.databinding.AdapterItemConsumptionCostBinding
 import farasense.mobile.databinding.DashboardDataBinding
 import farasense.mobile.util.DateUtil
 import farasense.mobile.util.EnergyUtil
@@ -44,16 +45,16 @@ class DashboardActivity : BaseActivity() {
     private val SECOND_TAB = 1
     private val THIRD_TAB = 2
 
-    lateinit var binding: DashboardDataBinding
-    lateinit var viewModel: DashboardViewModel
-    lateinit var dailyConsumptionFragmentViewModel: DailyChartConsumptionFragmentViewModel
-    lateinit var monthlyConsumptionFragmentViewModel: MonthlyChartConsumptionFragmentViewModel
-    lateinit var yearlyChartConsumptionFragmentViewModel: YearlyChartConsumptionFragmentViewModel
-    lateinit var hourChartConsumptionFragmentViewModel: HourChartConsumptionFragmentViewModel
-    lateinit var thirtyChartConsumptionFragmentViewModel: ThirtyChartConsumptionFragmentViewModel
-    lateinit var fiveChartConsumptionFragmentViewModel: FiveChartConsumptionFragmentViewModel
+    private lateinit var binding: DashboardDataBinding
+    private lateinit var viewModel: DashboardViewModel
+    private lateinit var dailyConsumptionFragmentViewModel: DailyChartConsumptionFragmentViewModel
+    private lateinit var monthlyConsumptionFragmentViewModel: MonthlyChartConsumptionFragmentViewModel
+    private lateinit var yearlyChartConsumptionFragmentViewModel: YearlyChartConsumptionFragmentViewModel
+    private lateinit var hourChartConsumptionFragmentViewModel: HourChartConsumptionFragmentViewModel
+    private lateinit var thirtyChartConsumptionFragmentViewModel: ThirtyChartConsumptionFragmentViewModel
+    private lateinit var fiveChartConsumptionFragmentViewModel: FiveChartConsumptionFragmentViewModel
 
-    lateinit var realTimeCurrentIndicatorView: RealTimeCurrentIndicatorView
+    private lateinit var realTimeCurrentIndicatorView: RealTimeCurrentIndicatorView
 
     private var tabLayoutConsumption: TabLayout? = null
     private var tabLayoutLastConsumption: TabLayout? = null
@@ -70,6 +71,8 @@ class DashboardActivity : BaseActivity() {
     private var endDateLabel: TextView? = null
     private var aoLabel: TextView? = null
     private var costValue: TextView? = null
+
+    private lateinit var itemConsumptionCost: AdapterItemConsumptionCostBinding
 
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
@@ -116,6 +119,8 @@ class DashboardActivity : BaseActivity() {
         tabLayoutLastConsumption?.getTabAt(SECOND_TAB)?.setText(R.string.thirty_minutes)
         tabLayoutLastConsumption?.getTabAt(THIRD_TAB)?.setText(R.string.five_minutes)
 
+        itemConsumptionCost = binding.consumptionCostView!!
+
         fragmentManager = supportFragmentManager
         fragmentManager?.executePendingTransactions()
 
@@ -125,13 +130,10 @@ class DashboardActivity : BaseActivity() {
 
         val button = findViewById<ImageButton>(R.id.cost_button_option)
         button.setOnClickListener {
-            val dialog = CostOptionDialog(this)
-            dialog.setContentView(R.layout.adapter_item_cost_option_dialog)
+            val dialog = CostOptionDialog(this, itemConsumptionCost)
+            dialog.setContentView(R.layout.item_cost_option_dialog)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCancelable(false)
-            dialog.setOnDismissListener {
-
-            }
             dialog.show()
         }
 
@@ -157,6 +159,31 @@ class DashboardActivity : BaseActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
+        getCostInMonth()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return true
+    }
+
+    public override fun onDestroy() {
+        viewModel.stopServices(this)
+        super.onDestroy()
+    }
+
+    private fun setToolbar(title: String, subtitle: String?, homeAsUpEnable: Boolean) {
+        toolbar.title = ""
+        toolbar.subtitle = ""
+        toolbarTitle.text = title
+        if (subtitle != null) {
+            toolbarSubtitle.visibility = View.VISIBLE
+            toolbarSubtitle.text = subtitle
+        }
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(homeAsUpEnable)
+    }
+
+    fun getCostInMonth() {
         val maturityLong = Preferences.getInstance(this).maturityDate
         if (maturityLong != null && maturityLong != 0L) {
             startDateLabel?.visibility = View.VISIBLE
@@ -188,32 +215,5 @@ class DashboardActivity : BaseActivity() {
             costValue?.text = "Insira suas opções"
             costValue?.textSize = 24f
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return true
-    }
-
-    public override fun onDestroy() {
-        viewModel.stopServices(this)
-        super.onDestroy()
-    }
-
-    private fun setToolbar(title: String, subtitle: String?, homeAsUpEnable: Boolean) {
-        toolbar.title = ""
-        toolbar.subtitle = ""
-        toolbarTitle.text = title
-        if (subtitle != null) {
-            toolbarSubtitle.visibility = View.VISIBLE
-            toolbarSubtitle.text = subtitle
-        }
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(homeAsUpEnable)
-
-        //        final Drawable backArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
-        //        if (backArrow != null) {
-        //            backArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
-        //            getSupportActionBar().setHomeAsUpIndicator(backArrow);
-        //        }
     }
 }
