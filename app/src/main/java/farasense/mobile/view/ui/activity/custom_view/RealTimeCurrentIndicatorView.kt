@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanSettings
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -27,12 +28,24 @@ import farasense.mobile.bluetooth.BleStatusListener
 import farasense.mobile.view.ui.activity.DashboardActivity
 import io.github.dvegasa.arcpointer.ArcPointer
 import android.content.Context.BLUETOOTH_SERVICE
+import android.content.IntentFilter
+import android.support.v4.app.ActivityCompat
+import com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread
+import farasense.mobile.bluetooth.BleBroadcastReceiver
 import farasense.mobile.view.components.LedStatusIndicatorView
 
 class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
-    private lateinit var bleHandler: Handler
-    private lateinit var bleHandler2: Handler
+    private val zero = 0F
+
+    private lateinit var bleHandlerScan: Handler
+    private lateinit var bleHandlerReciveMessage: Handler
+    private lateinit var bleHandlerDelay : Handler
+    private lateinit var bleHandlerDelayDisconnect: Handler
+    private lateinit var bleHandlerReconnect: Handler
+
+    private lateinit var bleAnimationRunnable: Runnable
+
     private lateinit var sensorBleAdapter: BluetoothAdapter
     private lateinit var bleScanner: BluetoothLeScanner
     private lateinit var bleSettings: ScanSettings
@@ -40,17 +53,19 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var bleScanResults: HashMap<Any, Any>
     private lateinit var bleScanCallback: BleScanCallback
     private lateinit var bleBluetoothLeScanner: BluetoothLeScanner
+
     private var bleMessage: Float = 0F
     private var isReciveMessage = false
     private var bleScanning = false
     private var bleUnavailable = false
 
-    private lateinit var bleAnimationRunnable: Runnable
     private lateinit var indicatorCurrent: ArcPointer
     private lateinit var indicatorLabel: TextView
+    private lateinit var infoStatusLabel: TextView
 
     private lateinit var ledStatusIndicator: LedStatusIndicatorView
 
+    // Bluetooth View
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -68,15 +83,20 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
         indicatorCurrent = rootView.findViewById(R.id.indicator)
         indicatorLabel = rootView.findViewById(R.id.indicator_label)
+        infoStatusLabel = rootView.findViewById(R.id.status_info_label)
         ledStatusIndicator = rootView.findViewById(R.id.led_indicator_view)
 
+        infoStatusLabel.setText(R.string.ble_initializing)
+
         if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(getContext(), BLE_NOT_SUPPORTED_MESSAGE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(getContext(), resources.getString(R.string.ble_not_supported), Toast.LENGTH_SHORT).show()
             bleUnavailable = true
         } else {
             val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
             sensorBleAdapter = bluetoothManager.adapter
         }
+
+        BleBroadcastReceiver.bleReceiver
     }
 
     override fun onAttachedToWindow() {
@@ -93,15 +113,20 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         indicatorCurrent.animationVelocity = 500L
 
         if (!bleUnavailable) {
-            bleHandler = Handler()
-            bleHandler2 = Handler()
+            bleHandlerScan = Handler()
+            bleHandlerReciveMessage = Handler()
+            bleHandlerDelay = Handler()
+            bleHandlerDelayDisconnect = Handler()
+            bleHandlerReconnect = Handler()
 
             bleAnimationRunnable = Runnable {
-                indicatorCurrent.value = bleMessage * 0.1f
-                indicatorLabel.text = String.format("%.2f", bleMessage)
+                runOnUiThread {
+                    indicatorCurrent.value = bleMessage * 0.1f
+                    indicatorLabel.text = String.format("%.2f", bleMessage)
+                }
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && sensorBleAdapter.isEnabled) {
                 bleScanner = sensorBleAdapter.bluetoothLeScanner
 
                 bleSettings = ScanSettings.Builder()
@@ -111,34 +136,21 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
                 bleScanResults = HashMap()
                 bleScanCallback = BleScanCallback(this, context, FARASENSE_SERVICE_UUID_SENSOR_1, this)
 
-                bleHandler.postDelayed({ this.startScan() }, SCAN_PERIOD)
+                this.startScan()
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !sensorBleAdapter.isEnabled) {
+                onError(resources.getString(R.string.ble_off))
             } else {
-                ledStatusIndicator.setStatus(LedStatusIndicatorView.ERROR)
+                onError(resources.getString(R.string.ble_not_supported))
             }
         }
-    }
 
-    private fun startScan() {
-        Log.d(TAG, "Start Scan!!!")
-
-        if (!hasPermissions() || bleScanning) {
-            return
+        ledStatusIndicator.setOnClickListener {
+            if (!isReciveMessage)
+                startScan()
         }
-        bleFilters = ArrayList()
-        val bleScanFilter = ScanFilter.Builder()
-                .setServiceUuid(ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
-                .build()
-        bleFilters.add(bleScanFilter)
-        bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
-        bleHandler.postDelayed({
-            this.stopScan()
-        }, SCAN_PERIOD)
-        bleBluetoothLeScanner = sensorBleAdapter.bluetoothLeScanner
-        bleScanning = true
-
-        ledStatusIndicator.setStatus(LedStatusIndicatorView.TRY)
     }
 
+    // Bluetooth Permission Manager
     private fun hasPermissions(): Boolean {
         if (!sensorBleAdapter.isEnabled) {
             requestBluetoothEnable()
@@ -151,67 +163,128 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     private fun hasLocationPermissions(): Boolean {
-        return context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        } else {
+            TODO("VERSION.SDK_INT < M")
+        }
     }
 
     private fun requestLocationPermission() {
-        (context as DashboardActivity).requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (context as DashboardActivity).requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
+        }
     }
 
     private fun requestBluetoothEnable() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         (context as DashboardActivity).startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         Log.d(TAG, "Requested user enables Bluetooth. Try starting the scan again.")
+
+        val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        context!!.registerReceiver(BleBroadcastReceiver.bleReceiver, filter)
     }
 
+    // Bluetooth Scanner
     fun stopScan() {
         if (bleScanning && sensorBleAdapter.isEnabled) {
-            if (scanComplete()) {
-                bleBluetoothLeScanner.stopScan(bleScanCallback)
-            }
+            bleHandlerDelayDisconnect.postDelayed({
+                scanComplete(bleBluetoothLeScanner)
+            }, SCAN_DELAY)
         }
-
+        Log.d(TAG, "Stop scan.")
         bleScanning = false
     }
 
-    private fun scanComplete(): Boolean {
-        if (bleScanResults.isEmpty()) {
-            return false
+    private fun startScan() {
+        Log.d(TAG, "Start Scan!!!")
+
+        if (!hasPermissions() || bleScanning) {
+            return
+        }
+
+        bleHandlerDelay.postDelayed({
+            bleFilters = ArrayList()
+            val bleScanFilter = ScanFilter.Builder()
+                    .setServiceUuid(ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
+                    .build()
+            bleFilters.add(bleScanFilter)
+            bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
+            bleHandlerScan.postDelayed({
+                this.stopScan()
+            }, SCAN_PERIOD)
+            bleBluetoothLeScanner = sensorBleAdapter.bluetoothLeScanner
+            bleScanning = true
+        }, SCAN_DELAY)
+
+        onTry()
+    }
+
+    private fun scanComplete(bleBluetoothLeScanner: BluetoothLeScanner) {
+        if (bleScanResults.isEmpty() && !isReciveMessage) {
+            Log.d(TAG, "Found nothing.")
+            onError(resources.getString(R.string.ble_scan_error))
+            bleHandlerDelayDisconnect.postDelayed({
+                onDisconnect()
+            }, SCAN_DELAY)
         }
         for (deviceAddress in bleScanResults.keys) {
             Log.d(TAG, "Found device: $deviceAddress")
         }
-        return true
+
+        bleBluetoothLeScanner.stopScan(bleScanCallback)
     }
 
-    override fun onTry() {
-        ledStatusIndicator.setStatus(LedStatusIndicatorView.TRY)
-    }
-
+    // Bluetooth Listener
     override fun onReciveMessage(message: String) {
         if (isReciveMessage) {
-            bleHandler2.postDelayed(bleAnimationRunnable, UPDATE_INDICATOR_SPEED.toLong())
+            bleHandlerReciveMessage.postDelayed(bleAnimationRunnable, UPDATE_INDICATOR_SPEED.toLong())
         }
         bleMessage = java.lang.Float.parseFloat(message)
     }
 
+    override fun onTry() {
+        runOnUiThread {
+            infoStatusLabel.setText(R.string.ble_try)
+        }
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.TRY)
+    }
+
     override fun onConnect() {
         isReciveMessage = true
+        runOnUiThread {
+            infoStatusLabel.setText(R.string.ble_connected)
+        }
         ledStatusIndicator.setStatus(LedStatusIndicatorView.CONNECT)
     }
 
     override fun onDisconnect() {
+        isReciveMessage = false
+        runOnUiThread {
+            infoStatusLabel.setText(R.string.ble_disconnected)
+            indicatorCurrent.value = zero
+            indicatorLabel.text = String.format("%.1f", zero)
+        }
         ledStatusIndicator.setStatus(LedStatusIndicatorView.DISCONNECT)
     }
 
-    override fun onError() {
+    override fun onError(error : String) {
+        isReciveMessage = false
+        runOnUiThread {
+            if (error.isEmpty())
+                infoStatusLabel.setText(R.string.ble_off)
+            else
+                infoStatusLabel.text = error
+        }
+        ledStatusIndicator.setStatus(LedStatusIndicatorView.ERROR)
     }
 
+    // Bluetooth Object
     companion object {
-        private val BLE_NOT_SUPPORTED_MESSAGE = "Bluetooth Low Energy não suportado."
         private val REQUEST_ENABLE_BT = 1
         private val REQUEST_FINE_LOCATION = 0
-        private val SCAN_PERIOD: Long = 10000
+        private val SCAN_PERIOD: Long = 3000
+        private val SCAN_DELAY: Long = 3500
         private val UPDATE_INDICATOR_SPEED = 500
         private val INDICATOR_ANGLE = 160
 

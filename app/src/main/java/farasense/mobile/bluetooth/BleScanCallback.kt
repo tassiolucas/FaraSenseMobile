@@ -5,13 +5,11 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
-import android.os.Build
-import android.support.annotation.RequiresApi
 import android.util.Log
+import farasense.mobile.R
 import farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
 import java.util.*
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class BleScanCallback(private val view: RealTimeCurrentIndicatorView,
                       private val context: Context,
                       private val sensorUUID: UUID,
@@ -35,6 +33,7 @@ class BleScanCallback(private val view: RealTimeCurrentIndicatorView,
     override fun onScanFailed(errorCode: Int) {
         super.onScanFailed(errorCode)
         Log.e("ScanCallback", "Failed, Error Code: $errorCode")
+        bleStatusListener.onError(context.getString(R.string.ble_scan_error))
     }
 
     private fun addScanResult(result: ScanResult) {
@@ -44,7 +43,7 @@ class BleScanCallback(private val view: RealTimeCurrentIndicatorView,
     }
 
     private fun connectDevice(device: BluetoothDevice): BluetoothGatt {
-        val gattClientCallback = BleGattClientCallback(sensorUUID, bleStatusListener)
+        val gattClientCallback = BleGattClientCallback(context, sensorUUID, bleStatusListener)
         val bleGatt = device.connectGatt(context, false, gattClientCallback)
         bleDevicesGatt.add(bleGatt)
         return bleGatt

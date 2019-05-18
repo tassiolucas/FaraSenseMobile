@@ -25,6 +25,8 @@ import java.util.*
 
 class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemConsumptionCostBinding?) : Dialog(activity) {
 
+    private val zero = 0.0F
+
     private var maturityDateInput: EditText? = null
     private var rateKhwInput: EditText? = null
     private var dateCalendar: Calendar? = null
@@ -127,10 +129,10 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
         cancelButton!!.setOnClickListener { this.dismiss() }
 
         saveButton!!.setOnClickListener {
-            if (dateCalendar != null && rateKhwValue != null && rateKhwValue != 0.0) {
+            if (dateCalendar != null && rateKhwValue != null && rateKhwValue != zero.toDouble()) {
                 Preferences.getInstance(context).setMaturityDate(dateCalendar!!.time)
                 Preferences.getInstance(context).rateKwh = rateKhwValue!!.toFloat()
-                if(rateFlagValue != null && rateFlagValue != 0.0)
+                if(rateFlagValue != null && rateFlagValue != zero.toDouble())
                     Preferences.getInstance(context).rateFlag = rateFlagValue!!.toFloat()
 
                 val maturityDate = DateTime(dateCalendar!!.timeInMillis)
@@ -145,7 +147,7 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
                 itemConsumptionCost?.labelStartPeriodComsumption?.text = startDate.dayOfMonth.toString() + "/" + startDate.monthOfYear.toString()
                 itemConsumptionCost?.labelEndPeriodComsumption?.text = maturityDate!!.dayOfMonth.toString() + "/" + maturityDate!!.monthOfYear.toString()
 
-                val totalCost = if (rateFlagValue!!.toFloat() != 0F)
+                val totalCost = if (rateFlagValue != null && rateFlagValue != 0.0)
                     EnergyUtil.getValueCost(maturityDate, rateKhwValue!!.toFloat(), rateFlagValue!!.toFloat())
                 else
                     EnergyUtil.getValueCost(maturityDate, rateKhwValue!!.toFloat())
@@ -153,7 +155,7 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
                 val format = DecimalFormat("0.00")
 
                 val formatted = format.format(totalCost)
-                if (totalCost != null && totalCost != 0.0) {
+                if (totalCost != null && totalCost != zero.toDouble()) {
                     itemConsumptionCost?.labelCostComsumption?.text = "RS $formatted"
                 }
 

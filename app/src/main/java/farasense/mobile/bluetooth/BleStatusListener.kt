@@ -1,9 +1,9 @@
 package farasense.mobile.bluetooth
 
 interface BleStatusListener {
-    fun onTry()
     fun onReciveMessage(message: String)
+    fun onTry()
     fun onConnect()
     fun onDisconnect()
-    fun onError()
+    fun onError(error: String)
 }

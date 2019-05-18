@@ -1,17 +1,25 @@
 package farasense.mobile.bluetooth
 
 import android.bluetooth.*
+import android.content.Context
 import android.os.Build
+import android.os.Handler
 import android.os.ParcelUuid
 import android.support.annotation.RequiresApi
+import android.support.v4.content.ContextCompat
 import android.util.Log
+import farasense.mobile.R
 import farasense.mobile.view.components.LedStatusIndicatorView
 import java.io.UnsupportedEncodingException
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class BleGattClientCallback(private val sensorUUID: UUID,
+class BleGattClientCallback(private val context: Context,
+                            private val sensorUUID: UUID,
                             private val bleStatusListener: BleStatusListener) : BluetoothGattCallback() {
+
+    private lateinit var bleGattHandler: Handler
+    private val GATT_DISCONNECT_DELAY: Long = 3000
 
     private val BLE_LOG = "BLE MANAGER"
 
@@ -19,6 +27,10 @@ class BleGattClientCallback(private val sensorUUID: UUID,
     private var gatt: BluetoothGatt? = null
 
     private val bluetoothUUIDs = ArrayList<Array<ParcelUuid>>()
+
+    init {
+        bleGattHandler = Handler()
+    }
 
     override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
         super.onConnectionStateChange(gatt, status, newState)
@@ -57,12 +69,23 @@ class BleGattClientCallback(private val sensorUUID: UUID,
 
         val service = gatt.getService(sensorUUID)
 
-        val listCharacteristic = service.characteristics
-        for (characteristic in listCharacteristic) {
-            characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            enableCharacteristicNotification(gatt, characteristic)
+        val listCharacteristic: MutableList<BluetoothGattCharacteristic>
+        if (service != null)
+            listCharacteristic = service.characteristics
+        else {
+            listCharacteristic = mutableListOf()
+            bleStatusListener.onError(context.getString(R.string.ble_service_off))
         }
-        Log.d(BLE_LOG, "Características salvas")
+
+        if (listCharacteristic.isNotEmpty()) {
+            for (characteristic in listCharacteristic) {
+                characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                enableCharacteristicNotification(gatt, characteristic)
+            }
+            Log.d(BLE_LOG, "Características salvas")
+        }
+        else
+            Log.d(BLE_LOG, "Falha nas Características")
     }
 
     override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
@@ -104,6 +127,9 @@ class BleGattClientCallback(private val sensorUUID: UUID,
             gatt!!.disconnect()
             gatt!!.close()
             Log.d(BLE_LOG, "GattServer Disconectado.")
+            bleGattHandler.postDelayed({
+                bleStatusListener.onDisconnect()
+            }, GATT_DISCONNECT_DELAY)
         }
     }
 }

@@ -212,8 +212,9 @@ class DashboardActivity : BaseActivity() {
             startDateLabel?.visibility = View.GONE
             endDateLabel?.visibility = View.GONE
             aoLabel?.visibility = View.GONE
-            costValue?.text = "Insira suas opções"
+            costValue?.text = resources.getString(R.string.cost_first_message)
             costValue?.textSize = 24f
         }
     }
+
 }

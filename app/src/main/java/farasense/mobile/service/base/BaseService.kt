@@ -62,7 +62,6 @@ open class BaseService : Service() {
 
             override fun onFail() {
                 onStartServiceDownload.onFail()
-
             }
         }, DateUtil.firts24Hours, DateUtil.now)
 

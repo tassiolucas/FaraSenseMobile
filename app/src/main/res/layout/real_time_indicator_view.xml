@@ -65,6 +65,7 @@
                     android:layout_below="@id/indicator_label"
                     android:text="Amper(s)"
                     android:textColor="@color/colorDailyChartBar"
+                    android:layout_marginBottom="@dimen/element_half_margin"
                     app:layout_constraintBottom_toTopOf="@id/consumption_appbar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,8 +86,20 @@
                         android:layout_height="25dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="12dp"
+                        android:padding="12dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="parent"/>
+
+                    <farasense.mobile.view.components.FaraSenseTextViewRegular
+                        android:id="@+id/status_info_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/element_margin"
+                        app:layout_constraintStart_toEndOf="@id/led_indicator_view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="@color/lightGray"
+                        tools:text="Status..."/>
 
                     <ImageButton
                         android:id="@+id/real_time_indicator_option"
