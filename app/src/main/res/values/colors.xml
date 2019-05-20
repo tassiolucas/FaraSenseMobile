@@ -43,7 +43,7 @@
     <color name="grayBackground">#EDEDED</color>
     <color name="toolbarDropShadow">#88333333</color>
 
-    <!--Led Indicator olors-->
+    <!--Led Indicator Colors-->
     <color name="ledYellow">#E39D44</color>
     <color name="ledYellowDark">#E15634</color>
     <color name="ledRed">#CA054D</color>
@@ -52,4 +52,16 @@
     <color name="ledGreenDark">#0E7C7B</color>
     <color name="ledGray">#95ADB6</color>
     <color name="ledGrayDark">#6B6D76</color>
+
+    <!--Seek Bar Colors-->
+    <color name="thumb">#3E5399</color>
+    <color name="progressBar">#150578</color>
+
+    <!--Palheta Sugerida-->
+    <color name="color1">#0E0E52</color>
+    <color name="color2">#150578</color>
+    <color name="color3">#3E5399</color>
+    <color name="color4">#449DD1</color>
+    <color name="color5">#78C0E0</color>
+
 </resources>

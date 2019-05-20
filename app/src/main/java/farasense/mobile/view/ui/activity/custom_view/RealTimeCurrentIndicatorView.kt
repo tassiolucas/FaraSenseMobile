@@ -6,9 +6,10 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanSettings
-import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.BLUETOOTH_SERVICE
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
@@ -17,22 +18,19 @@ import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.UUID
+import com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread
 import farasense.mobile.R
+import farasense.mobile.bluetooth.BleBroadcastReceiver
 import farasense.mobile.bluetooth.BleScanCallback
 import farasense.mobile.bluetooth.BleStatusListener
-import farasense.mobile.view.ui.activity.DashboardActivity
-import io.github.dvegasa.arcpointer.ArcPointer
-import android.content.Context.BLUETOOTH_SERVICE
-import android.content.IntentFilter
-import android.support.v4.app.ActivityCompat
-import com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread
-import farasense.mobile.bluetooth.BleBroadcastReceiver
 import farasense.mobile.view.components.LedStatusIndicatorView
+import farasense.mobile.view.ui.activity.DashboardActivity
+import farasense.mobile.view.ui.dialog.RealTimeIndicatorOptionsDialog
+import io.github.dvegasa.arcpointer.ArcPointer
+import java.util.*
 
 class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
@@ -47,7 +45,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var bleAnimationRunnable: Runnable
 
     private lateinit var sensorBleAdapter: BluetoothAdapter
-    private lateinit var bleScanner: BluetoothLeScanner
+    private var bleScanner: BluetoothLeScanner? = null
     private lateinit var bleSettings: ScanSettings
     private lateinit var bleFilters: MutableList<ScanFilter>
     private lateinit var bleScanResults: HashMap<Any, Any>
@@ -62,7 +60,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var indicatorCurrent: ArcPointer
     private lateinit var indicatorLabel: TextView
     private lateinit var infoStatusLabel: TextView
-
+    private lateinit var indicatorOptionButton: ImageButton
     private lateinit var ledStatusIndicator: LedStatusIndicatorView
 
     // Bluetooth View
@@ -85,6 +83,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         indicatorLabel = rootView.findViewById(R.id.indicator_label)
         infoStatusLabel = rootView.findViewById(R.id.status_info_label)
         ledStatusIndicator = rootView.findViewById(R.id.led_indicator_view)
+        indicatorOptionButton = rootView.findViewById(R.id.real_time_indicator_option)
 
         infoStatusLabel.setText(R.string.ble_initializing)
 
@@ -145,8 +144,26 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         }
 
         ledStatusIndicator.setOnClickListener {
-            if (!isReciveMessage)
-                startScan()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && sensorBleAdapter.isEnabled) {
+                if (bleScanner == null)
+                    bleScanner = sensorBleAdapter.bluetoothLeScanner
+
+                if (!isReciveMessage)
+                    startScan()
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !sensorBleAdapter.isEnabled) {
+                onError(resources.getString(R.string.ble_off))
+                Toast.makeText(context!!, resources.getString(R.string.ble_off_message), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context!!, resources.getString(R.string.ble_not_supported), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        indicatorOptionButton.setOnClickListener {
+            val dialog = RealTimeIndicatorOptionsDialog(context as DashboardActivity)
+            dialog.setContentView(R.layout.real_time_indicator_sensitivity_dialog)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.setCancelable(true)
+            dialog.show()
         }
     }
 
@@ -209,7 +226,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
                     .setServiceUuid(ParcelUuid(FARASENSE_SERVICE_UUID_SENSOR_1))
                     .build()
             bleFilters.add(bleScanFilter)
-            bleScanner.startScan(bleFilters, bleSettings, bleScanCallback)
+            bleScanner?.startScan(bleFilters, bleSettings, bleScanCallback)
             bleHandlerScan.postDelayed({
                 this.stopScan()
             }, SCAN_PERIOD)

@@ -17,7 +17,6 @@ import farasense.mobile.util.DateUtil
 import farasense.mobile.util.EnergyUtil
 import farasense.mobile.util.Preferences
 import org.joda.time.DateTime
-import java.sql.Timestamp
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat

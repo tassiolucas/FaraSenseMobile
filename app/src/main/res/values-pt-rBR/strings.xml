@@ -35,6 +35,7 @@
     <string name="alert_gps_exit">Sair</string>
     <string name="aler_gps_message">Para acessar ao FaraSense Mobile é necessária a ativação do GPS para localização dos sensores.</string>
     <string name="ble_off">Bluetooth desligado.</string>
+    <string name="ble_off_message">Procure ativar o Bluetooth no seu dispositivo.</string>
     <string name="ble_try">Procurando sensor…</string>
     <string name="ble_connected">Conectado.</string>
     <string name="ble_disconnected">Desligado.</string>
@@ -43,4 +44,5 @@
     <string name="ble_service_off">Servico Desligado.</string>
     <string name="ble_scan_error">Dispositivo não encontrado.</string>
     <string name="cost_first_message">Insira as tarifas</string>
+    <string name="indicator_sensitivity_label">Selecione a sensibilidade do indicador de corrente em tempo real:</string>
 </resources>
