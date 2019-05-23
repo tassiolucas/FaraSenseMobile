@@ -171,11 +171,11 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     // Real Time Current Sensitivity
     fun setSensitivity(value: Int) {
         when(value) {
-            0 -> amperSensitivity = 0.1F
-            1 -> amperSensitivity = 1.0F
-            2 -> amperSensitivity = 10.0F
-            3 -> amperSensitivity = 100.0F
-            4 -> amperSensitivity = 1000.0F
+            0 -> amperSensitivity = 0.01F
+            1 -> amperSensitivity = 0.20F
+            2 -> amperSensitivity = 0.40F
+            3 -> amperSensitivity = 0.80F
+            4 -> amperSensitivity = 1.00F
         }
     }
 

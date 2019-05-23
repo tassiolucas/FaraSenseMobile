@@ -37,8 +37,6 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrent
         sensitySelector.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 sensitityValueSet = progress
-                dismiss()
-                // Toast.makeText(activity, ) TODO: Continuar daqui.
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -52,6 +50,7 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrent
 
         saveButton.setOnClickListener {
             realTimeCurrentIndicatorView.setSensitivity(sensitityValueSet)
+            Toast.makeText(activity, "Escala de " + sensitityValueSet.toString(), Toast.LENGTH_SHORT) // TODO: Continuar daqui.
         }
 
         saveCancel.setOnClickListener{
