@@ -53,6 +53,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var bleBluetoothLeScanner: BluetoothLeScanner
 
     private var bleMessage: Float = 0F
+    private var amperSensitivity: Float = 0.1F
     private var isReciveMessage = false
     private var bleScanning = false
     private var bleUnavailable = false
@@ -120,7 +121,7 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
             bleAnimationRunnable = Runnable {
                 runOnUiThread {
-                    indicatorCurrent.value = bleMessage * 0.1f
+                    indicatorCurrent.value = bleMessage * amperSensitivity
                     indicatorLabel.text = String.format("%.2f", bleMessage)
                 }
             }
@@ -159,11 +160,22 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
         }
 
         indicatorOptionButton.setOnClickListener {
-            val dialog = RealTimeIndicatorOptionsDialog(context as DashboardActivity)
+            val dialog = RealTimeIndicatorOptionsDialog(context as DashboardActivity, this)
             dialog.setContentView(R.layout.real_time_indicator_sensitivity_dialog)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCancelable(true)
             dialog.show()
+        }
+    }
+
+    // Real Time Current Sensitivity
+    fun setSensitivity(value: Int) {
+        when(value) {
+            0 -> amperSensitivity = 0.1F
+            1 -> amperSensitivity = 1.0F
+            2 -> amperSensitivity = 10.0F
+            3 -> amperSensitivity = 100.0F
+            4 -> amperSensitivity = 1000.0F
         }
     }
 

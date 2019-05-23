@@ -5,15 +5,17 @@ import android.app.Dialog
 import android.content.Context
 import android.widget.Button
 import android.widget.SeekBar
+import android.widget.Toast
 import farasense.mobile.R
+import farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
 
-class RealTimeIndicatorOptionsDialog(val activity: Activity) : Dialog(activity) {
+class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrentIndicatorView: RealTimeCurrentIndicatorView) : Dialog(activity) {
 
     private lateinit var sensitySelector: SeekBar
     private lateinit var saveButton: Button
     private lateinit var saveCancel: Button
 
-
+    private var sensitityValueSet = 0
 
     override fun onStart() {
         super.onStart()
@@ -22,9 +24,10 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity) : Dialog(activity) 
         saveCancel = findViewById(R.id.button_cancel)
         saveButton = findViewById(R.id.button_save)
 
+        sensitySelector.max = 4
+        sensitySelector.incrementProgressBy(1)
+
         sensitySelector.progress = 0
-        sensitySelector.max = 100
-        sensitySelector.incrementProgressBy(10)
 
         initDialog()
     }
@@ -33,7 +36,9 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity) : Dialog(activity) 
 
         sensitySelector.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-
+                sensitityValueSet = progress
+                dismiss()
+                // Toast.makeText(activity, ) TODO: Continuar daqui.
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -46,11 +51,11 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity) : Dialog(activity) 
         })
 
         saveButton.setOnClickListener {
-
+            realTimeCurrentIndicatorView.setSensitivity(sensitityValueSet)
         }
 
         saveCancel.setOnClickListener{
-
+            dismiss()
         }
     }
 }
