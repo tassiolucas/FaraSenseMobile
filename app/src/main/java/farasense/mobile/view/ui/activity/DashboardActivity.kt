@@ -76,11 +76,14 @@ class DashboardActivity : BaseActivity() {
 
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
+
+        window.navigationBarColor = resources.getColor(R.color.colorPrimaryDark)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         viewModel = DashboardViewModel(this)
         ButterKnife.bind(this)
 
-        setToolbar(getString(R.string.welcome_label), null, false)
+        setToolbar(getString(R.string.sensor_id_label), null, false)
 
         dailyConsumptionFragmentViewModel = ViewModelProviders.of(this).get(DailyChartConsumptionFragmentViewModel::class.java)
         monthlyConsumptionFragmentViewModel = ViewModelProviders.of(this).get(MonthlyChartConsumptionFragmentViewModel::class.java)
@@ -115,9 +118,9 @@ class DashboardActivity : BaseActivity() {
         tabLayoutConsumption?.getTabAt(SECOND_TAB)?.setText(R.string.monthly)
         tabLayoutConsumption?.getTabAt(THIRD_TAB)?.setText(R.string.yearly)
 
-        tabLayoutLastConsumption?.getTabAt(FIRST_TAB)?.setText(R.string.hour)
+        tabLayoutLastConsumption?.getTabAt(FIRST_TAB)?.setText(R.string.five_minutes )
         tabLayoutLastConsumption?.getTabAt(SECOND_TAB)?.setText(R.string.thirty_minutes)
-        tabLayoutLastConsumption?.getTabAt(THIRD_TAB)?.setText(R.string.five_minutes)
+        tabLayoutLastConsumption?.getTabAt(THIRD_TAB)?.setText(R.string.hour)
 
         itemConsumptionCost = binding.consumptionCostView!!
 

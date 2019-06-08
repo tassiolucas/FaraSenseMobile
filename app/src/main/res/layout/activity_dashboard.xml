@@ -22,8 +22,26 @@
                 layout="@layout/toolbar"/>
 
             <TextView
-                android:id="@+id/title_real_time_text"
+                android:id="@+id/title_consumption_cost_text"
                 android:layout_below="@id/include_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/FaraSenseTitleChart"
+                android:layout_marginTop="@dimen/element_double_padding"
+                android:layout_marginBottom="@dimen/element_margin"
+                android:text="@string/title_cost_consumption_label"/>
+
+            <include
+                android:id="@+id/consumption_cost_view"
+                android:layout_below="@id/title_consumption_cost_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/adapter_item_consumption_cost"/>
+
+            <TextView
+                android:id="@+id/title_real_time_text"
+                android:layout_below="@id/consumption_cost_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -33,34 +51,17 @@
                 android:layout_marginBottom="@dimen/element_margin"
                 android:text="@string/title_real_time_consumption"/>
 
+
             <farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
                 android:id="@+id/real_time_current_indicator"
+                android:layout_below="@id/title_real_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title_real_time_text"
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:id="@+id/title_consumption_text"
-                android:layout_below="@id/real_time_current_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                style="@style/FaraSenseTitleChart"
-                android:layout_marginTop="@dimen/element_double_padding"
-                android:layout_marginBottom="@dimen/element_margin"
-                android:text="@string/title_consumption_label"/>
-
-            <include
-                android:id="@+id/chart_consumption_view"
-                android:layout_below="@id/title_consumption_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                layout="@layout/adapter_item_consumption_chart_date"/>
-
-            <TextView
                 android:id="@+id/title_last_consumption_text"
-                android:layout_below="@id/chart_consumption_view"
+                android:layout_below="@id/real_time_current_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -77,7 +78,7 @@
                 layout="@layout/adapter_item_consumption_chart_hour"/>
 
             <TextView
-                android:id="@+id/title_consumption_cost_text"
+                android:id="@+id/title_consumption_text"
                 android:layout_below="@id/chart_last_consumption_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,14 +86,14 @@
                 style="@style/FaraSenseTitleChart"
                 android:layout_marginTop="@dimen/element_double_padding"
                 android:layout_marginBottom="@dimen/element_margin"
-                android:text="@string/title_cost_consumption_label"/>
+                android:text="@string/title_consumption_label"/>
 
             <include
-                android:id="@+id/consumption_cost_view"
-                android:layout_below="@id/title_consumption_cost_text"
+                android:id="@+id/chart_consumption_view"
+                android:layout_below="@id/title_consumption_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                layout="@layout/adapter_item_consumption_cost"/>
+                layout="@layout/adapter_item_consumption_chart_date"/>
 
         </RelativeLayout>
     </ScrollView>

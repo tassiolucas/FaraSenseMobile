@@ -23,9 +23,10 @@ class ChartLastConsumptionTabAdapter(fragmentManager: FragmentManager, private v
 
     override fun getItem(position: Int): Fragment? {
         return when (position) {
-            0 -> hourChartConsumptionFragment
+            0 -> fiveChartConsumptionFragment
             1 -> thirtyChartConsumptionFragment
-            2 -> fiveChartConsumptionFragment
+            2 -> hourChartConsumptionFragment
+
             else -> null
         }
     }

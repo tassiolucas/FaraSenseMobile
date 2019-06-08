@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.ColorInt
 import android.support.v4.app.ActivityCompat
 import android.widget.Toast
 import farasense.mobile.BuildConfig
@@ -23,6 +24,9 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
+
+        window.navigationBarColor = resources.getColor(R.color.colorSplash)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
     }
 

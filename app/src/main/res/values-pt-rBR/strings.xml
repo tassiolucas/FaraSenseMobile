@@ -9,7 +9,7 @@
     <string name="error_unknown_error_message">Ocorreu um erro desconhecido. Tente novamente daqui a pouco.</string>
     <string name="error_no_connection_message">Verifique sua conexão com a Internet e tente novamente.</string>
     <string name="error_downloading_message">Houve um problema ao baixar os dados. Tente novamente mais tarde.</string>
-    <string name="welcome_label">Olá, seja muito bem-vindo!</string>
+    <string name="sensor_id_label">FaraSense Enterprise 1</string>
     <string name="menu_search_title">Pesquisar</string>
     <string name="daily">Diário</string>
     <string name="monthly">Mensal</string>
@@ -18,8 +18,8 @@
     <string name="thirty_minutes">30 min</string>
     <string name="five_minutes">5 min</string>
     <string name="title_real_time_consumption">Consumo em tempo real:</string>
-    <string name="title_consumption_label">Esse é seu consumo:</string>
-    <string name="title_last_consumption_label">Consumo mais recente:</string>
+    <string name="title_consumption_label">Histórico ao longo do tempo:</string>
+    <string name="title_last_consumption_label">Histórico mais recente:</string>
     <string name="loading">Carregando dados...</string>
     <string name="kilowatts">Kilowatts</string>
     <string name="description_hour_chart">De 1 em 1 hora</string>
@@ -28,7 +28,7 @@
     <string name="description_daily_chart">Dia a dia</string>
     <string name="description_monthly_chart">Mês a mês</string>
     <string name="description_yearly_chart">Ano a ano</string>
-    <string name="title_cost_consumption_label">Custo Calculado no Mês</string>
+    <string name="title_cost_consumption_label">Gasto Estimado Mensal</string>
     <string name="alert_empty_or_value_invalid">Valor da tarifa Kwh inválido ou vazio! Tente novamente.</string>
     <string name="alert_save_sucess">Opções salvas com sucesso!</string>
     <string name="alert_gps_accept">Aceitar</string>

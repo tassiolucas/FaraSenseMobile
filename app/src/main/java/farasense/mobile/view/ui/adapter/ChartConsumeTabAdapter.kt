@@ -10,14 +10,11 @@ import farasense.mobile.view.ui.activity.fragment.MonthlyChartConsumptionFragmen
 
 class ChartConsumeTabAdapter(fragmentManager: FragmentManager, private val numOfTabs: Int) : FragmentPagerAdapter(fragmentManager) {
     private val dailyChartConsumptionFragment: DailyChartConsumptionFragment = DailyChartConsumptionFragment()
-    private val monthlyChartConsumptionFragment: MonthlyChartConsumptionFragment
-    private val yearlyChartConsumptionFragment: YearlyChartConsumptionFragment
+    private val monthlyChartConsumptionFragment: MonthlyChartConsumptionFragment = MonthlyChartConsumptionFragment()
+    private val yearlyChartConsumptionFragment: YearlyChartConsumptionFragment = YearlyChartConsumptionFragment()
     private val fragmentList: MutableList<Fragment>
 
     init {
-        monthlyChartConsumptionFragment = MonthlyChartConsumptionFragment()
-        yearlyChartConsumptionFragment = YearlyChartConsumptionFragment()
-
         fragmentList = ArrayList()
         fragmentList.add(dailyChartConsumptionFragment)
         fragmentList.add(monthlyChartConsumptionFragment)
@@ -29,6 +26,7 @@ class ChartConsumeTabAdapter(fragmentManager: FragmentManager, private val numOf
             0 -> dailyChartConsumptionFragment
             1 -> monthlyChartConsumptionFragment
             2 -> yearlyChartConsumptionFragment
+
             else -> null
         }
     }
