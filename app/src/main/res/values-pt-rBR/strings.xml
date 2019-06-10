@@ -45,4 +45,6 @@
     <string name="ble_scan_error">Dispositivo não encontrado.</string>
     <string name="cost_first_message">Insira as tarifas</string>
     <string name="indicator_sensitivity_label">Selecione a sensibilidade do indicador de corrente em tempo real:</string>
+    <string name="minimum_sensitivity_label">10 A</string>
+    <string name="maximum_sensitivity_label">30 A</string>
 </resources>
