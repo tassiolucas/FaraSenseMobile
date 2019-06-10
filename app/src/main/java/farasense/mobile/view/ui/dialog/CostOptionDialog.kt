@@ -4,9 +4,11 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -17,8 +19,10 @@ import farasense.mobile.util.DateUtil
 import farasense.mobile.util.EnergyUtil
 import farasense.mobile.util.Preferences
 import org.joda.time.DateTime
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,7 +66,13 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
 
         maturityDateInput!!.inputType = InputType.TYPE_NULL
         maturityDateInput!!.setOnClickListener {
-            val datePickerDialog = DatePickerDialog(context, R.style.dialog_theme, dateChose, dateCalendar!!.get(Calendar.YEAR), dateCalendar!!.get(Calendar.MONTH), dateCalendar!!.get(Calendar.DAY_OF_MONTH))
+            val datePickerDialog = DatePickerDialog(context,
+                    R.style.dialog_theme,
+                    dateChose,
+                    dateCalendar!!.get(Calendar.YEAR),
+                    dateCalendar!!.get(Calendar.MONTH),
+                    dateCalendar!!.get(Calendar.DAY_OF_MONTH))
+
             datePickerDialog.show()
         }
 
@@ -74,9 +84,12 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
                     if (s.toString() != rateKhw) {
                         rateKhwInput!!.removeTextChangedListener(this)
 
-                        val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
+                        val cleanBigDouble = parse(s.toString(), Locale.FRANCE)
 
-                        val parsed = java.lang.Double.parseDouble(cleanString)
+                        val cleanString = cleanBigDouble.toString().replace(".", "")
+
+                        val parsed = cleanString.toDouble()
+
                         val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
 
                         rateKhwValue = parsed / 100
@@ -103,9 +116,12 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
                     if (s.toString() != rateFlag) {
                         rateFlagInput!!.removeTextChangedListener(this)
 
-                        val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
+                        val cleanBigDouble = parse(s.toString(), Locale.FRANCE)
 
-                        val parsed = java.lang.Double.parseDouble(cleanString)
+                        val cleanString = cleanBigDouble.toString().replace(".", "")
+
+                        val parsed = cleanString.toDouble()
+
                         val formatted = NumberFormat.getCurrencyInstance().format(parsed / 100)
 
                         rateFlagValue = parsed / 100
@@ -177,5 +193,15 @@ class CostOptionDialog(val activity: Activity, itemConsumptionCost: AdapterItemC
         val sdf = SimpleDateFormat(myFormat, Locale("pt", "BR"))
 
         maturityDateInput!!.setText(sdf.format(dateCalendar!!.time))
+    }
+
+    // Para converter a moeda para Double novamente
+    @Throws(ParseException::class)
+    fun parse(amount: String, locale: Locale): BigDecimal {
+        val format = NumberFormat.getNumberInstance(locale)
+        if (format is DecimalFormat) {
+            format.isParseBigDecimal = true
+        }
+        return format.parse(amount.replace("[^\\d.,]".toRegex(), "")) as BigDecimal
     }
 }
