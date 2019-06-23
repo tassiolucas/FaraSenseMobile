@@ -44,4 +44,6 @@
     <string name="ble_scan_error">Device Not Found</string>
     <string name="cost_first_message">Enter rates</string>
     <string name="indicator_sensitivity_label">Select the sensitivity of the current indicator in real time:</string>
+    <string name="minimum_sensitivity_label">10 A</string>
+    <string name="maximum_sensitivity_label">30 A</string>
 </resources>
