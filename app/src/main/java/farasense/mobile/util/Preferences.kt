@@ -7,7 +7,7 @@ import farasense.mobile.App
 
 class Preferences {
 
-    private var sharedPreferences: SharedPreferences? = null
+    private var sharedPreferences : SharedPreferences? = null
 
     val maturityDate: Long?
         get() = sharedPreferences!!.getLong(MATURITY_DATE, 0)
@@ -34,17 +34,26 @@ class Preferences {
         editor.apply()
     }
 
-    fun setMaturityDate(maturutyDate: Date) {
+    fun setMaturityDate(maturutyDate : Date) {
         val editor = sharedPreferences!!.edit()
         editor.putLong(MATURITY_DATE, maturutyDate.time)
         editor.apply()
     }
+
+    var amperSensitivity : Float?
+        get() = sharedPreferences!!.getFloat(AMPER_SENSITIVITY, 30F)
+        set(amperSensitivity) {
+            val editor = sharedPreferences!!.edit()
+            editor.putFloat(AMPER_SENSITIVITY, amperSensitivity!!)
+            editor.apply()
+        }
 
     companion object {
         private val SHARED_PREFERENCES = "shared_preferences"
         private val MATURITY_DATE = "maturity_date"
         private val RATE_KWH = "rate_kwh"
         private val RATE_FLAG = "rate_flag"
+        private val AMPER_SENSITIVITY = "amper_sensitivity"
 
         private var instance: Preferences? = null
 

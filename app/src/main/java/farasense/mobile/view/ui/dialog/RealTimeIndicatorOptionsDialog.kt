@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.Toast
 import farasense.mobile.R
+import farasense.mobile.util.AmperSensitivityEnum
+import farasense.mobile.util.Preferences
 import farasense.mobile.view.ui.activity.custom_view.RealTimeCurrentIndicatorView
 
 class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrentIndicatorView: RealTimeCurrentIndicatorView) : Dialog(activity) {
@@ -27,13 +29,13 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrent
         sensitySelector.max = 4
         sensitySelector.incrementProgressBy(1)
 
-        sensitySelector.progress = 0
+        sensitityValueSet = AmperSensitivityEnum.getSelectionFromValue(Preferences.getInstance(context).amperSensitivity!!)
+        sensitySelector.progress = sensitityValueSet
 
         initDialog()
     }
 
     private fun initDialog() {
-
         sensitySelector.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 sensitityValueSet = progress
@@ -50,7 +52,9 @@ class RealTimeIndicatorOptionsDialog(val activity: Activity, val realTimeCurrent
 
         saveButton.setOnClickListener {
             realTimeCurrentIndicatorView.setSensitivity(sensitityValueSet)
+            Preferences.getInstance(context).amperSensitivity = AmperSensitivityEnum.getValueFromSelection(sensitityValueSet)
             Toast.makeText(activity, "Escala de " + sensitityValueSet.toString(), Toast.LENGTH_SHORT) // TODO: Continuar daqui.
+            dismiss()
         }
 
         saveCancel.setOnClickListener{

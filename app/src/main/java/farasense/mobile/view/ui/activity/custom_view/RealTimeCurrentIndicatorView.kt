@@ -26,6 +26,8 @@ import farasense.mobile.R
 import farasense.mobile.bluetooth.BleBroadcastReceiver
 import farasense.mobile.bluetooth.BleScanCallback
 import farasense.mobile.bluetooth.BleStatusListener
+import farasense.mobile.util.AmperSensitivityEnum
+import farasense.mobile.util.Preferences
 import farasense.mobile.view.components.LedStatusIndicatorView
 import farasense.mobile.view.ui.activity.DashboardActivity
 import farasense.mobile.view.ui.dialog.RealTimeIndicatorOptionsDialog
@@ -35,6 +37,7 @@ import java.util.*
 class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
     private val zero = 0F
+    private val maxValueIndicator = 1.0F
 
     private lateinit var bleHandlerScan: Handler
     private lateinit var bleHandlerReciveMessage: Handler
@@ -52,8 +55,8 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     private lateinit var bleScanCallback: BleScanCallback
     private lateinit var bleBluetoothLeScanner: BluetoothLeScanner
 
-    private var bleMessage: Float = 0F
-    private var amperSensitivity: Float = 0.1F
+    private var bleMessage: Float = zero
+    private var amperSensitivity: Float = Preferences.getInstance(context).amperSensitivity!!
     private var isReciveMessage = false
     private var bleScanning = false
     private var bleUnavailable = false
@@ -121,7 +124,15 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
 
             bleAnimationRunnable = Runnable {
                 runOnUiThread {
-                    indicatorCurrent.value = bleMessage * amperSensitivity
+                    var indicatorValue = (bleMessage / amperSensitivity)
+
+                    if (indicatorValue < maxValueIndicator) {
+                        indicatorCurrent.value = indicatorValue
+                        Log.d("VAL", indicatorValue.toString())
+                    } else {
+                        indicatorCurrent.value = maxValueIndicator
+                        Log.d("Erro de escala", indicatorValue.toString())
+                    }
                     indicatorLabel.text = String.format("%.2f", bleMessage)
                 }
             }
@@ -169,14 +180,9 @@ class RealTimeCurrentIndicatorView : ConstraintLayout, BleStatusListener {
     }
 
     // Real Time Current Sensitivity
-    fun setSensitivity(value: Int) {
-        when(value) {
-            0 -> amperSensitivity = 0.01F
-            1 -> amperSensitivity = 0.20F
-            2 -> amperSensitivity = 0.40F
-            3 -> amperSensitivity = 0.80F
-            4 -> amperSensitivity = 1.00F
-        }
+    fun setSensitivity(value: Int): Float {
+        amperSensitivity = AmperSensitivityEnum.getValueFromSelection(value)
+        return amperSensitivity
     }
 
     // Bluetooth Permission Manager
