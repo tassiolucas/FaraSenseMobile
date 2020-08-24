@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/farasense_navigation"
+    app:startDestination="@+id/navigation_splash_screen">
+
+    <fragment
+        android:id="@+id/navigation_splash_screen"
+        android:name="farasense.mobile.ui.splash_screen.SplashScreenFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_splash_screen"/>
+
+</navigation>

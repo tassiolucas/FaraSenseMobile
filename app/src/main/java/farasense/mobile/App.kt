@@ -1,28 +1,21 @@
 package farasense.mobile
 
 import android.app.Application
-import farasense.mobile.aws.AWSProvider
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import farasense.mobile.di.appComponent
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
-    private var downloadingServices: Boolean = false
-
     override fun onCreate() {
-
         super.onCreate()
+        configureDI()
+    }
 
-        Realm.init(this)
-        val realmConfig = RealmConfiguration.Builder()
-                .name("faraSenseMobileDataBase")
-                .deleteRealmIfMigrationNeeded()
-                .build()
-
-        Realm.setDefaultConfiguration(realmConfig)
-
-        AWSProvider.initialize(applicationContext)
-
-        downloadingServices = false
+    private fun configureDI() = startKoin {
+        androidLogger()
+        androidContext(this@App)
+        modules(appComponent)
     }
 }
